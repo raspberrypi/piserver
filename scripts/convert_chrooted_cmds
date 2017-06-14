@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+# Used by convert.sh
+# Makes file system image suitable for read-only use, and install LDAP client software
+#
+
+cat >/etc/fstab <<EOF
+proc            /proc           proc    defaults            0       0
+
+# Locations that need to be writable
+# Any location that ordinary users can write to must be nosuid to prevent pam_group privilege escalation
+tmpfs           /dev/shm        tmpfs   defaults,nosuid,nodev,noexec 0       0
+tmpfs           /tmp            tmpfs   defaults,nosuid,nodev,noexec 0       0
+tmpfs           /var/tmp        tmpfs   defaults,nosuid,nodev,noexec 0       0
+tmpfs           /var/log        tmpfs   defaults,mode=755,size=100m  0       0
+tmpfs           /var/spool      tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/dhcp   tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/systemd/rfkill  tmpfs defaults,mode=755     0       0
+tmpfs           /media          tmpfs   defaults,mode=755            0       0
+tmpfs           /home           tmpfs   defaults,mode=755            0       0
+EOF
+
+if [ -d /var/cache ]; then
+    echo "tmpfs           /var/cache  tmpfs defaults,mode=755                  0       0" >> /etc/fstab
+fi
+
+if [ -d /var/lib/lightdm ]; then
+    echo "tmpfs           /var/lib/lightdm  tmpfs defaults,mode=755,nosuid     0       0" >> /etc/fstab
+fi
+
+debconf-set-selections <<EOF
+nslcd nslcd/ldap-uris string ldap://piserver
+nslcd nslcd/ldap-base string dc=raspberrypi,dc=local
+libnss-ldapd libnss-ldapd/nsswitch multiselect group, passwd, shadow
+EOF
+
+ln -sf /proc/self/mounts /etc/mtab
+mkdir /var/lib/systemd/rfkill
+rm -f /etc/init.d/apply_noobs_os_config /etc/rc2.d/S01apply_noobs_os_config /etc/init.d/resize2fs_once /etc/rc3.d/resize2fs_once \
+    /etc/systemd/system/multi-user.target.wants/regenerate_ssh_host_keys.service
+
+apt-get update
+apt-get install -y -q libnss-ldapd libpam-ldapd sshfs libpam-mount
+apt-get clean
+
+
+cat >/etc/security/pam_mount.conf.xml <<EOF
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE pam_mount SYSTEM "pam_mount.conf.xml.dtd">
+<pam_mount>
+<debug enable="0" />
+<volume user="*" fstype="fuse" path="%(USER)@piserver:" mountpoint="/home/%(USER)"
+        options="port=1022,password_stdin,nonempty,UserKnownHostsFile=/dev/null,StrictHostKeyChecking=no,IdentitiesOnly=yes,IdentityFile=/dev/null,PubkeyAuthentication=no,ssh_command=ssh -F /dev/null" />
+
+<mntoptions require="nosuid,nodev" />
+<logout wait="0" hup="0" term="0" kill="0" />
+<mkmountpoint enable="1" remove="true" />
+<fusemount>sshfs %(VOLUME) %(MNTPT) -o %(OPTIONS)</fusemount>
+</pam_mount>
+EOF
+
+if [ -f /etc/lightdm/lightdm.conf ]; then
+    # Disable GUI auto-login
+    sed -i "s/^autologin-user=.*/#autologin-user=/" /etc/lightdm/lightdm.conf
+    # Store X authority in tmpfs instead of in home dir
+    sed -i "s/#user-authority-in-system-dir=false/user-authority-in-system-dir=true/" /etc/lightdm/lightdm.conf
+    # Hide user list
+    sed -i "s/greeter-hide-users=false/greeter-hide-users=true/" /etc/lightdm/lightdm.conf
+fi
+
+# Disable console auto-login
+ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+
+# No point in saving random seed on read-only system
+rm -f $DISTROROOT/lib/systemd/system/sysinit.target.wants/systemd-random-seed.service
+
+# Use our server as NTP server, as terminals may or may not be able to reach outside ones
+sed -i 's/server /#server /g' /etc/ntp.conf
+echo "# Local network boot server" >> /etc/ntp.conf
+echo "server piserver iburst" >> /etc/ntp.conf
+
+#
+# Remove non-relevant options from cmdline.txt
+#
+sed -i 's# init=/usr/lib/raspi-config/init_resize.sh##g' /boot/cmdline.txt
+sed -i 's# fsck.repair=yes##g' /boot/cmdline.txt
+sed -i 's# rootfstype=ext4##g' /boot/cmdline.txt
+
+#
+# User Pi has no place in multi-user system
+#
+deluser --remove-home pi
+delgroup pi
+
+#
+# Make all users part of some extra local groups when logged in through lightdm
+#
+sed -i '/@include common-auth/a auth       optional   pam_group.so' /etc/pam.d/lightdm
+echo "" >> /etc/security/group.conf
+echo "# Added for Piserver" >> /etc/security/group.conf
+echo "lightdm;*;*;Al0000-2400;dialout, audio, video, spi, i2c, gpio, plugdev, input" >> /etc/security/group.conf
+#echo "login;tty*;*;Al0000-2400;dialout, spi, i2c, gpio" >> /etc/security/group.conf

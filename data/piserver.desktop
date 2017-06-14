@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=PiServer
+Comment=Server for diskless Pi 3
+Icon=network-card
+Exec=gksudo piserver
+Categories=Settings

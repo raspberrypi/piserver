@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: piserver 
+Source: 
+
+Files: *
+Copyright: 2017 Raspberry Pi
+License: TBD

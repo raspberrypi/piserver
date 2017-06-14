@@ -1,0 +1,9 @@
+#!/bin/sh
+
+PATH=/usr/bin:/usr/local/bin
+
+if ([ $reason = "RENEW" ] && [ $old_ip_address != $new_ip_address ]) ; then
+    piserver --update-ip
+elif ([ $reason = "REBOOT" ] || [ $reason = "BOUND" ] || [ $reason = "STATIC" ]) ; then
+    piserver --update-ip
+fi

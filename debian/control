@@ -1,0 +1,12 @@
+Source: piserver
+Section: admin
+Priority: optional
+Maintainer: Floris Bos <bos@je-eigen-domein.nl>
+Build-Depends: debhelper (>= 9), cmake, libldap2-dev, libgtkmm-3.0-dev, libarchive-dev, libcurl4-openssl-dev, intltool
+Standards-Version: 3.9.7
+
+Package: piserver
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, gksu, binfmt-support [!armhf], qemu-user-static [!armhf]
+Description: Utility program to manage a network of diskless Pi 3 terminals
+ Lets diskless Pi 3 terminals PXE boot from the network.
