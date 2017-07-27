@@ -87,6 +87,9 @@ void DependenciesInstallThread::run()
         fwrite(ldif, strlen(ldif), 1, f);
         pclose(f);
 
+        // Test that LDAP server works. Generates exception if not
+        _ps->isUsernameAvailable("test");
+
         _execCheckResult("systemctl start piserver_ssh");
         _execCheckResult("systemctl enable piserver_ssh");
         _execCheckResult("systemctl enable rpcbind");

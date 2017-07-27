@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     auto app = Gtk::Application::create(argc, argv, "org.raspberrypi.piserver");
 
-    if (false /*::getuid() != 0*/)
+    if (::getuid() != 0)
     {
         Gtk::MessageDialog d(_("This program must be run as root. Try starting it with sudo"));
         d.run();
