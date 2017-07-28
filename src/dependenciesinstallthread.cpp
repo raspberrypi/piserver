@@ -96,6 +96,9 @@ void DependenciesInstallThread::run()
         _ps->addToExports(PISERVER_DISTROROOT " *(ro,no_subtree_check,no_root_squash,fsid=1055)");
         _ps->regenDnsmasqConf();
 
+        // On Debian Stretch it seems necessary to restart nscd before logging in with LDAP works
+        if ( ::system("systemctl restart nscd") != 0 ) { }
+
         ::sync();
         //std::this_thread::sleep_for(chrono::seconds(1));
         _signalSucess.emit();

@@ -145,4 +145,7 @@ void AbstractAddUser::addUsers()
             d.run();
         }
     }
+
+    // Flush nscd cache
+    if ( ::system("nscd -i passwd") != 0 ) { }
 }
