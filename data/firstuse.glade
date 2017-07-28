@@ -102,8 +102,6 @@ used by multiple diskless Raspberry Pi 3 terminals.
 
 &lt;big&gt;Steps to complete&lt;/big&gt;
 
-This wizard will guide you through the following steps:
-
 1) Registering the Raspberry Pi 3 terminals with the system.
 2) Creating at least one initial user account.
 3) Downloading an operating system image.
