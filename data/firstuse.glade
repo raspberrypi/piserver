@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkListStore" id="ethstore">
@@ -77,7 +77,7 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">PiServer initial installation</property>
     <property name="window_position">center</property>
-    <property name="icon_name">network-card</property>
+    <property name="icon_name">folder-remote</property>
     <property name="use_header_bar">0</property>
     <child>
       <object class="GtkLabel" id="introductionpage">
@@ -87,26 +87,26 @@
         <property name="halign">baseline</property>
         <property name="label" translatable="yes">&lt;big&gt;Introduction&lt;/big&gt;
 
-PiServer allows you to setup this computer as a central file server, to be
-used by multiple diskless Raspberry Pi 3 terminals.
+PiServer enables you to set this computer up as a central server from which
+multiple Raspberry Pis can be remotely booted.
 
 &lt;big&gt;Requirements&lt;/big&gt;
 
-• You must have one or more Raspberry Pi 3 devices to use as terminals.
-   PXE network boot functionality must be enabled on them
-• The terminals must be connected by &lt;b&gt;wired&lt;/b&gt; network connection to the same
-  network (vlan) this computer is in.
-• This computer must have Internet access to install the extra software necessary
-  (dnsmasq, nfs-kernel-server, slapd, openssh-server and the OS image desired)
-• The keyboard layout of this computer must be the same as the terminals
+Only Raspberry Pi 3s can be used. They must:
+   - have network boot enabled.
+   - be connected via Ethernet to the same network as this server.
+   - use the same keyboard layout as this server.
 
-&lt;big&gt;Steps to complete&lt;/big&gt;
+This server must have Internet access to download required software.
 
-1) Registering the Raspberry Pi 3 terminals with the system.
-2) Creating at least one initial user account.
-3) Downloading an operating system image.
+&lt;big&gt;Process&lt;/big&gt;
 
-Press "next" to get started!</property>
+This wizard will guide you through the following process:
+
+1) Registering Raspberry Pis with the server.
+2) Creating user accounts.
+3) Installing an operating system.
+</property>
         <property name="use_markup">True</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>
@@ -127,15 +127,14 @@ Press "next" to get started!</property>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;big&gt;Register your Raspberry Pi terminals&lt;/big&gt;
+            <property name="label" translatable="yes">&lt;big&gt;Select Raspberry Pi clients to use&lt;/big&gt;
 
-You will need to add the Raspberry Pi devices you would like to use to the system first,
-so that it knows for which hosts it is responsible.
+Select the Raspberry Pis to use with this server.
 
-• Let your Raspberry Pi boot from the network now, by plugging them in.
-• Verify that all appear in the list below
-• Uncheck any devices you do not want to manage
-• Press "next"
+Ensure all the Pis you want to use are set up to boot from the network,
+connected to Ethernet and powered on. They will appear in the list below.
+
+Uncheck the box next to any Pis you do not want to use with this server.
 </property>
             <property name="use_markup">True</property>
             <property name="xalign">0</property>
@@ -217,7 +216,7 @@ so that it knows for which hosts it is responsible.
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                <property name="title" translatable="yes">mac address of detected device</property>
+                <property name="title" translatable="yes">MAC address of Raspberry Pi</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                   <attributes>
@@ -235,7 +234,7 @@ so that it knows for which hosts it is responsible.
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes">Add hosts     </property>
+        <property name="title" translatable="yes">Add clients   </property>
         <property name="complete">True</property>
       </packing>
     </child>
@@ -249,10 +248,12 @@ so that it knows for which hosts it is responsible.
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;big&gt;Add users&lt;/big&gt;
+            <property name="label" translatable="yes">&lt;big&gt;Create user accounts on server&lt;/big&gt;
 
-Add at least one initial user.
-You can add more later.
+You need to create at least one user account on the server - you can
+add more accounts later if desired.
+
+Enter a username and password for each account to be created.
 </property>
             <property name="use_markup">True</property>
             <property name="xalign">0</property>
@@ -447,7 +448,7 @@ You can add more later.
               <object class="GtkLabel" id="label12">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">username</property>
+                <property name="label" translatable="yes">User</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -458,7 +459,7 @@ You can add more later.
               <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">initial password</property>
+                <property name="label" translatable="yes">Password</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -474,7 +475,7 @@ You can add more later.
         </child>
         <child>
           <object class="GtkCheckButton" id="showpasscheck">
-            <property name="label" translatable="yes">show passwords</property>
+            <property name="label" translatable="yes">Show passwords</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -489,7 +490,7 @@ You can add more later.
         </child>
         <child>
           <object class="GtkCheckButton" id="forcepasschangecheck">
-            <property name="label" translatable="yes">force password change on first login</property>
+            <property name="label" translatable="yes">Force password change on first login</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="xalign">0</property>
@@ -517,10 +518,11 @@ You can add more later.
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;big&gt;Add software&lt;/big&gt;
+            <property name="label" translatable="yes">&lt;big&gt;Select the operating system to install&lt;/big&gt;
 
-Select the operating system you wish to run by default
-You can add more later.
+Select the operating system that the server will provide for the clients. 
+
+Choose one option below - you can add additional operating systems later.
 </property>
             <property name="use_markup">True</property>
             <property name="xalign">0</property>
@@ -533,7 +535,7 @@ You can add more later.
         </child>
         <child>
           <object class="GtkRadioButton" id="reporadio">
-            <property name="label" translatable="yes">install operating system from repository</property>
+            <property name="label" translatable="yes">Install operating system from repository</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -564,7 +566,7 @@ You can add more later.
                   <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                     <property name="resizable">True</property>
                     <property name="fixed_width">250</property>
-                    <property name="title" translatable="yes">operating system</property>
+                    <property name="title" translatable="yes">Operating system</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext3"/>
                       <attributes>
@@ -577,7 +579,7 @@ You can add more later.
                   <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                     <property name="resizable">True</property>
                     <property name="fixed_width">100</property>
-                    <property name="title" translatable="yes">version</property>
+                    <property name="title" translatable="yes">Version</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext4"/>
                       <attributes>
@@ -590,7 +592,7 @@ You can add more later.
                   <object class="GtkTreeViewColumn" id="treeviewcolumn5">
                     <property name="resizable">True</property>
                     <property name="fixed_width">100</property>
-                    <property name="title" translatable="yes">size</property>
+                    <property name="title" translatable="yes">Size</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext5"/>
                       <attributes>
@@ -610,7 +612,7 @@ You can add more later.
         </child>
         <child>
           <object class="GtkRadioButton" id="localfileradio">
-            <property name="label" translatable="yes">install operating system using local file (.tar.xz)</property>
+            <property name="label" translatable="yes">Install operating system from local file (.tar.xz)</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -639,7 +641,7 @@ You can add more later.
         </child>
         <child>
           <object class="GtkRadioButton" id="urlradio">
-            <property name="label" translatable="yes">install operating system using URL</property>
+            <property name="label" translatable="yes">Install operating system from URL</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -683,7 +685,7 @@ You can add more later.
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">&lt;big&gt;Installing software&lt;/big&gt;
 
-The software is being installed.
+Please wait while the software is installed.
 
 
 
@@ -760,8 +762,9 @@ The software is being installed.
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">&lt;big&gt;Finished&lt;/big&gt;
 
-Installation has completed.
-You can now start using the system, and add additional users and hosts if desired.</property>
+Installation was successful.
+
+You can now start using the system, and add additional users and clients as needed.</property>
         <property name="use_markup">True</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>

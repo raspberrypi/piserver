@@ -52,9 +52,9 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;big&gt;Add software&lt;/big&gt;
+            <property name="label" translatable="yes">&lt;big&gt;Add operating system&lt;/big&gt;
 
-Select the operating system you wish to install
+Select the operating system you wish to install.
 </property>
             <property name="use_markup">True</property>
             <property name="xalign">0</property>
@@ -67,7 +67,7 @@ Select the operating system you wish to install
         </child>
         <child>
           <object class="GtkRadioButton" id="reporadio">
-            <property name="label" translatable="yes">install operating system from repository</property>
+            <property name="label" translatable="yes">Install operating system from repository</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -101,7 +101,7 @@ Select the operating system you wish to install
                   <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                     <property name="resizable">True</property>
                     <property name="fixed_width">250</property>
-                    <property name="title" translatable="yes">operating system</property>
+                    <property name="title" translatable="yes">Operating system</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext3"/>
                       <attributes>
@@ -114,7 +114,7 @@ Select the operating system you wish to install
                   <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                     <property name="resizable">True</property>
                     <property name="fixed_width">100</property>
-                    <property name="title" translatable="yes">version</property>
+                    <property name="title" translatable="yes">Version</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext4"/>
                       <attributes>
@@ -127,7 +127,7 @@ Select the operating system you wish to install
                   <object class="GtkTreeViewColumn" id="treeviewcolumn5">
                     <property name="resizable">True</property>
                     <property name="fixed_width">50</property>
-                    <property name="title" translatable="yes">size</property>
+                    <property name="title" translatable="yes">Size</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext5"/>
                       <attributes>
@@ -147,7 +147,7 @@ Select the operating system you wish to install
         </child>
         <child>
           <object class="GtkRadioButton" id="localfileradio">
-            <property name="label" translatable="yes">install operating system using local file (.tar.xz)</property>
+            <property name="label" translatable="yes">Install operating system from local file (.tar.xz)</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -175,7 +175,7 @@ Select the operating system you wish to install
         </child>
         <child>
           <object class="GtkRadioButton" id="urlradio">
-            <property name="label" translatable="yes">install operating system using URL</property>
+            <property name="label" translatable="yes">Install operating system from URL</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

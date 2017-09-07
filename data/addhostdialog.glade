@@ -18,7 +18,7 @@
   </object>
   <object class="GtkDialog" id="addhostdialog">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Add hosts</property>
+    <property name="title" translatable="yes">Add Clients</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -67,171 +67,151 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkFrame" id="frame1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkBox" id="box1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">• Let your Raspberry Pi terminals boot from the network now, by plugging them in.
-• Verify that all appear in the list below
-• Uncheck any devices you do not want to manage
-• Select the operating system you want to run on the terminals
-• Press "ok"
-Note that devices already registered do not appear in the list
+		<child>
+		  <object class="GtkBox" id="box1">
+			<property name="visible">True</property>
+			<property name="can_focus">False</property>
+			<property name="margin_left">10</property>
+			<property name="margin_right">10</property>
+			<property name="margin_top">10</property>
+			<property name="margin_bottom">10</property>
+			<property name="orientation">vertical</property>
+			<child>
+			  <object class="GtkLabel" id="label2">
+				<property name="visible">True</property>
+				<property name="can_focus">False</property>
+				<property name="label" translatable="yes">Ensure all the Pis you want to use are set up to boot from the network,
+connected to Ethernet and powered on. They will appear in the list below.
+(Note that any Pis already registered do not appear in the list.)
+
+Uncheck the box next to any Pis you do not want to use with this server.
+
+Select the operating system to run on these Pis from the drop-down box.
 </property>
-                    <property name="use_markup">True</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
-                    <property name="min_content_height">150</property>
-                    <child>
-                      <object class="GtkTreeView" id="hosttree">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="resize_mode">immediate</property>
-                        <property name="model">hoststore</property>
-                        <property name="search_column">0</property>
-                        <property name="enable_grid_lines">both</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection"/>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                            <property name="fixed_width">40</property>
-                            <child>
-                              <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
-                              <attributes>
-                                <attribute name="active">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                            <property name="title" translatable="yes">mac address of detected device</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="column_spacing">10</property>
-                    <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Description of hosts (optional)</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="descriptionentry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label4">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Operating system</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="oscombo">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="model">distrostore</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Add hosts</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="padding">10</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+				<property name="use_markup">True</property>
+				<property name="xalign">0</property>
+			  </object>
+			  <packing>
+				<property name="expand">False</property>
+				<property name="fill">True</property>
+				<property name="position">0</property>
+			  </packing>
+			</child>
+			<child>
+			  <object class="GtkScrolledWindow" id="scrolledwindow1">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="vexpand">True</property>
+				<property name="shadow_type">in</property>
+				<property name="min_content_height">150</property>
+				<child>
+				  <object class="GtkTreeView" id="hosttree">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="resize_mode">immediate</property>
+					<property name="model">hoststore</property>
+					<property name="search_column">0</property>
+					<property name="enable_grid_lines">both</property>
+					<child internal-child="selection">
+					  <object class="GtkTreeSelection" id="treeview-selection"/>
+					</child>
+					<child>
+					  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+						<property name="fixed_width">40</property>
+						<child>
+						  <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
+						  <attributes>
+							<attribute name="active">0</attribute>
+						  </attributes>
+						</child>
+					  </object>
+					</child>
+					<child>
+					  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+						<property name="title" translatable="yes">MAC address of Raspberry Pi</property>
+						<child>
+						  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+						  <attributes>
+							<attribute name="text">1</attribute>
+						  </attributes>
+						</child>
+					  </object>
+					</child>
+				  </object>
+				</child>
+			  </object>
+			  <packing>
+				<property name="expand">False</property>
+				<property name="fill">True</property>
+				<property name="position">1</property>
+			  </packing>
+			</child>
+			<child>
+			  <object class="GtkGrid" id="grid1">
+				<property name="visible">True</property>
+				<property name="can_focus">False</property>
+				<property name="column_spacing">10</property>
+				<child>
+				  <object class="GtkLabel" id="label3">
+					<property name="visible">True</property>
+					<property name="can_focus">False</property>
+					<property name="label" translatable="yes">Description of clients (optional):</property>
+					<property name="xalign">0</property>
+				  </object>
+				  <packing>
+					<property name="left_attach">0</property>
+					<property name="top_attach">0</property>
+				  </packing>
+				</child>
+				<child>
+				  <object class="GtkEntry" id="descriptionentry">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hexpand">True</property>
+				  </object>
+				  <packing>
+					<property name="left_attach">1</property>
+					<property name="top_attach">0</property>
+				  </packing>
+				</child>
+				<child>
+				  <object class="GtkLabel" id="label4">
+					<property name="visible">True</property>
+					<property name="can_focus">False</property>
+					<property name="label" translatable="yes">Operating system:</property>
+					<property name="xalign">0</property>
+				  </object>
+				  <packing>
+					<property name="left_attach">0</property>
+					<property name="top_attach">1</property>
+				  </packing>
+				</child>
+				<child>
+				  <object class="GtkComboBox" id="oscombo">
+					<property name="visible">True</property>
+					<property name="can_focus">False</property>
+					<property name="model">distrostore</property>
+					<child>
+					  <object class="GtkCellRendererText" id="cellrenderertext3"/>
+					  <attributes>
+						<attribute name="text">0</attribute>
+					  </attributes>
+					</child>
+				  </object>
+				  <packing>
+					<property name="left_attach">1</property>
+					<property name="top_attach">1</property>
+				  </packing>
+				</child>
+			  </object>
+			  <packing>
+				<property name="expand">False</property>
+				<property name="fill">True</property>
+				<property name="position">2</property>
+			  </packing>
+			</child>
+		  </object>
+		</child>
       </object>
     </child>
     <action-widgets>
