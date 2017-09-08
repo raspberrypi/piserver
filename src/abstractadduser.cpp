@@ -111,7 +111,7 @@ bool AbstractAddUser::checkUserAvailability(bool useLDAP)
         }
         if (!alreadyexists.empty())
         {
-            errmsg += _("The following user names already exist on the system (or on this computer): ");
+            errmsg += _("The following user names already exist on the system or this computer: ");
             for (auto user : alreadyexists)
                 errmsg += "'"+user+"' ";
         }

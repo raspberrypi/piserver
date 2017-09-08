@@ -10,6 +10,11 @@ int main(int argc, char *argv[])
 {
     PiServer ps;
 
+	setlocale (LC_ALL, "");
+	bindtextdomain ("piserver", "/usr/share/locale");
+	bind_textdomain_codeset ("piserver", "UTF-8");
+	textdomain ("piserver");
+
     if (argc == 2 && strcmp(argv[1], "--update-ip") == 0 )
     {
         ps.updateIP();
@@ -20,7 +25,7 @@ int main(int argc, char *argv[])
 
     if (::getuid() != 0)
     {
-        Gtk::MessageDialog d(_("This program must be run as root. Try starting it with sudo"));
+        Gtk::MessageDialog d(_("This program must be run as root. Try starting it with sudo."));
         d.run();
         return 1;
     }

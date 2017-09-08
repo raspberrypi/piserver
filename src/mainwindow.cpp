@@ -223,7 +223,7 @@ void MainWindow::on_deluser_clicked()
     iter->get_value(0, user);
     if (!user.empty())
     {
-        Gtk::MessageDialog d(_("Are you sure you want to delete this user and the files in its home directory?"),
+        Gtk::MessageDialog d(_("Are you sure you want to delete this user and the files in their home directory?"),
                              false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
         d.set_transient_for(*_window);
         if (d.run() == Gtk::RESPONSE_YES)
@@ -248,7 +248,7 @@ void MainWindow::on_addhost_clicked()
     if (_ps->getDistributions()->empty() )
     {
         /* Shouldn't happen if user made it through the first-use wizard */
-        Gtk::MessageDialog d(_("Please install a Linux distribution first under 'software'"));
+        Gtk::MessageDialog d(_("Please install a Linux distribution first under 'Software'"));
         d.set_transient_for(*_window);
         d.run();
     }

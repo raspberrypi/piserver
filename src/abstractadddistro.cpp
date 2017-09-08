@@ -162,7 +162,7 @@ void AbstractAddDistro::startInstallation()
         int availMB = _ps->availableDiskSpace() / 1048576;
         if ( stoi(sizestr) >  availMB)
         {
-            onInstallationFailed(_("Insufficient disk space. Available: ")+to_string(availMB)+" MB");
+            onInstallationFailed(_("Insufficient disk space. ")+to_string(availMB)+_(" MB available."));
             return;
         }
 
@@ -183,7 +183,7 @@ void AbstractAddDistro::startInstallation()
     if (_ps->getDistributions()->count(distroName)
             && _ps->getDistributions()->at(distroName)->version() == version)
     {
-        onInstallationFailed(_("There is already an OS by the name '"+distroName+"' installed"));
+        onInstallationFailed(_("There is already an OS called '")+distroName+_("' installed."));
         return;
     }
 
@@ -240,7 +240,7 @@ bool AbstractAddDistro::_updateProgress()
 
     snprintf(buf, sizeof(buf), _("%.1f MB of %.1f MB"), mb, totalMb);
     _progressLabel1->set_text(buf);
-    snprintf(buf, sizeof(buf), _("%.1f mbit/sec"), downloadRate * 8.0);
+    snprintf(buf, sizeof(buf), _("%.1f Mbit/sec"), downloadRate * 8.0);
     _progressLabel2->set_text(buf);
 
     if (etahr > 1)

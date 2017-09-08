@@ -42,7 +42,7 @@ InstallWizard::InstallWizard(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
         _ifacecombo->set_active(0);
     else
     {
-        Gtk::MessageDialog d(_("No network interfaces with IPv4 address detected. Check your network settings"));
+        Gtk::MessageDialog d(_("No network interfaces with IPv4 address detected. Check your network settings."));
         d.run();
     }
 
@@ -93,7 +93,7 @@ void InstallWizard::onPagePrepare(Gtk::Widget *newPage)
 
     if (newPage == _progressPage)
     {
-        _progressLabel1->set_text( _("Installing LDAP, NFS and (proxy) DHCP server software") );
+        _progressLabel1->set_text( _("Installing LDAP, NFS and DHCP server software") );
 
         string ldapPassword = _ps->getSetting("ldapPassword", _randomStr(32));
         _ps->setSetting("ldapPassword", ldapPassword);
