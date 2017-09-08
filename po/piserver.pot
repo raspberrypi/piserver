@@ -1,0 +1,542 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-08 09:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/abstractadddistro.cpp:123
+msgid "Error parsing downloaded repository information: "
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:132
+msgid "Error downloading repository information: "
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:165
+msgid "Insufficient disk space. Available: "
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:186
+msgid "There is already an OS by the name '"
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:190
+msgid "Starting download"
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:241
+#, c-format
+msgid "%.1f MB of %.1f MB"
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:243
+#, c-format
+msgid "%.1f mbit/sec"
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:248
+msgid " hours "
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:252
+msgid " minutes "
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:256
+msgid "1 minute "
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:260
+msgid "Less than a minute "
+msgstr ""
+
+#: ../src/abstractadddistro.cpp:262
+msgid "left"
+msgstr ""
+
+#: ../src/abstractaddhost.cpp:31
+msgid ""
+"Error listening for DHCP traffic.\n"
+"Uninstall any other DHCP servers running on this computer."
+msgstr ""
+
+#: ../src/abstractadduser.cpp:106
+msgid "The following user names contain invalid characters: "
+msgstr ""
+
+#: ../src/abstractadduser.cpp:110
+msgid ""
+"\n"
+"Only the following characters are allowed: a-z 0-9 . - _\n"
+msgstr ""
+
+#: ../src/abstractadduser.cpp:114
+msgid ""
+"The following user names already exist on the system (or on this computer): "
+msgstr ""
+
+#: ../src/installwizard.cpp:45
+msgid ""
+"No network interfaces with IPv4 address detected. Check your network settings"
+msgstr ""
+
+#: ../src/installwizard.cpp:96
+msgid "Installing LDAP, NFS and (proxy) DHCP server software"
+msgstr ""
+
+#: ../src/main.cpp:23
+msgid "This program must be run as root. Try starting it with sudo"
+msgstr ""
+
+#: ../src/mainwindow.cpp:189
+msgid "Normal users"
+msgstr ""
+
+#: ../src/mainwindow.cpp:226
+msgid ""
+"Are you sure you want to delete this user and the files in its home "
+"directory?"
+msgstr ""
+
+#. Shouldn't happen if user made it through the first-use wizard
+#: ../src/mainwindow.cpp:251
+msgid "Please install a Linux distribution first under 'software'"
+msgstr ""
+
+#: ../src/mainwindow.cpp:314
+msgid "Are you sure you want to delete this operating system?"
+msgstr ""
+
+#: ../src/mainwindow.cpp:398
+msgid "Update available"
+msgstr ""
+
+#: ../src/mainwindow.cpp:459
+msgid "Settings saved"
+msgstr ""
+
+#: ../src/piserver.cpp:541
+msgid "Cannot delete this OS, as it is in use by "
+msgstr ""
+
+#: ../src/piserver.cpp:541
+msgid " hosts"
+msgstr ""
+
+#: ../src/piserver.cpp:559
+msgid "Old"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:1 ../data/firstuse.glade.h:5
+msgid "Raspbian"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:2 ../data/firstuse.glade.h:6
+msgid "2017-1-1"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:3 ../data/firstuse.glade.h:7
+msgid "1024 MB"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:4 ../data/firstuse.glade.h:8
+msgid "Raspbian Lite"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:5 ../data/firstuse.glade.h:9
+msgid "2016-12-31"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:6 ../data/firstuse.glade.h:10
+msgid "512 MB"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:7 ../data/firstuse.glade.h:77
+msgid "Add software"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:8
+msgid ""
+"<big>Add operating system</big>\n"
+"\n"
+"Select the operating system you wish to install.\n"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:12 ../data/firstuse.glade.h:70
+msgid "Install operating system from repository"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:13 ../data/piserver.glade.h:13
+#: ../data/firstuse.glade.h:71
+msgid "Operating system"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:14 ../data/firstuse.glade.h:72
+msgid "Version"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:15 ../data/firstuse.glade.h:73
+msgid "Size"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:16 ../data/firstuse.glade.h:74
+msgid "Install operating system from local file (.tar.xz)"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:17 ../data/firstuse.glade.h:75
+msgid "Install operating system from URL"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:18 ../data/firstuse.glade.h:76
+msgid "http://"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:19
+msgid "Select OS"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:20
+msgid ""
+"<big>Installing software</big>\n"
+"\n"
+"The software is being installed.\n"
+"\n"
+"\n"
+"\n"
+"\n"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:28 ../data/firstuse.glade.h:86
+msgid "Installation"
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:29
+msgid ""
+"<big>Finished</big>\n"
+"\n"
+"Installation of the operating system has completed.\n"
+"In the \"hosts\" tab you can configure which terminals should run this OS."
+msgstr ""
+
+#: ../data/adddistrodialog.glade.h:33 ../data/firstuse.glade.h:92
+msgid "Finished"
+msgstr ""
+
+#: ../data/edithostdialog.glade.h:1
+msgid "Edit Client"
+msgstr ""
+
+#: ../data/edithostdialog.glade.h:2
+msgid "MAC address:"
+msgstr ""
+
+#: ../data/edithostdialog.glade.h:3
+msgid "Description:"
+msgstr ""
+
+#: ../data/edithostdialog.glade.h:4 ../data/addhostdialog.glade.h:12
+msgid "Operating system:"
+msgstr ""
+
+#: ../data/addhostdialog.glade.h:1
+msgid "Add Clients"
+msgstr ""
+
+#: ../data/addhostdialog.glade.h:2
+msgid ""
+"Ensure all the Pis you want to use are set up to boot from the network,\n"
+"connected to Ethernet and powered on. They will appear in the list below.\n"
+"(Note that any Pis already registered do not appear in the list.)\n"
+"\n"
+"Uncheck the box next to any Pis you do not want to use with this server.\n"
+"\n"
+"Select the operating system to run on these Pis from the drop-down box.\n"
+msgstr ""
+
+#: ../data/addhostdialog.glade.h:10 ../data/firstuse.glade.h:45
+msgid "MAC address of Raspberry Pi"
+msgstr ""
+
+#: ../data/addhostdialog.glade.h:11
+msgid "Description of clients (optional):"
+msgstr ""
+
+#: ../data/edituserdialog.glade.h:1 ../data/piserver.glade.h:5
+msgid "Reset Password"
+msgstr ""
+
+#: ../data/edituserdialog.glade.h:2
+msgid "User:"
+msgstr ""
+
+#: ../data/edituserdialog.glade.h:3
+msgid "Password:"
+msgstr ""
+
+#: ../data/edituserdialog.glade.h:4
+msgid "Confirm password:"
+msgstr ""
+
+#: ../data/edituserdialog.glade.h:5 ../data/adduserdialog.glade.h:9
+#: ../data/firstuse.glade.h:61
+msgid "Show passwords"
+msgstr ""
+
+#: ../data/piserver.glade.h:1 ../data/firstuse.glade.h:1
+msgid "eth0"
+msgstr ""
+
+#: ../data/piserver.glade.h:2 ../data/firstuse.glade.h:2
+msgid "eth0 (e1000)"
+msgstr ""
+
+#: ../data/piserver.glade.h:3 ../data/piserver.desktop.in.h:1
+msgid "PiServer"
+msgstr ""
+
+#: ../data/piserver.glade.h:4
+msgid "Add"
+msgstr ""
+
+#: ../data/piserver.glade.h:6
+msgid "Remove"
+msgstr ""
+
+#: ../data/piserver.glade.h:7 ../data/adduserdialog.glade.h:7
+#: ../data/firstuse.glade.h:59
+msgid "User"
+msgstr ""
+
+#: ../data/piserver.glade.h:8
+msgid "Group"
+msgstr ""
+
+#: ../data/piserver.glade.h:9
+msgid "Users"
+msgstr ""
+
+#: ../data/piserver.glade.h:10
+msgid "Edit"
+msgstr ""
+
+#: ../data/piserver.glade.h:11
+msgid "MAC address"
+msgstr ""
+
+#: ../data/piserver.glade.h:12
+msgid "Description"
+msgstr ""
+
+#: ../data/piserver.glade.h:14
+msgid "Clients"
+msgstr ""
+
+#: ../data/piserver.glade.h:15
+msgid "Upgrade"
+msgstr ""
+
+#: ../data/piserver.glade.h:16
+msgid "Shell"
+msgstr ""
+
+#: ../data/piserver.glade.h:17
+msgid "Installed version"
+msgstr ""
+
+#: ../data/piserver.glade.h:18
+msgid "Latest version"
+msgstr ""
+
+#: ../data/piserver.glade.h:19
+msgid "Software"
+msgstr ""
+
+#: ../data/piserver.glade.h:20 ../data/firstuse.glade.h:44
+msgid "Network interface: "
+msgstr ""
+
+#: ../data/piserver.glade.h:21
+msgid "Act as proxy DHCP server"
+msgstr ""
+
+#: ../data/piserver.glade.h:22
+msgid "Act as standalone DHCP server"
+msgstr ""
+
+#: ../data/piserver.glade.h:23
+msgid "Client IP range start:"
+msgstr ""
+
+#: ../data/piserver.glade.h:24
+msgid "Client IP range end:"
+msgstr ""
+
+#: ../data/piserver.glade.h:25
+msgid "Netmask:"
+msgstr ""
+
+#: ../data/piserver.glade.h:26
+msgid "Gateway:"
+msgstr ""
+
+#: ../data/piserver.glade.h:27
+msgid "DHCP server settings"
+msgstr ""
+
+#: ../data/piserver.glade.h:28
+msgid "Save"
+msgstr ""
+
+#: ../data/piserver.glade.h:29
+msgid "Settings"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:1
+msgid "Add Users"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:2 ../data/firstuse.glade.h:54
+msgid "5)"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:3 ../data/firstuse.glade.h:55
+msgid "4)"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:4 ../data/firstuse.glade.h:56
+msgid "3)"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:5 ../data/firstuse.glade.h:57
+msgid "2)"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:6 ../data/firstuse.glade.h:58
+msgid "1)"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:8 ../data/firstuse.glade.h:60
+msgid "Password"
+msgstr ""
+
+#: ../data/adduserdialog.glade.h:10 ../data/firstuse.glade.h:62
+msgid "Force password change on first login"
+msgstr ""
+
+#: ../data/firstuse.glade.h:3
+msgid "b8:27:eb:11:22:33"
+msgstr ""
+
+#: ../data/firstuse.glade.h:4
+msgid "b8:27:eb:44:55:66"
+msgstr ""
+
+#: ../data/firstuse.glade.h:11
+msgid "PiServer initial installation"
+msgstr ""
+
+#: ../data/firstuse.glade.h:12
+msgid ""
+"<big>Introduction</big>\n"
+"\n"
+"PiServer enables you to set this computer up as a central server from which\n"
+"multiple Raspberry Pis can be remotely booted.\n"
+"\n"
+"<big>Requirements</big>\n"
+"\n"
+"Only Raspberry Pi 3s can be used. They must:\n"
+"   - have network boot enabled.\n"
+"   - be connected via Ethernet to the same network as this server.\n"
+"   - use the same keyboard layout as this server.\n"
+"\n"
+"This server must have Internet access to download required software.\n"
+"\n"
+"<big>Process</big>\n"
+"\n"
+"This wizard will guide you through the following process:\n"
+"\n"
+"1) Registering Raspberry Pis with the server.\n"
+"2) Creating user accounts.\n"
+"3) Installing an operating system.\n"
+msgstr ""
+
+#: ../data/firstuse.glade.h:34
+msgid "Introduction"
+msgstr ""
+
+#: ../data/firstuse.glade.h:35
+msgid ""
+"<big>Select Raspberry Pi clients to use</big>\n"
+"\n"
+"Select the Raspberry Pis to use with this server.\n"
+"\n"
+"Ensure all the Pis you want to use are set up to boot from the network,\n"
+"connected to Ethernet and powered on. They will appear in the list below.\n"
+"\n"
+"Uncheck the box next to any Pis you do not want to use with this server.\n"
+msgstr ""
+
+#: ../data/firstuse.glade.h:46
+msgid "Add clients   "
+msgstr ""
+
+#: ../data/firstuse.glade.h:47
+msgid ""
+"<big>Create user accounts on server</big>\n"
+"\n"
+"You need to create at least one user account on the server - you can\n"
+"add more accounts later if desired.\n"
+"\n"
+"Enter a username and password for each account to be created.\n"
+msgstr ""
+
+#: ../data/firstuse.glade.h:63
+msgid "Add users"
+msgstr ""
+
+#: ../data/firstuse.glade.h:64
+msgid ""
+"<big>Select the operating system to install</big>\n"
+"\n"
+"Select the operating system that the server will provide for the clients. \n"
+"\n"
+"Choose one option below - you can add additional operating systems later.\n"
+msgstr ""
+
+#: ../data/firstuse.glade.h:78
+msgid ""
+"<big>Installing software</big>\n"
+"\n"
+"Please wait while the software is installed.\n"
+"\n"
+"\n"
+"\n"
+"\n"
+msgstr ""
+
+#: ../data/firstuse.glade.h:87
+msgid ""
+"<big>Finished</big>\n"
+"\n"
+"Installation was successful.\n"
+"\n"
+"You can now start using the system, and add additional users and clients as "
+"needed."
+msgstr ""
+
+#: ../data/piserver.desktop.in.h:2
+msgid "Server for diskless Pi 3"
+msgstr ""
