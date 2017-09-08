@@ -3,6 +3,6 @@ Type=Application
 Version=1.0
 Name=PiServer
 Comment=Server for diskless Pi 3
-Icon=network-card
+Icon=folder-remote
 Exec=gksudo piserver
 Categories=Settings
