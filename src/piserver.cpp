@@ -649,8 +649,9 @@ void PiServer::startChrootTerminal(const std::string &distribution)
         cmdline += " /usr/bin/qemu-arm-static /bin/bash";
     }*/
 
-    string cmdline = string (PISERVER_DATADIR "/scripts/chroot_image.sh '")+distroPath+"'";
-    const gchar *cmd[] = {"/usr/bin/lxterminal", "-e", cmdline.c_str(), NULL};
+    string cmdline1 = string (PISERVER_DATADIR "/scripts/chroot_image.sh");
+    string cmdline2 = distroPath;
+    const gchar *cmd[] = {"/usr/bin/lxterminal", "-e", cmdline1.c_str(), cmdline2.c_str(), NULL};
 
     if (!g_spawn_async(NULL, (gchar **) cmd, NULL, G_SPAWN_DEFAULT, NULL, NULL, NULL, &error))
     {
