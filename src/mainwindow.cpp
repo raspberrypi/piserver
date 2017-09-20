@@ -9,6 +9,7 @@
 #include "adddistrodialog.h"
 #include <arpa/inet.h>
 #include <iostream>
+#include <regex>
 
 using namespace std;
 using nlohmann::json;
@@ -444,15 +445,59 @@ bool MainWindow::_validIP(const std::string &s)
 
 void MainWindow::on_savesettings_clicked()
 {
-    _ps->setSetting("interface", _ifacecombo->get_active_id());
-    _ps->setSetting("standaloneDhcpServer", _standaloneradio->get_active() );
     if ( _standaloneradio->get_active() )
     {
+        // Check with odhcploc that there aren't any other DHCP servers active that may conflict
+        int ret = 0;
+        string output, myip = _ps->currentIP(_ifacecombo->get_active_id());
+        vector<string> cmd = { "/usr/sbin/odhcploc", "-i3", myip, myip };
+        auto watchcursor = Gdk::Cursor::create(Gdk::WATCH);
+        _window->get_window()->set_cursor(watchcursor);
+        while (gtk_events_pending()) gtk_main_iteration();
+
+        try
+        {
+            Glib::spawn_sync("", cmd, Glib::SPAWN_DEFAULT, Glib::SlotSpawnChildSetup(), &output, nullptr, &ret);
+        }
+        catch (exception &e)
+        {
+            Gtk::MessageDialog d(_("Error starting odhcploc.\n"
+                                   "Skipped checking if other DHCP servers are active."));
+            d.run();
+        }
+
+        _window->get_window()->set_cursor();
+
+        if (ret)
+        {
+            Gtk::MessageDialog d(_("odhcploc returned error code.\n"
+                                   "Skipped checking if other DHCP servers are active."));
+            d.run();
+        }
+        else if (!output.empty())
+        {
+            string otherserverip;
+            regex ipRegex("\\(S\\)([^ ]+) ");
+            smatch match;
+
+            if (regex_search(output, match, ipRegex) )
+                otherserverip = match[1];
+
+            Gtk::MessageDialog d(Glib::ustring::compose(_("There is already another DHCP server (%1) active in your network.\n"
+                                   "It is not safe to have multiple DHCP servers running.\n"
+                                   "Your settings have not been saved."), otherserverip), false, Gtk::MESSAGE_ERROR);
+            d.run();
+            return;
+        }
+
         _ps->setSetting("startIP", _startipentry->get_text() );
         _ps->setSetting("endIP", _endipentry->get_text() );
         _ps->setSetting("netmask", _netmaskentry->get_text() );
         _ps->setSetting("gateway", _gatewayentry->get_text() );
     }
+    _ps->setSetting("interface", _ifacecombo->get_active_id());
+    _ps->setSetting("standaloneDhcpServer", _standaloneradio->get_active() );
+
     _ps->saveSettings();
     _ps->regenDnsmasqConf();
 
