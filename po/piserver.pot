@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-08 10:52+0000\n"
+"POT-Creation-Date: 2017-09-22 16:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,30 +109,49 @@ msgstr ""
 msgid "This program must be run as root. Try starting it with sudo."
 msgstr ""
 
-#: ../src/mainwindow.cpp:189
+#: ../src/mainwindow.cpp:190
 msgid "Normal users"
 msgstr ""
 
-#: ../src/mainwindow.cpp:226
+#: ../src/mainwindow.cpp:227
 msgid ""
 "Are you sure you want to delete this user and the files in their home "
 "directory?"
 msgstr ""
 
 #. Shouldn't happen if user made it through the first-use wizard
-#: ../src/mainwindow.cpp:251
+#: ../src/mainwindow.cpp:252
 msgid "Please install a Linux distribution first under 'Software'"
 msgstr ""
 
-#: ../src/mainwindow.cpp:314
+#: ../src/mainwindow.cpp:315
 msgid "Are you sure you want to delete this operating system?"
 msgstr ""
 
-#: ../src/mainwindow.cpp:398
+#: ../src/mainwindow.cpp:399
 msgid "Update available"
 msgstr ""
 
-#: ../src/mainwindow.cpp:459
+#: ../src/mainwindow.cpp:464
+msgid ""
+"Error starting odhcploc.\n"
+"Skipped checking if other DHCP servers are active."
+msgstr ""
+
+#: ../src/mainwindow.cpp:473
+msgid ""
+"odhcploc returned error code.\n"
+"Skipped checking if other DHCP servers are active."
+msgstr ""
+
+#: ../src/mainwindow.cpp:486
+msgid ""
+"There is already another DHCP server (%1) active in your network.\n"
+"It is not safe to have multiple DHCP servers running.\n"
+"Your settings have not been saved."
+msgstr ""
+
+#: ../src/mainwindow.cpp:504
 msgid "Settings saved"
 msgstr ""
 
