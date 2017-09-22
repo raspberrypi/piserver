@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 16:42+0100\n"
+"POT-Creation-Date: 2017-09-22 19:25+0200\n"
 "PO-Revision-Date: 2017-09-22 16:45+0100\n"
 "Last-Translator: Simon Long <simon@raspberrypi.org>\n"
 "Language-Team: English (British)\n"
@@ -116,11 +116,11 @@ msgstr "Installing LDAP, NFS and DHCP server software"
 msgid "This program must be run as root. Try starting it with sudo."
 msgstr "This program must be run as root. Try starting it with sudo."
 
-#: ../src/mainwindow.cpp:190
+#: ../src/mainwindow.cpp:191
 msgid "Normal users"
 msgstr "Normal users"
 
-#: ../src/mainwindow.cpp:227
+#: ../src/mainwindow.cpp:228
 msgid ""
 "Are you sure you want to delete this user and the files in their home "
 "directory?"
@@ -129,27 +129,28 @@ msgstr ""
 "directory?"
 
 #. Shouldn't happen if user made it through the first-use wizard
-#: ../src/mainwindow.cpp:252
+#: ../src/mainwindow.cpp:253
 msgid "Please install a Linux distribution first under 'Software'"
 msgstr "Please install a Linux distribution first under 'Software'"
 
-#: ../src/mainwindow.cpp:315
+#: ../src/mainwindow.cpp:316
 msgid "Are you sure you want to delete this operating system?"
 msgstr "Are you sure you want to delete this operating system?"
 
-#: ../src/mainwindow.cpp:399
+#: ../src/mainwindow.cpp:400
 msgid "Update available"
 msgstr "Update available"
 
-#: ../src/mainwindow.cpp:464
+#: ../src/mainwindow.cpp:468
+#, fuzzy
 msgid ""
-"Error starting odhcploc.\n"
+"Error starting odhcploc: %1\n"
 "Skipped checking if other DHCP servers are active."
 msgstr ""
 "Error starting odhcploc.\n"
 "Skipped checking if other DHCP servers are active."
 
-#: ../src/mainwindow.cpp:473
+#: ../src/mainwindow.cpp:476
 msgid ""
 "odhcploc returned error code.\n"
 "Skipped checking if other DHCP servers are active."
@@ -157,17 +158,19 @@ msgstr ""
 "odhcploc returned error code.\n"
 "Skipped checking if other DHCP servers are active."
 
-#: ../src/mainwindow.cpp:486
+#: ../src/mainwindow.cpp:491
 msgid ""
 "There is already another DHCP server (%1) active in your network.\n"
-"It is not safe to have multiple DHCP servers running.\n"
-"Your settings have not been saved."
+"Having more than one DHCP server hand out IP-addresses from the same range "
+"can result in serious problems, such as that more than one client is "
+"assigned the same IP-address.\n"
+"Please read the <a href=\"https://github.com/raspberrypi/piserver/wiki"
+"\">documentation</a> before proceeding.\n"
+"\n"
+"Are you sure you want to activate standalone DHCP server mode?"
 msgstr ""
-"There is already another DHCP server (%1) active in your network.\n"
-"It is not safe to have multiple DHCP servers running.\n"
-"Your settings have not been saved."
 
-#: ../src/mainwindow.cpp:504
+#: ../src/mainwindow.cpp:516
 msgid "Settings saved"
 msgstr "Settings saved"
 
@@ -657,3 +660,12 @@ msgstr ""
 #: ../data/piserver.desktop.in.h:2
 msgid "Server for diskless Pi 3"
 msgstr "Server for diskless Pi 3"
+
+#~ msgid ""
+#~ "There is already another DHCP server (%1) active in your network.\n"
+#~ "It is not safe to have multiple DHCP servers running.\n"
+#~ "Your settings have not been saved."
+#~ msgstr ""
+#~ "There is already another DHCP server (%1) active in your network.\n"
+#~ "It is not safe to have multiple DHCP servers running.\n"
+#~ "Your settings have not been saved."

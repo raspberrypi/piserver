@@ -29,6 +29,7 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     builder->get_widget("endipentry", _endipentry);
     builder->get_widget("netmaskentry", _netmaskentry);
     builder->get_widget("gatewayentry", _gatewayentry);
+    builder->get_widget("proxydhcpradio", _proxydhcpradio);
     builder->get_widget("standaloneradio", _standaloneradio);
     builder->get_widget("dhcpserverframe", _dhcpserverframe);
     builder->get_widget("savesettingsbutton", _savesettingsbutton);
@@ -450,28 +451,31 @@ void MainWindow::on_savesettings_clicked()
         // Check with odhcploc that there aren't any other DHCP servers active that may conflict
         int ret = 0;
         string output, myip = _ps->currentIP(_ifacecombo->get_active_id());
-        vector<string> cmd = { "/usr/sbin/odhcploc", "-i3", myip, myip };
+        vector<string> cmd = { "/usr/sbin/odhcploc", "-p", "-i3", myip, myip };
         auto watchcursor = Gdk::Cursor::create(Gdk::WATCH);
         _window->get_window()->set_cursor(watchcursor);
+        ::usleep(100000);
         while (gtk_events_pending()) gtk_main_iteration();
 
         try
         {
             Glib::spawn_sync("", cmd, Glib::SPAWN_DEFAULT, Glib::SlotSpawnChildSetup(), &output, nullptr, &ret);
+            _window->get_window()->set_cursor();
         }
-        catch (exception &e)
+        catch (const Glib::Error &e)
         {
-            Gtk::MessageDialog d(_("Error starting odhcploc.\n"
-                                   "Skipped checking if other DHCP servers are active."));
+            _window->get_window()->set_cursor();
+            Gtk::MessageDialog d(Glib::ustring::compose(_("Error starting odhcploc: %1\n"
+                                                          "Skipped checking if other DHCP servers are active."), e.what() ));
+            d.set_transient_for(*_window);
             d.run();
         }
-
-        _window->get_window()->set_cursor();
 
         if (ret)
         {
             Gtk::MessageDialog d(_("odhcploc returned error code.\n"
                                    "Skipped checking if other DHCP servers are active."));
+            d.set_transient_for(*_window);
             d.run();
         }
         else if (!output.empty())
@@ -483,11 +487,19 @@ void MainWindow::on_savesettings_clicked()
             if (regex_search(output, match, ipRegex) )
                 otherserverip = match[1];
 
-            Gtk::MessageDialog d(Glib::ustring::compose(_("There is already another DHCP server (%1) active in your network.\n"
-                                   "It is not safe to have multiple DHCP servers running.\n"
-                                   "Your settings have not been saved."), otherserverip), false, Gtk::MESSAGE_ERROR);
-            d.run();
-            return;
+            Gtk::MessageDialog d(Glib::ustring::compose(_(
+                                   "There is already another DHCP server (%1) active in your network.\n"
+                                   "Having more than one DHCP server hand out IP-addresses from the same range can result "
+                                   "in serious problems, such as that more than one client is assigned the same IP-address.\n"
+                                   "Please read the <a href=\"https://github.com/raspberrypi/piserver/wiki\">documentation</a> before proceeding.\n\n"
+                                   "Are you sure you want to activate standalone DHCP server mode?"
+                                   ), otherserverip), true, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+            d.set_transient_for(*_window);
+            if (d.run() == Gtk::RESPONSE_NO)
+            {
+                _proxydhcpradio->set_active();
+                return;
+            }
         }
 
         _ps->setSetting("startIP", _startipentry->get_text() );
@@ -502,5 +514,6 @@ void MainWindow::on_savesettings_clicked()
     _ps->regenDnsmasqConf();
 
     Gtk::MessageDialog d(_("Settings saved"));
+    d.set_transient_for(*_window);
     d.run();
 }

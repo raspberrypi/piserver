@@ -28,7 +28,7 @@ protected:
     Gtk::Entry *_startipentry, *_endipentry, *_netmaskentry, *_gatewayentry;
     Gtk::Button *_savesettingsbutton;
     Gtk::ComboBox *_ifacecombo;
-    Gtk::RadioButton *_standaloneradio;
+    Gtk::RadioButton *_proxydhcpradio, *_standaloneradio;
     Gtk::Frame *_dhcpserverframe;
     Gtk::Label *_softwarelabel;
     Glib::RefPtr<Gtk::ListStore> _distrostore, _hoststore, _userstore, _ethstore;
