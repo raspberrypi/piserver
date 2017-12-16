@@ -1,5 +1,6 @@
 #include "dhcpanalyzer.h"
 #include "piserver.h"
+#include "dhcp.h"
 #include <stdexcept>
 #include <iostream>
 #include <unistd.h>
@@ -49,15 +50,7 @@ void DhcpAnalyzer::startListening()
 
 bool DhcpAnalyzer::on_packet(Glib::IOCondition)
 {
-    struct {
-          uint8_t op, htype, hlen, hops;
-          uint32_t xid;
-          uint16_t secs, flags;
-          uint32_t ciaddr, yiaddr, siaddr, giaddr;
-          unsigned char chaddr[16], legacy[192];
-          uint32_t cookie;
-          unsigned char data[500];
-    } __attribute__((__packed__)) dhcp = { 0 };
+    struct dhcp_packet dhcp = { 0 };
     char macbuf[32];
 
     int len = recvfrom(_s, &dhcp, sizeof(dhcp), 0, NULL, 0);
@@ -67,7 +60,7 @@ bool DhcpAnalyzer::on_packet(Glib::IOCondition)
          && dhcp.chaddr[0] == OUI_FILTER1 && dhcp.chaddr[1] == OUI_FILTER2 && dhcp.chaddr[2] == OUI_FILTER3
 #endif
          && dhcp.op == 1
-         && dhcp.cookie == htonl(0x63825363)
+         && dhcp.cookie == DHCP_COOKIE
 #ifdef DHCPANALYZER_FILTER_STRING
          && memmem(dhcp.data, sizeof(dhcp.data), DHCPANALYZER_FILTER_STRING, strlen(DHCPANALYZER_FILTER_STRING)) != NULL
 #endif

@@ -37,6 +37,7 @@ protected:
     std::string _cachedDistroInfo;
 
     bool _validIP(const std::string &s);
+    void _savesettings();
 
     /* Slots */
     void on_adduser_clicked();
@@ -54,6 +55,7 @@ protected:
     void on_usertree_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
     void onDownloadSuccessful();
     void onDownloadFailed();
+    void onOtherDhcpServerDetected(const std::string &ip);
     void on_popup_clicked();
     void _setSettingsSensitive();
     void on_savesettings_clicked();

@@ -7,6 +7,6 @@ Standards-Version: 3.9.7
 
 Package: piserver
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, gksu, binfmt-support [!armhf], qemu-user-static [!armhf], odhcploc
+Depends: ${shlibs:Depends}, ${misc:Depends}, gksu, binfmt-support [!armhf], qemu-user-static [!armhf]
 Description: Utility program to manage a network of diskless Pi 3 terminals
  Lets diskless Pi 3 terminals PXE boot from the network.
