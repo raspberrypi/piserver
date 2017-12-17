@@ -46,10 +46,13 @@ void DependenciesInstallThread::run()
         {"slapd	slapd/domain string", PISERVER_DOMAIN},
         {"slapd	slapd/backend select", "MDB"},
         {"slapd	slapd/dump_database	select", "when needed"},
-        {"nslcd nslcd/ldap-uris string", "ldap://127.0.0.1"},
+        {"nslcd nslcd/ldap-uris string", PISERVER_LDAP_URL},
         {"nslcd nslcd/ldap-base string", PISERVER_LDAP_DN},
         {"libnss-ldapd libnss-ldapd/nsswitch multiselect", "group, passwd, shadow"}
     };
+
+    bool nslcdAlreadyExists = ::access("/etc/nslcd.conf", F_OK) != -1;
+    bool slapdAlreadyExists = ::access("/etc/ldap/slapd.d", F_OK) != -1;
 
     try
     {
@@ -58,6 +61,18 @@ void DependenciesInstallThread::run()
 
         ::setenv("DEBIAN_FRONTEND", "noninteractive", 1);
         _execCheckResult("apt-get -q -y install dnsmasq openssh-server nfs-kernel-server slapd libnss-ldapd libpam-ldapd ldap-utils gnutls-bin");
+
+        if (slapdAlreadyExists)
+        {
+            cerr << "Force reconfiguration of existing slapd" << endl;
+            _execCheckResult("dpkg-reconfigure slapd");
+        }
+
+        if (nslcdAlreadyExists)
+        {
+            cerr << "Force reconfiguration of existing nslcd" << endl;
+            _execCheckResult("dpkg-reconfigure nslcd");
+        }
         ::unsetenv("DEBIAN_FRONTEND");
 
         // Using gnutls's certtool instead of OpenSSL, because it allows setting start date to 1970
