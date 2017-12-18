@@ -53,6 +53,8 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_addhost_clicked) );
     builder->get_widget("addosbutton", button);
     button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_addos_clicked) );
+    builder->get_widget("importusersbutton", button);
+    button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_importusers_clicked) );
 
     builder->get_widget("edituserbutton", _edituserbutton);
     _edituserbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_edituser_clicked) );
@@ -204,6 +206,25 @@ void MainWindow::on_adduser_clicked()
 {
     AddUserDialog d(_ps, _window);
     if ( d.exec() )
+        _reloadUsers();
+}
+
+void MainWindow::on_importusers_clicked()
+{
+    Gtk::FileChooserDialog fd(*_window, _("Please choose a .CSV file to import"));
+    auto filter = Gtk::FileFilter::create();
+    filter->set_name("CSV files");
+    filter->add_mime_type("text/csv");
+    fd.add_filter(filter);
+    fd.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    fd.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_OK);
+
+    if (fd.run() != Gtk::RESPONSE_OK)
+        return;
+
+    fd.hide();
+    AddUserDialog d(_ps, _window);
+    if ( d.importCSV(fd.get_filename()) && d.exec() )
         _reloadUsers();
 }
 

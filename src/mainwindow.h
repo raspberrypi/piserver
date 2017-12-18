@@ -41,6 +41,7 @@ protected:
 
     /* Slots */
     void on_adduser_clicked();
+    void on_importusers_clicked();
     void on_edituser_clicked();
     void on_deluser_clicked();
     void on_addhost_clicked();

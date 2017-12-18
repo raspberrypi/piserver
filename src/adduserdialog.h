@@ -12,12 +12,14 @@ public:
     AddUserDialog(PiServer *ps, Gtk::Window *parent);
     virtual ~AddUserDialog();
     bool exec();
+    bool importCSV(const std::string &filename);
 
 protected:
     PiServer *_ps;
     Gtk::Window *_parentWindow;
     Gtk::Dialog *_dialog;
     Gtk::Button *_okbutton;
+    Gtk::Grid *_grid;
 
     virtual void setAddUserOkButton();
 };
