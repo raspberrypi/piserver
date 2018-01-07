@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+  configure)
+    systemctl daemon-reload
+  ;;
+esac
+
+#DEBHELPER#
+
+exit 0
