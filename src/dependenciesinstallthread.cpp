@@ -60,7 +60,7 @@ void DependenciesInstallThread::run()
         _preseed(preseedValues);
 
         ::setenv("DEBIAN_FRONTEND", "noninteractive", 1);
-        _execCheckResult("apt-get -q -y install dnsmasq openssh-server nfs-kernel-server slapd libnss-ldapd libpam-ldapd ldap-utils gnutls-bin");
+        _execCheckResult("apt-get -q -y install dnsmasq openssh-server nfs-kernel-server slapd libnss-ldapd libpam-ldapd ldap-utils gnutls-bin ntp");
 
         if (slapdAlreadyExists)
         {
