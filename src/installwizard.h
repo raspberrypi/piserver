@@ -8,6 +8,8 @@
 #include "dependenciesinstallthread.h"
 #include <gtkmm.h>
 
+class ActiveDiscovery;
+
 class InstallWizard : public AbstractAddHost, public AbstractAddUser, public AbstractAddDistro
 {
 public:
@@ -21,8 +23,14 @@ protected:
     Gtk::Assistant *_assistant;
     Gtk::ComboBox *_ifacecombo;
     Glib::RefPtr<Gtk::ListStore> _ethstore, _repostore;
-    Gtk::Widget *_addHostPage, *_addUserPage, *_addDistroPage, *_progressPage;
+    Gtk::Widget *_addHostPage, *_addUserPage, *_addDistroPage, *_progressPage, *_authSelectPage;
     DependenciesInstallThread *_dependsThread;
+    Gtk::RadioButton *_localLdapRadio, *_extLdapRadio;
+    Gtk::Frame *_extLdapFrame;
+    Gtk::ComboBox *_ldapTypeBox;
+    Gtk::Entry *_ldapServerEntry, *_domainEntry, *_bindUserEntry, *_bindPassEntry;
+    ActiveDiscovery *_activeDiscovery;
+    int _prevPage;
 
     virtual void setAddHostOkButton();
     virtual void setAddUserOkButton();
@@ -33,6 +41,10 @@ protected:
     void onDependsInstallFailed();
     virtual void onInstallationSuccess();
     virtual void onInstallationFailed(const std::string &error);
+    void authSelectionRadioChange();
+    void setAuthSelectionOkButton();
+    void adDiscovered(const std::string &server, const std::string &domain);
+    void adDiscoveryFailed();
 
     std::string _randomStr(int len);
 };

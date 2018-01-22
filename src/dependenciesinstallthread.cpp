@@ -8,8 +8,8 @@
 
 using namespace std;
 
-DependenciesInstallThread::DependenciesInstallThread(PiServer *ps, const std::string &ldapPassword)
-    : _ps(ps), _ldapPassword(ldapPassword), _thread(NULL)
+DependenciesInstallThread::DependenciesInstallThread(PiServer *ps)
+    : _ps(ps), _thread(NULL)
 {
 }
 
@@ -29,40 +29,70 @@ void DependenciesInstallThread::start()
 
 void DependenciesInstallThread::run()
 {
-    map<string,string> preseedValues = {
-        {"slapd	slapd/password1	password", _ldapPassword},
-        {"slapd	slapd/internal/adminpw password", _ldapPassword},
-        {"slapd	slapd/internal/generated_adminpw password", _ldapPassword},
-        {"slapd	slapd/password2	password", _ldapPassword},
-        {"slapd	slapd/allow_ldap_v2	boolean", "false"},
-        {"slapd	slapd/password_mismatch", "note"},
-        {"slapd	slapd/invalid_config boolean", "true"},
-        {"slapd	shared/organization	string", PISERVER_DOMAIN},
-        {"slapd	slapd/upgrade_slapcat_failure", "error"},
-        {"slapd	slapd/no_configuration boolean", "false"},
-        {"slapd	slapd/move_old_database	boolean", "true"},
-        {"slapd	slapd/dump_database_destdir	string", "/var/backups/slapd-VERSION"},
-        {"slapd	slapd/purge_database boolean", "false"},
-        {"slapd	slapd/domain string", PISERVER_DOMAIN},
-        {"slapd	slapd/backend select", "MDB"},
-        {"slapd	slapd/dump_database	select", "when needed"},
-        {"nslcd nslcd/ldap-uris string", PISERVER_LDAP_URL},
-        {"nslcd nslcd/ldap-base string", PISERVER_LDAP_DN},
-        {"libnss-ldapd libnss-ldapd/nsswitch multiselect", "group, passwd, shadow"}
-    };
-
+    string ldapUri = _ps->getSetting("ldapUri", PISERVER_LDAP_URL);
+    string ldapDN = _ps->getSetting("ldapDN", PISERVER_LDAP_DN);
+    string ldapServerType = _ps->getSetting("ldapServerType");
+    string ldapUser = _ps->getSetting("ldapUser");
+    string ldapPassword = _ps->getSetting("ldapPassword");
+    string ldapExtraConfig = _ps->getSetting("ldapExtraConfig");
+    string pkglist = "dnsmasq openssh-server nfs-kernel-server libnss-ldapd libpam-ldapd ldap-utils gnutls-bin ntp";
+    bool installSlapd = ldapServerType.empty();
     bool nslcdAlreadyExists = ::access("/etc/nslcd.conf", F_OK) != -1;
     bool slapdAlreadyExists = ::access("/etc/ldap/slapd.d", F_OK) != -1;
 
     try
     {
         _execCheckResult("apt-get update -q");
-        _preseed(preseedValues);
+        if (installSlapd)
+        {
+            _preseed({
+                {"slapd	slapd/password1	password", ldapPassword},
+                {"slapd	slapd/internal/adminpw password", ldapPassword},
+                {"slapd	slapd/internal/generated_adminpw password", ldapPassword},
+                {"slapd	slapd/password2	password", ldapPassword},
+                {"slapd	slapd/allow_ldap_v2	boolean", "false"},
+                {"slapd	slapd/password_mismatch", "note"},
+                {"slapd	slapd/invalid_config boolean", "true"},
+                {"slapd	shared/organization	string", PISERVER_DOMAIN},
+                {"slapd	slapd/upgrade_slapcat_failure", "error"},
+                {"slapd	slapd/no_configuration boolean", "false"},
+                {"slapd	slapd/move_old_database	boolean", "true"},
+                {"slapd	slapd/dump_database_destdir	string", "/var/backups/slapd-VERSION"},
+                {"slapd	slapd/purge_database boolean", "false"},
+                {"slapd	slapd/domain string", PISERVER_DOMAIN},
+                {"slapd	slapd/backend select", "MDB"},
+                {"slapd	slapd/dump_database	select", "when needed"}
+            });
+            pkglist += " slapd";
+        }
+        else
+        {
+            /* Using external LDAP server. Install pam_mkhomedir to create home on first login */
+            _execCheckResult("cp " PISERVER_DATADIR "/scripts/mkhomedir-piserver /usr/share/pam-configs");
+            _execCheckResult("pam-auth-update --package");
+        }
+
+        map<string,string> nslcdPreseed = {
+            {"nslcd nslcd/ldap-uris string", ldapUri},
+            {"nslcd nslcd/ldap-base string", ldapDN},
+            {"libnss-ldapd libnss-ldapd/nsswitch multiselect", "group, passwd, shadow"},
+            {"nslcd nslcd/ldap-auth-type select", "none"}
+        };
+        if (!ldapServerType.empty())
+        {
+            if (!ldapUser.empty())
+            {
+                nslcdPreseed["nslcd nslcd/ldap-auth-type select"] = "simple";
+                nslcdPreseed.insert(make_pair("nslcd nslcd/ldap-binddn string", ldapUser));
+                nslcdPreseed.insert(make_pair("nslcd nslcd/ldap-bindpw string", ldapPassword));
+            }
+        }
+        _preseed(nslcdPreseed);
 
         ::setenv("DEBIAN_FRONTEND", "noninteractive", 1);
-        _execCheckResult("apt-get -q -y install dnsmasq openssh-server nfs-kernel-server slapd libnss-ldapd libpam-ldapd ldap-utils gnutls-bin ntp");
+        _execCheckResult("apt-get -q -y install "+pkglist);
 
-        if (slapdAlreadyExists)
+        if (installSlapd && slapdAlreadyExists)
         {
             cerr << "Force reconfiguration of existing slapd" << endl;
             _execCheckResult("dpkg-reconfigure slapd");
@@ -71,39 +101,51 @@ void DependenciesInstallThread::run()
         if (nslcdAlreadyExists)
         {
             cerr << "Force reconfiguration of existing nslcd" << endl;
+            ::unlink("/etc/nslcd.conf");
             _execCheckResult("dpkg-reconfigure nslcd");
         }
         ::unsetenv("DEBIAN_FRONTEND");
 
-        // Using gnutls's certtool instead of OpenSSL, because it allows setting start date to 1970
-        _execCheckResult("certtool --generate-privkey --ecc --outfile /etc/ldap/piserver.key");
-        ofstream os("/etc/ldap/piserver.tpl");
-        os << "cn = \"piserver\"" << endl
-           << "tls_www_server" << endl
-           << "activation_date=\"1970-01-01 00:00:00 UTC\"" << endl
-           << "expiration_days=\"7300\"" << endl;
-        os.close();
-        _execCheckResult("certtool --generate-self-signed --load-privkey /etc/ldap/piserver.key --template=/etc/ldap/piserver.tpl --outfile=/etc/ssl/certs/piserver.pem");
-        _execCheckResult("chown openldap /etc/ldap/piserver.key");
-        if (::unlink("/etc/ldap/piserver.tpl") != 0) { }
+        if (installSlapd)
+        {
+            // Using gnutls's certtool instead of OpenSSL, because it allows setting start date to 1970
+            _execCheckResult("certtool --generate-privkey --ecc --outfile /etc/ldap/piserver.key");
+            ofstream os("/etc/ldap/piserver.tpl");
+            os << "cn = \"piserver\"" << endl
+               << "tls_www_server" << endl
+               << "activation_date=\"1970-01-01 00:00:00 UTC\"" << endl
+               << "expiration_days=\"7300\"" << endl;
+            os.close();
+            _execCheckResult("certtool --generate-self-signed --load-privkey /etc/ldap/piserver.key --template=/etc/ldap/piserver.tpl --outfile=/etc/ssl/certs/piserver.pem");
+            _execCheckResult("chown openldap /etc/ldap/piserver.key");
+            if (::unlink("/etc/ldap/piserver.tpl") != 0) { }
 
-        const char *ldif =
-                "dn: cn=config\n"
-                "changetype: modify\n"
-                "replace: olcTLSCertificateFile\n"
-                "olcTLSCertificateFile: /etc/ssl/certs/piserver.pem\n"
-                "-\n"
-                "replace: olcTLSCACertificateFile\n"
-                "olcTLSCACertificateFile: /etc/ssl/certs/piserver.pem\n"
-                "-\n"
-                "replace: olcTLSCertificateKeyFile\n"
-                "olcTLSCertificateKeyFile: /etc/ldap/piserver.key\n";
-        FILE *f = popen("ldapmodify -Y EXTERNAL -H ldapi:///", "w");
-        fwrite(ldif, strlen(ldif), 1, f);
-        pclose(f);
+            const char *ldif =
+                    "dn: cn=config\n"
+                    "changetype: modify\n"
+                    "replace: olcTLSCertificateFile\n"
+                    "olcTLSCertificateFile: /etc/ssl/certs/piserver.pem\n"
+                    "-\n"
+                    "replace: olcTLSCACertificateFile\n"
+                    "olcTLSCACertificateFile: /etc/ssl/certs/piserver.pem\n"
+                    "-\n"
+                    "replace: olcTLSCertificateKeyFile\n"
+                    "olcTLSCertificateKeyFile: /etc/ldap/piserver.key\n";
+            FILE *f = popen("ldapmodify -Y EXTERNAL -H ldapi:///", "w");
+            fwrite(ldif, strlen(ldif), 1, f);
+            pclose(f);
 
-        // Test that LDAP server works. Generates exception if not
-        _ps->isUsernameAvailable("test");
+            // Test that LDAP server works. Generates exception if not
+            _ps->isUsernameAvailable("test");
+        }
+
+        if (!ldapExtraConfig.empty())
+        {
+            ofstream o("/etc/nslcd.conf", ios_base::out | ios_base::binary | ios_base::app);
+            o.write(ldapExtraConfig.c_str(), ldapExtraConfig.size());
+            o.close();
+            _execCheckResult("systemctl restart nslcd");
+        }
 
         _execCheckResult("systemctl start piserver_ssh");
         _execCheckResult("systemctl enable piserver_ssh");

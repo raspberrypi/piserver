@@ -130,6 +130,8 @@ void DownloadExtractThread::extractRun()
         if (!_postInstallScript.empty())
         {
             ::setenv("DISTROROOT", _folder.c_str(), 1);
+            if (!_ldapConfig.empty())
+                ::setenv("EXTERNAL_LDAP_CONFIG", _ldapConfig.c_str(), 1);
             if (system(_postInstallScript.c_str()) != 0)
             {
                 _emitError("Error running post-installation script");
@@ -139,6 +141,8 @@ void DownloadExtractThread::extractRun()
                 _emitSuccess();
             }
             ::unsetenv("DISTROROOT");
+            if (!_ldapConfig.empty())
+                ::unsetenv("EXTERNAL_LDAP_CONFIG");
         }
         else
         {
@@ -229,4 +233,9 @@ void DownloadExtractThread::_pushQueue(const char *data, size_t len)
 void DownloadExtractThread::setPostInstallScript(const std::string &path)
 {
     _postInstallScript = path;
+}
+
+void DownloadExtractThread::setLdapConfig(const std::string &config)
+{
+    _ldapConfig = config;
 }

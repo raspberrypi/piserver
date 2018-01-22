@@ -48,14 +48,19 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
 
     Gtk::ToolButton *button;
     builder->get_widget("adduserbutton", button);
-    button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_adduser_clicked) );
+    if (_ps->externalServer())
+        button->set_sensitive(false);
+    else
+        button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_adduser_clicked) );
     builder->get_widget("addhostbutton", button);
     button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_addhost_clicked) );
     builder->get_widget("addosbutton", button);
     button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_addos_clicked) );
     builder->get_widget("importusersbutton", button);
-    button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_importusers_clicked) );
-
+    if (_ps->externalServer())
+        button->set_sensitive(false);
+    else
+        button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_importusers_clicked) );
     builder->get_widget("edituserbutton", _edituserbutton);
     _edituserbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_edituser_clicked) );
     builder->get_widget("removeuserbutton", _deluserbutton);
@@ -385,8 +390,11 @@ void MainWindow::on_distrotree_activated(const Gtk::TreeModel::Path &path, Gtk::
 
 void MainWindow::on_usertree_activated(const Gtk::TreeModel::Path &, Gtk::TreeViewColumn *)
 {
-    _edituserbutton->set_sensitive();
-    _deluserbutton->set_sensitive();
+    if (!_ps->externalServer())
+    {
+        _edituserbutton->set_sensitive();
+        _deluserbutton->set_sensitive();
+    }
 }
 
 void MainWindow::onDownloadSuccessful()
@@ -418,9 +426,11 @@ void MainWindow::onDownloadSuccessful()
         if (updates)
         {
             Gtk::Popover *pop = new Gtk::Popover(*_softwarelabel);
-            pop->signal_closed().connect( sigc::mem_fun(this, &MainWindow::on_popup_clicked) );
+            pop->signal_button_press_event().connect( sigc::bind<Gtk::Widget *>(sigc::mem_fun(this, &MainWindow::on_popup_button), pop));
+            _notebook->signal_button_press_event().connect( sigc::bind<Gtk::Widget *>(sigc::mem_fun(this, &MainWindow::on_popup_button), pop));
             pop->add_label(_("Update available"));
             pop->set_position(Gtk::POS_BOTTOM);
+            pop->set_modal(false);
             pop->show();
         }
     }
@@ -431,9 +441,10 @@ void MainWindow::onDownloadSuccessful()
     _dt = NULL;
 }
 
-void MainWindow::on_popup_clicked()
+bool MainWindow::on_popup_button(GdkEventButton*, Gtk::Widget *sender)
 {
-    _notebook->set_current_page(2);
+    delete sender;
+    return true;
 }
 
 void MainWindow::onDownloadFailed()

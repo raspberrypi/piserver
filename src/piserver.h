@@ -60,11 +60,14 @@ public:
     void setSetting(const std::string &key, int value);
     std::string getSetting(const std::string &key, const std::string &defaultValue = "");
     int getSetting(const std::string &key, int defaultValue);
+    void unsetSetting(const std::string &key);
     void saveSettings();
     void regenDnsmasqConf(bool restartDnsmasqIfChanged = true);
     void addToExports(const std::string &line);
     double availableDiskSpace(const std::string &path = PISERVER_DISTROROOT);
     bool hasArmCpu();
+    bool externalServer();
+    std::string getDomainSidFromLdap(const std::string &server, const std::string &servertype, const std::string &basedn, const std::string &bindUser, const std::string &bindPass);
 
 protected:
     std::map<std::string,Host *> _hosts;
@@ -85,6 +88,9 @@ protected:
     static int _unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf);
     std::string _fileGetContents(const std::string &filename);
     void _filePutContents(const std::string &filename, const std::string &contents);
+    std::string _ldapDN();
+    bool _activeDirectory();
+    std::string _uidField();
 };
 
 #endif // PISERVER_H

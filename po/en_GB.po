@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 19:25+0200\n"
+"POT-Creation-Date: 2017-09-22 19:21+0200\n"
 "PO-Revision-Date: 2017-09-22 16:45+0100\n"
 "Last-Translator: Simon Long <simon@raspberrypi.org>\n"
 "Language-Team: English (British)\n"
@@ -17,33 +17,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/abstractadddistro.cpp:123
-msgid "Error parsing downloaded repository information: "
-msgstr "Error parsing downloaded repository information: "
-
-#: ../src/abstractadddistro.cpp:132
-msgid "Error downloading repository information: "
-msgstr "Error downloading repository information: "
-
-#: ../src/abstractadddistro.cpp:165
-msgid "Insufficient disk space. "
-msgstr "Insufficient disk space. "
+#: ../src/abstractadduser.cpp:110
+msgid ""
+"\n"
+"Only the following characters are allowed: a-z 0-9 . - _\n"
+msgstr ""
+"\n"
+"Only the following characters are allowed: a-z 0-9 . - _\n"
 
 #: ../src/abstractadddistro.cpp:165
 msgid " MB available."
 msgstr " MB available."
 
-#: ../src/abstractadddistro.cpp:186
-msgid "There is already an OS called '"
-msgstr "There is already an OS called '"
+#: ../src/piserver.cpp:541
+msgid " hosts"
+msgstr " hosts"
 
-#: ../src/abstractadddistro.cpp:186
-msgid "' installed."
-msgstr "' installed."
+#: ../src/abstractadddistro.cpp:248
+msgid " hours "
+msgstr " hours "
 
-#: ../src/abstractadddistro.cpp:190
-msgid "Starting download"
-msgstr "Starting download"
+#: ../src/abstractadddistro.cpp:252
+msgid " minutes "
+msgstr " minutes "
 
 #: ../src/abstractadddistro.cpp:241
 #, c-format
@@ -55,172 +51,49 @@ msgstr "%.1f MB of %.1f MB"
 msgid "%.1f Mbit/sec"
 msgstr "%.1f Mbit/sec"
 
-#: ../src/abstractadddistro.cpp:248
-msgid " hours "
-msgstr " hours "
-
-#: ../src/abstractadddistro.cpp:252
-msgid " minutes "
-msgstr " minutes "
+#: ../src/abstractadddistro.cpp:186
+msgid "' installed."
+msgstr "' installed."
 
 #: ../src/abstractadddistro.cpp:256
 msgid "1 minute "
 msgstr "1 minute "
 
-#: ../src/abstractadddistro.cpp:260
-msgid "Less than a minute "
-msgstr "Less than a minute "
-
-#: ../src/abstractadddistro.cpp:262
-msgid "left"
-msgstr "left"
-
-#: ../src/abstractaddhost.cpp:31
-msgid ""
-"Error listening for DHCP traffic.\n"
-"Uninstall any other DHCP servers running on this computer."
-msgstr ""
-"Error listening for DHCP traffic.\n"
-"Uninstall any other DHCP servers running on this computer."
-
-#: ../src/abstractadduser.cpp:106
-msgid "The following user names contain invalid characters: "
-msgstr "The following user names contain invalid characters: "
-
-#: ../src/abstractadduser.cpp:110
-msgid ""
-"\n"
-"Only the following characters are allowed: a-z 0-9 . - _\n"
-msgstr ""
-"\n"
-"Only the following characters are allowed: a-z 0-9 . - _\n"
-
-#: ../src/abstractadduser.cpp:114
-msgid "The following user names already exist on the system or this computer: "
-msgstr ""
-"The following user names already exist on the system or this computer: "
-
-#: ../src/installwizard.cpp:45
-msgid ""
-"No network interfaces with IPv4 address detected. Check your network "
-"settings."
-msgstr ""
-"No network interfaces with IPv4 address detected. Check your network "
-"settings."
-
-#: ../src/installwizard.cpp:96
-msgid "Installing LDAP, NFS and DHCP server software"
-msgstr "Installing LDAP, NFS and DHCP server software"
-
-#: ../src/main.cpp:28
-msgid "This program must be run as root. Try starting it with sudo."
-msgstr "This program must be run as root. Try starting it with sudo."
-
-#: ../src/mainwindow.cpp:191
-msgid "Normal users"
-msgstr "Normal users"
-
-#: ../src/mainwindow.cpp:228
-msgid ""
-"Are you sure you want to delete this user and the files in their home "
-"directory?"
-msgstr ""
-"Are you sure you want to delete this user and the files in their home "
-"directory?"
-
-#. Shouldn't happen if user made it through the first-use wizard
-#: ../src/mainwindow.cpp:253
-msgid "Please install a Linux distribution first under 'Software'"
-msgstr "Please install a Linux distribution first under 'Software'"
-
-#: ../src/mainwindow.cpp:316
-msgid "Are you sure you want to delete this operating system?"
-msgstr "Are you sure you want to delete this operating system?"
-
-#: ../src/mainwindow.cpp:400
-msgid "Update available"
-msgstr "Update available"
-
-#: ../src/mainwindow.cpp:468
-#, fuzzy
-msgid ""
-"Error starting odhcploc: %1\n"
-"Skipped checking if other DHCP servers are active."
-msgstr ""
-"Error starting odhcploc.\n"
-"Skipped checking if other DHCP servers are active."
-
-#: ../src/mainwindow.cpp:476
-msgid ""
-"odhcploc returned error code.\n"
-"Skipped checking if other DHCP servers are active."
-msgstr ""
-"odhcploc returned error code.\n"
-"Skipped checking if other DHCP servers are active."
-
-#: ../src/mainwindow.cpp:491
-msgid ""
-"There is already another DHCP server (%1) active in your network.\n"
-"Having more than one DHCP server hand out IP-addresses from the same range "
-"can result in serious problems, such as that more than one client is "
-"assigned the same IP-address.\n"
-"Please read the <a href=\"https://github.com/raspberrypi/piserver/wiki"
-"\">documentation</a> before proceeding.\n"
-"\n"
-"Are you sure you want to activate standalone DHCP server mode?"
-msgstr ""
-"There is already another DHCP server (%1) active on your network.\n"
-"Having more than one DHCP server assigning IP addresses"
-"can result in serious problems, such as the same address being "
-"assigned to multiple clients.\n"
-"Please read the <a href=\"https://github.com/raspberrypi/piserver/wiki"
-"\">documentation</a> before proceeding.\n"
-"\n"
-"Are you sure you want to activate standalone DHCP server mode?"
-
-#: ../src/mainwindow.cpp:516
-msgid "Settings saved"
-msgstr "Settings saved"
-
-#: ../src/piserver.cpp:541
-msgid "Cannot delete this OS, as it is in use by "
-msgstr "Cannot delete this OS, as it is in use by "
-
-#: ../src/piserver.cpp:541
-msgid " hosts"
-msgstr " hosts"
-
-#: ../src/piserver.cpp:559
-msgid "Old"
-msgstr "Old"
-
-#: ../data/adddistrodialog.glade.h:1 ../data/firstuse.glade.h:5
-msgid "Raspbian"
-msgstr "Raspbian"
-
-#: ../data/adddistrodialog.glade.h:2 ../data/firstuse.glade.h:6
-msgid "2017-1-1"
-msgstr "2017-1-1"
+#: ../data/adduserdialog.glade.h:6 ../data/firstuse.glade.h:58
+msgid "1)"
+msgstr "1)"
 
 #: ../data/adddistrodialog.glade.h:3 ../data/firstuse.glade.h:7
 msgid "1024 MB"
 msgstr "1024 MB"
 
-#: ../data/adddistrodialog.glade.h:4 ../data/firstuse.glade.h:8
-msgid "Raspbian Lite"
-msgstr "Raspbian Lite"
+#: ../data/adduserdialog.glade.h:5 ../data/firstuse.glade.h:57
+msgid "2)"
+msgstr "2)"
 
 #: ../data/adddistrodialog.glade.h:5 ../data/firstuse.glade.h:9
 msgid "2016-12-31"
 msgstr "2016-12-31"
 
+#: ../data/adddistrodialog.glade.h:2 ../data/firstuse.glade.h:6
+msgid "2017-1-1"
+msgstr "2017-1-1"
+
+#: ../data/adduserdialog.glade.h:4 ../data/firstuse.glade.h:56
+msgid "3)"
+msgstr "3)"
+
+#: ../data/adduserdialog.glade.h:3 ../data/firstuse.glade.h:55
+msgid "4)"
+msgstr "4)"
+
+#: ../data/adduserdialog.glade.h:2 ../data/firstuse.glade.h:54
+msgid "5)"
+msgstr "5)"
+
 #: ../data/adddistrodialog.glade.h:6 ../data/firstuse.glade.h:10
 msgid "512 MB"
 msgstr "512 MB"
-
-#: ../data/adddistrodialog.glade.h:7 ../data/firstuse.glade.h:77
-msgid "Add software"
-msgstr "Add software"
 
 #: ../data/adddistrodialog.glade.h:8
 msgid ""
@@ -232,38 +105,67 @@ msgstr ""
 "\n"
 "Select the operating system you wish to install.\n"
 
-#: ../data/adddistrodialog.glade.h:12 ../data/firstuse.glade.h:70
-msgid "Install operating system from repository"
-msgstr "Install operating system from repository"
+#: ../data/firstuse.glade.h:47
+msgid ""
+"<big>Create user accounts on server</big>\n"
+"\n"
+"You need to create at least one user account on the server - you can\n"
+"add more accounts later if desired.\n"
+"\n"
+"Enter a username and password for each account to be created.\n"
+msgstr ""
+"<big>Create user accounts on server</big>\n"
+"\n"
+"You need to create at least one user account on the server - you can\n"
+"add more accounts later if desired.\n"
+"\n"
+"Enter a username and password for each account to be created.\n"
 
-#: ../data/adddistrodialog.glade.h:13 ../data/piserver.glade.h:13
-#: ../data/firstuse.glade.h:71
-msgid "Operating system"
-msgstr "Operating system"
+#: ../data/adddistrodialog.glade.h:29
+msgid ""
+"<big>Finished</big>\n"
+"\n"
+"Installation of the operating system has completed.\n"
+"In the \"hosts\" tab you can configure which terminals should run this OS."
+msgstr ""
+"<big>Finished</big>\n"
+"\n"
+"Installation of the operating system has completed.\n"
+"In the \"hosts\" tab you can configure which terminals should run this OS."
 
-#: ../data/adddistrodialog.glade.h:14 ../data/firstuse.glade.h:72
-msgid "Version"
-msgstr "Version"
+#: ../data/firstuse.glade.h:87
+msgid ""
+"<big>Finished</big>\n"
+"\n"
+"Installation was successful.\n"
+"\n"
+"You can now start using the system, and add additional users and clients as "
+"needed."
+msgstr ""
+"<big>Finished</big>\n"
+"\n"
+"Installation was successful.\n"
+"\n"
+"You can now start using the system, and add additional users and clients as "
+"needed."
 
-#: ../data/adddistrodialog.glade.h:15 ../data/firstuse.glade.h:73
-msgid "Size"
-msgstr "Size"
-
-#: ../data/adddistrodialog.glade.h:16 ../data/firstuse.glade.h:74
-msgid "Install operating system from local file (.tar.xz)"
-msgstr "Install operating system from local file (.tar.xz)"
-
-#: ../data/adddistrodialog.glade.h:17 ../data/firstuse.glade.h:75
-msgid "Install operating system from URL"
-msgstr "Install operating system from URL"
-
-#: ../data/adddistrodialog.glade.h:18 ../data/firstuse.glade.h:76
-msgid "http://"
-msgstr "http://"
-
-#: ../data/adddistrodialog.glade.h:19
-msgid "Select OS"
-msgstr "Select OS"
+#: ../data/firstuse.glade.h:78
+msgid ""
+"<big>Installing software</big>\n"
+"\n"
+"Please wait while the software is installed.\n"
+"\n"
+"\n"
+"\n"
+"\n"
+msgstr ""
+"<big>Installing software</big>\n"
+"\n"
+"Please wait while the software is installed.\n"
+"\n"
+"\n"
+"\n"
+"\n"
 
 #: ../data/adddistrodialog.glade.h:20
 msgid ""
@@ -282,246 +184,6 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-
-#: ../data/adddistrodialog.glade.h:28 ../data/firstuse.glade.h:86
-msgid "Installation"
-msgstr "Installation"
-
-#: ../data/adddistrodialog.glade.h:29
-msgid ""
-"<big>Finished</big>\n"
-"\n"
-"Installation of the operating system has completed.\n"
-"In the \"hosts\" tab you can configure which terminals should run this OS."
-msgstr ""
-"<big>Finished</big>\n"
-"\n"
-"Installation of the operating system has completed.\n"
-"In the \"hosts\" tab you can configure which terminals should run this OS."
-
-#: ../data/adddistrodialog.glade.h:33 ../data/firstuse.glade.h:92
-msgid "Finished"
-msgstr "Finished"
-
-#: ../data/edithostdialog.glade.h:1
-msgid "Edit Client"
-msgstr "Edit Client"
-
-#: ../data/edithostdialog.glade.h:2
-msgid "MAC address:"
-msgstr "MAC address:"
-
-#: ../data/edithostdialog.glade.h:3
-msgid "Description:"
-msgstr "Description:"
-
-#: ../data/edithostdialog.glade.h:4 ../data/addhostdialog.glade.h:12
-msgid "Operating system:"
-msgstr "Operating system:"
-
-#: ../data/addhostdialog.glade.h:1
-msgid "Add Clients"
-msgstr "Add Clients"
-
-#: ../data/addhostdialog.glade.h:2
-msgid ""
-"Ensure all the Pis you want to use are set up to boot from the network,\n"
-"connected to Ethernet and powered on. They will appear in the list below.\n"
-"(Note that any Pis already registered do not appear in the list.)\n"
-"\n"
-"Uncheck the box next to any Pis you do not want to use with this server.\n"
-"\n"
-"Select the operating system to run on these Pis from the drop-down box.\n"
-msgstr ""
-"Ensure all the Pis you want to use are set up to boot from the network,\n"
-"connected to Ethernet and powered on. They will appear in the list below.\n"
-"(Note that any Pis already registered do not appear in the list.)\n"
-"\n"
-"Uncheck the box next to any Pis you do not want to use with this server.\n"
-"\n"
-"Select the operating system to run on these Pis from the drop-down box.\n"
-
-#: ../data/addhostdialog.glade.h:10 ../data/firstuse.glade.h:45
-msgid "MAC address of Raspberry Pi"
-msgstr "MAC address of Raspberry Pi"
-
-#: ../data/addhostdialog.glade.h:11
-msgid "Description of clients (optional):"
-msgstr "Description of clients (optional):"
-
-#: ../data/edituserdialog.glade.h:1 ../data/piserver.glade.h:5
-msgid "Reset Password"
-msgstr "Reset Password"
-
-#: ../data/edituserdialog.glade.h:2
-msgid "User:"
-msgstr "User:"
-
-#: ../data/edituserdialog.glade.h:3
-msgid "Password:"
-msgstr "Password:"
-
-#: ../data/edituserdialog.glade.h:4
-msgid "Confirm password:"
-msgstr "Confirm password:"
-
-#: ../data/edituserdialog.glade.h:5 ../data/adduserdialog.glade.h:9
-#: ../data/firstuse.glade.h:61
-msgid "Show passwords"
-msgstr "Show passwords"
-
-#: ../data/piserver.glade.h:1 ../data/firstuse.glade.h:1
-msgid "eth0"
-msgstr "eth0"
-
-#: ../data/piserver.glade.h:2 ../data/firstuse.glade.h:2
-msgid "eth0 (e1000)"
-msgstr "eth0 (e1000)"
-
-#: ../data/piserver.glade.h:3 ../data/piserver.desktop.in.h:1
-msgid "PiServer"
-msgstr "PiServer"
-
-#: ../data/piserver.glade.h:4
-msgid "Add"
-msgstr "Add"
-
-#: ../data/piserver.glade.h:6
-msgid "Remove"
-msgstr "Remove"
-
-#: ../data/piserver.glade.h:7 ../data/adduserdialog.glade.h:7
-#: ../data/firstuse.glade.h:59
-msgid "User"
-msgstr "User"
-
-#: ../data/piserver.glade.h:8
-msgid "Group"
-msgstr "Group"
-
-#: ../data/piserver.glade.h:9
-msgid "Users"
-msgstr "Users"
-
-#: ../data/piserver.glade.h:10
-msgid "Edit"
-msgstr "Edit"
-
-#: ../data/piserver.glade.h:11
-msgid "MAC address"
-msgstr "MAC address"
-
-#: ../data/piserver.glade.h:12
-msgid "Description"
-msgstr "Description"
-
-#: ../data/piserver.glade.h:14
-msgid "Clients"
-msgstr "Clients"
-
-#: ../data/piserver.glade.h:15
-msgid "Upgrade"
-msgstr "Upgrade"
-
-#: ../data/piserver.glade.h:16
-msgid "Shell"
-msgstr "Shell"
-
-#: ../data/piserver.glade.h:17
-msgid "Installed version"
-msgstr "Installed version"
-
-#: ../data/piserver.glade.h:18
-msgid "Latest version"
-msgstr "Latest version"
-
-#: ../data/piserver.glade.h:19
-msgid "Software"
-msgstr "Software"
-
-#: ../data/piserver.glade.h:20 ../data/firstuse.glade.h:44
-msgid "Network interface: "
-msgstr "Network interface: "
-
-#: ../data/piserver.glade.h:21
-msgid "Act as proxy DHCP server"
-msgstr "Act as proxy DHCP server"
-
-#: ../data/piserver.glade.h:22
-msgid "Act as standalone DHCP server"
-msgstr "Act as standalone DHCP server"
-
-#: ../data/piserver.glade.h:23
-msgid "Client IP range start:"
-msgstr "Client IP range start:"
-
-#: ../data/piserver.glade.h:24
-msgid "Client IP range end:"
-msgstr "Client IP range end:"
-
-#: ../data/piserver.glade.h:25
-msgid "Netmask:"
-msgstr "Netmask:"
-
-#: ../data/piserver.glade.h:26
-msgid "Gateway:"
-msgstr "Gateway:"
-
-#: ../data/piserver.glade.h:27
-msgid "DHCP server settings"
-msgstr "DHCP server settings"
-
-#: ../data/piserver.glade.h:28
-msgid "Save"
-msgstr "Save"
-
-#: ../data/piserver.glade.h:29
-msgid "Settings"
-msgstr "Settings"
-
-#: ../data/adduserdialog.glade.h:1
-msgid "Add Users"
-msgstr "Add Users"
-
-#: ../data/adduserdialog.glade.h:2 ../data/firstuse.glade.h:54
-msgid "5)"
-msgstr "5)"
-
-#: ../data/adduserdialog.glade.h:3 ../data/firstuse.glade.h:55
-msgid "4)"
-msgstr "4)"
-
-#: ../data/adduserdialog.glade.h:4 ../data/firstuse.glade.h:56
-msgid "3)"
-msgstr "3)"
-
-#: ../data/adduserdialog.glade.h:5 ../data/firstuse.glade.h:57
-msgid "2)"
-msgstr "2)"
-
-#: ../data/adduserdialog.glade.h:6 ../data/firstuse.glade.h:58
-msgid "1)"
-msgstr "1)"
-
-#: ../data/adduserdialog.glade.h:8 ../data/firstuse.glade.h:60
-msgid "Password"
-msgstr "Password"
-
-#: ../data/adduserdialog.glade.h:10 ../data/firstuse.glade.h:62
-msgid "Force password change on first login"
-msgstr "Force password change on first login"
-
-#: ../data/firstuse.glade.h:3
-msgid "b8:27:eb:11:22:33"
-msgstr "b8:27:eb:11:22:33"
-
-#: ../data/firstuse.glade.h:4
-msgid "b8:27:eb:44:55:66"
-msgstr "b8:27:eb:44:55:66"
-
-#: ../data/firstuse.glade.h:11
-msgid "PiServer initial installation"
-msgstr "PiServer initial installation"
 
 #: ../data/firstuse.glade.h:12
 msgid ""
@@ -569,10 +231,6 @@ msgstr ""
 "2) Creating user accounts.\n"
 "3) Installing an operating system.\n"
 
-#: ../data/firstuse.glade.h:34
-msgid "Introduction"
-msgstr "Introduction"
-
 #: ../data/firstuse.glade.h:35
 msgid ""
 "<big>Select Raspberry Pi clients to use</big>\n"
@@ -593,30 +251,6 @@ msgstr ""
 "\n"
 "Uncheck the box next to any Pis you do not want to use with this server.\n"
 
-#: ../data/firstuse.glade.h:46
-msgid "Add clients   "
-msgstr "Add clients   "
-
-#: ../data/firstuse.glade.h:47
-msgid ""
-"<big>Create user accounts on server</big>\n"
-"\n"
-"You need to create at least one user account on the server - you can\n"
-"add more accounts later if desired.\n"
-"\n"
-"Enter a username and password for each account to be created.\n"
-msgstr ""
-"<big>Create user accounts on server</big>\n"
-"\n"
-"You need to create at least one user account on the server - you can\n"
-"add more accounts later if desired.\n"
-"\n"
-"Enter a username and password for each account to be created.\n"
-
-#: ../data/firstuse.glade.h:63
-msgid "Add users"
-msgstr "Add users"
-
 #: ../data/firstuse.glade.h:64
 msgid ""
 "<big>Select the operating system to install</big>\n"
@@ -631,41 +265,405 @@ msgstr ""
 "\n"
 "Choose one option below - you can add additional operating systems later.\n"
 
-#: ../data/firstuse.glade.h:78
-msgid ""
-"<big>Installing software</big>\n"
-"\n"
-"Please wait while the software is installed.\n"
-"\n"
-"\n"
-"\n"
-"\n"
-msgstr ""
-"<big>Installing software</big>\n"
-"\n"
-"Please wait while the software is installed.\n"
-"\n"
-"\n"
-"\n"
-"\n"
+#: ../data/piserver.glade.h:21
+msgid "Act as proxy DHCP server"
+msgstr "Act as proxy DHCP server"
 
-#: ../data/firstuse.glade.h:87
+#: ../data/piserver.glade.h:22
+msgid "Act as standalone DHCP server"
+msgstr "Act as standalone DHCP server"
+
+#: ../data/piserver.glade.h:4
+msgid "Add"
+msgstr "Add"
+
+#: ../data/addhostdialog.glade.h:1
+msgid "Add Clients"
+msgstr "Add Clients"
+
+#: ../data/adduserdialog.glade.h:1
+msgid "Add Users"
+msgstr "Add Users"
+
+#: ../data/firstuse.glade.h:46
+msgid "Add clients   "
+msgstr "Add clients   "
+
+#: ../data/adddistrodialog.glade.h:7 ../data/firstuse.glade.h:77
+msgid "Add software"
+msgstr "Add software"
+
+#: ../data/firstuse.glade.h:63
+msgid "Add users"
+msgstr "Add users"
+
+#: ../src/mainwindow.cpp:316
+msgid "Are you sure you want to delete this operating system?"
+msgstr "Are you sure you want to delete this operating system?"
+
+#: ../src/mainwindow.cpp:228
 msgid ""
-"<big>Finished</big>\n"
-"\n"
-"Installation was successful.\n"
-"\n"
-"You can now start using the system, and add additional users and clients as "
-"needed."
+"Are you sure you want to delete this user and the files in their home "
+"directory?"
 msgstr ""
-"<big>Finished</big>\n"
+"Are you sure you want to delete this user and the files in their home "
+"directory?"
+
+#: ../src/piserver.cpp:541
+msgid "Cannot delete this OS, as it is in use by "
+msgstr "Cannot delete this OS, as it is in use by "
+
+#: ../data/piserver.glade.h:24
+msgid "Client IP range end:"
+msgstr "Client IP range end:"
+
+#: ../data/piserver.glade.h:23
+msgid "Client IP range start:"
+msgstr "Client IP range start:"
+
+#: ../data/piserver.glade.h:14
+msgid "Clients"
+msgstr "Clients"
+
+#: ../data/edituserdialog.glade.h:4
+msgid "Confirm password:"
+msgstr "Confirm password:"
+
+#: ../data/piserver.glade.h:27
+msgid "DHCP server settings"
+msgstr "DHCP server settings"
+
+#: ../data/piserver.glade.h:12
+msgid "Description"
+msgstr "Description"
+
+#: ../data/addhostdialog.glade.h:11
+msgid "Description of clients (optional):"
+msgstr "Description of clients (optional):"
+
+#: ../data/edithostdialog.glade.h:3
+msgid "Description:"
+msgstr "Description:"
+
+#: ../data/piserver.glade.h:10
+msgid "Edit"
+msgstr "Edit"
+
+#: ../data/edithostdialog.glade.h:1
+msgid "Edit Client"
+msgstr "Edit Client"
+
+#: ../data/addhostdialog.glade.h:2
+msgid ""
+"Ensure all the Pis you want to use are set up to boot from the network,\n"
+"connected to Ethernet and powered on. They will appear in the list below.\n"
+"(Note that any Pis already registered do not appear in the list.)\n"
 "\n"
-"Installation was successful.\n"
+"Uncheck the box next to any Pis you do not want to use with this server.\n"
 "\n"
-"You can now start using the system, and add additional users and clients as "
-"needed."
+"Select the operating system to run on these Pis from the drop-down box.\n"
+msgstr ""
+"Ensure all the Pis you want to use are set up to boot from the network,\n"
+"connected to Ethernet and powered on. They will appear in the list below.\n"
+"(Note that any Pis already registered do not appear in the list.)\n"
+"\n"
+"Uncheck the box next to any Pis you do not want to use with this server.\n"
+"\n"
+"Select the operating system to run on these Pis from the drop-down box.\n"
+
+#: ../src/abstractadddistro.cpp:132
+msgid "Error downloading repository information: "
+msgstr "Error downloading repository information: "
+
+#: ../src/abstractaddhost.cpp:31
+msgid ""
+"Error listening for DHCP traffic.\n"
+"Uninstall any other DHCP servers running on this computer."
+msgstr ""
+"Error listening for DHCP traffic.\n"
+"Uninstall any other DHCP servers running on this computer."
+
+#: ../src/abstractadddistro.cpp:123
+msgid "Error parsing downloaded repository information: "
+msgstr "Error parsing downloaded repository information: "
+
+#: ../src/mainwindow.cpp:468
+#, fuzzy
+msgid ""
+"Error starting odhcploc: %1\n"
+"Skipped checking if other DHCP servers are active."
+msgstr ""
+"Error starting odhcploc.\n"
+"Skipped checking if other DHCP servers are active."
+
+#: ../data/adddistrodialog.glade.h:33 ../data/firstuse.glade.h:92
+msgid "Finished"
+msgstr "Finished"
+
+#: ../data/adduserdialog.glade.h:10 ../data/firstuse.glade.h:62
+msgid "Force password change on first login"
+msgstr "Force password change on first login"
+
+#: ../data/piserver.glade.h:26
+msgid "Gateway:"
+msgstr "Gateway:"
+
+#: ../data/piserver.glade.h:8
+msgid "Group"
+msgstr "Group"
+
+#: ../data/adddistrodialog.glade.h:17 ../data/firstuse.glade.h:75
+msgid "Install operating system from URL"
+msgstr "Install operating system from URL"
+
+#: ../data/adddistrodialog.glade.h:16 ../data/firstuse.glade.h:74
+msgid "Install operating system from local file (.tar.xz)"
+msgstr "Install operating system from local file (.tar.xz)"
+
+#: ../data/adddistrodialog.glade.h:12 ../data/firstuse.glade.h:70
+msgid "Install operating system from repository"
+msgstr "Install operating system from repository"
+
+#: ../data/adddistrodialog.glade.h:28 ../data/firstuse.glade.h:86
+msgid "Installation"
+msgstr "Installation"
+
+#: ../data/piserver.glade.h:17
+msgid "Installed version"
+msgstr "Installed version"
+
+#: ../src/installwizard.cpp:96
+msgid "Installing LDAP, NFS and DHCP server software"
+msgstr "Installing LDAP, NFS and DHCP server software"
+
+#: ../src/abstractadddistro.cpp:165
+msgid "Insufficient disk space. "
+msgstr "Insufficient disk space. "
+
+#: ../data/firstuse.glade.h:34
+msgid "Introduction"
+msgstr "Introduction"
+
+#: ../data/piserver.glade.h:18
+msgid "Latest version"
+msgstr "Latest version"
+
+#: ../src/abstractadddistro.cpp:260
+msgid "Less than a minute "
+msgstr "Less than a minute "
+
+#: ../data/piserver.glade.h:11
+msgid "MAC address"
+msgstr "MAC address"
+
+#: ../data/addhostdialog.glade.h:10 ../data/firstuse.glade.h:45
+msgid "MAC address of Raspberry Pi"
+msgstr "MAC address of Raspberry Pi"
+
+#: ../data/edithostdialog.glade.h:2
+msgid "MAC address:"
+msgstr "MAC address:"
+
+#: ../data/piserver.glade.h:25
+msgid "Netmask:"
+msgstr "Netmask:"
+
+#: ../data/piserver.glade.h:20 ../data/firstuse.glade.h:44
+msgid "Network interface: "
+msgstr "Network interface: "
+
+#: ../src/installwizard.cpp:45
+msgid ""
+"No network interfaces with IPv4 address detected. Check your network "
+"settings."
+msgstr ""
+"No network interfaces with IPv4 address detected. Check your network "
+"settings."
+
+#: ../src/mainwindow.cpp:191
+msgid "Normal users"
+msgstr "Normal users"
+
+#: ../src/piserver.cpp:559
+msgid "Old"
+msgstr "Old"
+
+#: ../data/adddistrodialog.glade.h:13 ../data/piserver.glade.h:13
+#: ../data/firstuse.glade.h:71
+msgid "Operating system"
+msgstr "Operating system"
+
+#: ../data/edithostdialog.glade.h:4 ../data/addhostdialog.glade.h:12
+msgid "Operating system:"
+msgstr "Operating system:"
+
+#: ../data/adduserdialog.glade.h:8 ../data/firstuse.glade.h:60
+msgid "Password"
+msgstr "Password"
+
+#: ../data/edituserdialog.glade.h:3
+msgid "Password:"
+msgstr "Password:"
+
+#: ../data/piserver.glade.h:3 ../data/piserver.desktop.in.h:1
+msgid "PiServer"
+msgstr "PiServer"
+
+#: ../data/firstuse.glade.h:11
+msgid "PiServer initial installation"
+msgstr "PiServer initial installation"
+
+#. Shouldn't happen if user made it through the first-use wizard
+#: ../src/mainwindow.cpp:253
+msgid "Please install a Linux distribution first under 'Software'"
+msgstr "Please install a Linux distribution first under 'Software'"
+
+#: ../data/adddistrodialog.glade.h:1 ../data/firstuse.glade.h:5
+msgid "Raspbian"
+msgstr "Raspbian"
+
+#: ../data/adddistrodialog.glade.h:4 ../data/firstuse.glade.h:8
+msgid "Raspbian Lite"
+msgstr "Raspbian Lite"
+
+#: ../data/piserver.glade.h:6
+msgid "Remove"
+msgstr "Remove"
+
+#: ../data/edituserdialog.glade.h:1 ../data/piserver.glade.h:5
+msgid "Reset Password"
+msgstr "Reset Password"
+
+#: ../data/piserver.glade.h:28
+msgid "Save"
+msgstr "Save"
+
+#: ../data/adddistrodialog.glade.h:19
+msgid "Select OS"
+msgstr "Select OS"
 
 #: ../data/piserver.desktop.in.h:2
 msgid "Server for diskless Pi 3"
 msgstr "Server for diskless Pi 3"
 
+#: ../data/piserver.glade.h:29
+msgid "Settings"
+msgstr "Settings"
+
+#: ../src/mainwindow.cpp:516
+msgid "Settings saved"
+msgstr "Settings saved"
+
+#: ../data/piserver.glade.h:16
+msgid "Shell"
+msgstr "Shell"
+
+#: ../data/edituserdialog.glade.h:5 ../data/adduserdialog.glade.h:9
+#: ../data/firstuse.glade.h:61
+msgid "Show passwords"
+msgstr "Show passwords"
+
+#: ../data/adddistrodialog.glade.h:15 ../data/firstuse.glade.h:73
+msgid "Size"
+msgstr "Size"
+
+#: ../data/piserver.glade.h:19
+msgid "Software"
+msgstr "Software"
+
+#: ../src/abstractadddistro.cpp:190
+msgid "Starting download"
+msgstr "Starting download"
+
+#: ../src/abstractadduser.cpp:114
+msgid "The following user names already exist on the system or this computer: "
+msgstr ""
+"The following user names already exist on the system or this computer: "
+
+#: ../src/abstractadduser.cpp:106
+msgid "The following user names contain invalid characters: "
+msgstr "The following user names contain invalid characters: "
+
+#: ../src/abstractadddistro.cpp:186
+msgid "There is already an OS called '"
+msgstr "There is already an OS called '"
+
+#: ../src/mainwindow.cpp:491
+msgid ""
+"There is already another DHCP server (%1) active in your network.\n"
+"Having more than one DHCP server hand out IP-addresses from the same range "
+"can result in serious problems, such as that more than one client is "
+"assigned the same IP-address.\n"
+"Please read the <a href=\"https://github.com/raspberrypi/piserver/wiki"
+"\">documentation</a> before proceeding.\n"
+"\n"
+"Are you sure you want to activate standalone DHCP server mode?"
+msgstr ""
+"There is already another DHCP server (%1) active on your network.\n"
+"Having more than one DHCP server assigning IP addressescan result in serious "
+"problems, such as the same address being assigned to multiple clients.\n"
+"Please read the <a href=\"https://github.com/raspberrypi/piserver/wiki"
+"\">documentation</a> before proceeding.\n"
+"\n"
+"Are you sure you want to activate standalone DHCP server mode?"
+
+#: ../src/main.cpp:28
+msgid "This program must be run as root. Try starting it with sudo."
+msgstr "This program must be run as root. Try starting it with sudo."
+
+#: ../src/mainwindow.cpp:400
+msgid "Update available"
+msgstr "Update available"
+
+#: ../data/piserver.glade.h:15
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: ../data/piserver.glade.h:7 ../data/adduserdialog.glade.h:7
+#: ../data/firstuse.glade.h:59
+msgid "User"
+msgstr "User"
+
+#: ../data/edituserdialog.glade.h:2
+msgid "User:"
+msgstr "User:"
+
+#: ../data/piserver.glade.h:9
+msgid "Users"
+msgstr "Users"
+
+#: ../data/adddistrodialog.glade.h:14 ../data/firstuse.glade.h:72
+msgid "Version"
+msgstr "Version"
+
+#: ../data/firstuse.glade.h:3
+msgid "b8:27:eb:11:22:33"
+msgstr "b8:27:eb:11:22:33"
+
+#: ../data/firstuse.glade.h:4
+msgid "b8:27:eb:44:55:66"
+msgstr "b8:27:eb:44:55:66"
+
+#: ../data/piserver.glade.h:1 ../data/firstuse.glade.h:1
+msgid "eth0"
+msgstr "eth0"
+
+#: ../data/piserver.glade.h:2 ../data/firstuse.glade.h:2
+msgid "eth0 (e1000)"
+msgstr "eth0 (e1000)"
+
+#: ../data/adddistrodialog.glade.h:18 ../data/firstuse.glade.h:76
+msgid "http://"
+msgstr "http://"
+
+#: ../src/abstractadddistro.cpp:262
+msgid "left"
+msgstr "left"
+
+#: ../src/mainwindow.cpp:476
+msgid ""
+"odhcploc returned error code.\n"
+"Skipped checking if other DHCP servers are active."
+msgstr ""
+"odhcploc returned error code.\n"
+"Skipped checking if other DHCP servers are active."

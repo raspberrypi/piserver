@@ -88,7 +88,7 @@ rm -f /usr/lib/tmpfiles.d/dbus.conf /usr/lib/tmpfiles.d/debian.conf
 if [ -f /usr/lib/tmpfiles.d/legacy.conf ]; then
     sed -i 's@L /var/lock @#L /var/lock @g' /usr/lib/tmpfiles.d/legacy.conf
 fi
-if [ -f /var/lib/dbus ]; then
+if [ -d /var/lib/dbus ]; then
     ln -sf /etc/machine-id /var/lib/dbus/machine-id
 fi
 

@@ -58,6 +58,7 @@ protected:
     void onDownloadFailed();
     void onOtherDhcpServerDetected(const std::string &ip);
     void on_popup_clicked();
+    bool on_popup_button(GdkEventButton*,Gtk::Widget *sender);
     void _setSettingsSensitive();
     void on_savesettings_clicked();
 };

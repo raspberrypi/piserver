@@ -19,9 +19,10 @@ public:
     virtual ~DownloadExtractThread();
     virtual void cancelDownload();
     void setPostInstallScript(const std::string &path);
+    void setLdapConfig(const std::string &config);
 
 protected:
-    std::string _folder, _postInstallScript;
+    std::string _folder, _postInstallScript, _ldapConfig;
     std::thread *_extractThread;
     std::deque<std::string> _queue;
     static const int MAX_QUEUE_SIZE;

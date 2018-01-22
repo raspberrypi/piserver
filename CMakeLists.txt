@@ -25,10 +25,13 @@ endif()
 # for crypt_r()
 find_library(CRYPT_LIBRARY crypt)
 
+# for resolving SRV DNS records
+find_library(RESOLV_LIBRARY resolv)
+
 aux_source_directory(src SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST} resources.c)
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LDAP_LIBRARY}
-    ${CRYPT_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} Threads::Threads)
+    ${CRYPT_LIBRARY} ${RESOLV_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} Threads::Threads)
 
 # Languages
 
@@ -69,5 +72,5 @@ install(DIRECTORY DESTINATION /var/lib/piserver/os)
 install(DIRECTORY DESTINATION /var/lib/piserver/tftproot)
 install(DIRECTORY DESTINATION /var/lib/piserver/scripts)
 install(PROGRAMS scripts/postinstall.sh scripts/convert.sh scripts/chroot_image.sh DESTINATION /var/lib/piserver/scripts)
-install(FILES scripts/convert_chrooted_cmds DESTINATION /var/lib/piserver/scripts)
+install(FILES scripts/convert_chrooted_cmds scripts/mkhomedir-piserver DESTINATION /var/lib/piserver/scripts)
 install(FILES scripts/50-piserver-dhcpcd-hook DESTINATION /lib/dhcpcd/dhcpcd-hooks)

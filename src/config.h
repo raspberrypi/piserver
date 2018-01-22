@@ -26,7 +26,9 @@
 #define PISERVER_LDAP_URL  "ldapi:///"
 #define PISERVER_DOMAIN    "raspberrypi.local"
 #define PISERVER_LDAP_DN   "dc=raspberrypi,dc=local"
-#define PISERVER_LDAP_USER "admin"
+
+#define PISERVER_LDAP_USER "cn=admin,dc=raspberrypi,dc=local"
+
 #define PISERVER_LDAP_TIMEOUT  10
 #define PISERVER_MIN_UID   10000
 #define PISERVER_GID       100

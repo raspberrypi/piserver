@@ -10,7 +10,7 @@
 class DependenciesInstallThread
 {
 public:
-    DependenciesInstallThread(PiServer *ps, const std::string &ldapPassword);
+    DependenciesInstallThread(PiServer *ps);
     virtual ~DependenciesInstallThread();
 
     /*
@@ -32,7 +32,7 @@ protected:
     void _preseed(const std::map<std::string,std::string> &values);
 
     PiServer *_ps;
-    std::string _ldapPassword, _error;
+    std::string _error;
     std::thread *_thread;
     Glib::Dispatcher _signalSucess, _signalFailure;
 };

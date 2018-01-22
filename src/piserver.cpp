@@ -19,6 +19,7 @@
 #include <ftw.h>
 #include <sys/utsname.h>
 #include <giomm.h>
+#include <fcntl.h>
 
 using namespace std;
 using nlohmann::json;
@@ -122,12 +123,13 @@ void PiServer::addUser(const std::string &name, const std::string &password, boo
 
     int uid = max(_getHighestUID()+1, PISERVER_MIN_UID);
 
-    string dn = "cn="+name+","+PISERVER_LDAP_DN;
+    string dn = "cn="+name+","+_ldapDN();
     string homedir = string(PISERVER_HOMEROOT)+"/"+name;
     multimap<string,string> attr;
     struct crypt_data cd;
 
     attr.insert(make_pair("uid", name));
+    attr.insert(make_pair("cn", name));
     attr.insert(make_pair("sn", name));
     attr.insert(make_pair("objectClass", "inetOrgPerson"));
     attr.insert(make_pair("objectClass", "posixAccount"));
@@ -156,7 +158,7 @@ void PiServer::addGroup(const std::string &name, const std::string &description,
     if (gid == -1)
         gid =  max(_getHighestUID("posixGroup", "gidNumber")+1, PISERVER_MIN_UID);
 
-    string dn = "cn="+name+",ou=groups,"+PISERVER_LDAP_DN;
+    string dn = "cn="+name+",ou=groups,"+_ldapDN();
     multimap<string,string> attr = {
         {"gidNumber", to_string(gid)},
         {"description", description},
@@ -169,7 +171,7 @@ void PiServer::addGroup(const std::string &name, const std::string &description,
 
 void PiServer::deleteGroup(const std::string &name)
 {
-    string dn = "cn="+name+",ou=groups,"+PISERVER_LDAP_DN;
+    string dn = "cn="+name+",ou=groups,"+_ldapDN();
 
     if (!isUsernameValid(name))
         throw runtime_error("Group name not well-formed");
@@ -190,7 +192,7 @@ int PiServer::_unlink_cb(const char *fpath, const struct stat *, int, struct FTW
 
 void PiServer::deleteUser(const std::string &name)
 {
-    string dn = "cn="+name+","+PISERVER_LDAP_DN;
+    string dn = "cn="+name+","+_ldapDN();
     string homedir = string(PISERVER_HOMEROOT)+"/"+name;
 
     if (!isUsernameValid(name))
@@ -198,15 +200,18 @@ void PiServer::deleteUser(const std::string &name)
 
     _connectToLDAP();
     _ldapDelete(dn);
-    /* Recursively delete contents of home directory */
-    if (::nftw(homedir.c_str(), _unlink_cb, 128, FTW_DEPTH | FTW_PHYS) != 0)
-        throw runtime_error("Error deleting home directory");
+    /* Recursively delete contents of home directory if it exists */
+    if (::access(homedir.c_str(), F_OK) != -1)
+    {
+        if (::nftw(homedir.c_str(), _unlink_cb, 128, FTW_DEPTH | FTW_PHYS) != 0)
+            throw runtime_error("Error deleting home directory");
+    }
 }
 
 void PiServer::setUserPassword(const std::string &name, const std::string &password)
 {
     struct crypt_data cd;
-    string dn = "cn="+name+","+PISERVER_LDAP_DN;
+    string dn = "cn="+name+","+_ldapDN();
 
     if (!isUsernameValid(name))
         throw runtime_error("Username not well-formed");
@@ -243,9 +248,10 @@ bool PiServer::isUsernameAvailable(const std::string &name)
     int rc;
     LDAPMessage  *result = NULL;
     string filter = "(&(objectClass=posixAccount)(cn="+_ldapEscape(name)+"))";
+    string ldapDN = _ldapDN();
 
     _connectToLDAP();
-    rc = ldap_search_ext_s(_ldap, PISERVER_LDAP_DN, LDAP_SCOPE_SUBTREE,
+    rc = ldap_search_ext_s(_ldap, ldapDN.c_str(), LDAP_SCOPE_SUBTREE,
                       filter.c_str(), NULL, 0, NULL, NULL, LDAP_NO_LIMIT, LDAP_NO_LIMIT, &result);
     if (rc != LDAP_SUCCESS)
     {
@@ -274,15 +280,21 @@ std::set<std::string> PiServer::searchUsernames(const std::string &query)
     LDAPMessage  *result = NULL, *entry = NULL;
     int rc;
     struct berval **values;
-    string filter = "(objectClass=posixAccount)";
-    const char *attrfilter[] = {"cn", NULL};
+    string ldapDN = _ldapDN();
+    string uidfield = _uidField();
+    string filter;
+    if (_activeDirectory()) /* Hide hidden and disabled users */
+        filter = "(&(objectCategory=person)(objectClass=user)(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))";
+    else
+        filter = "(objectClass=posixAccount)";
+    const char *attrfilter[] = { uidfield.c_str(), NULL};
 
     if (!query.empty())
-        filter = "(&(objectClass=posixAccount)(cn=*"+_ldapEscape(query)+"*))";
+        filter = "(&"+filter+"("+uidfield+"=*"+_ldapEscape(query)+"*))";
 
     _connectToLDAP();
 
-    rc = ldap_search_ext_s(_ldap, PISERVER_LDAP_DN, LDAP_SCOPE_SUBTREE,
+    rc = ldap_search_ext_s(_ldap, ldapDN.c_str(), LDAP_SCOPE_SUBTREE,
                       filter.c_str(), (char **) attrfilter, 0, NULL, NULL, LDAP_NO_LIMIT, LDAP_NO_LIMIT, &result);
     if (rc != LDAP_SUCCESS)
     {
@@ -294,7 +306,7 @@ std::set<std::string> PiServer::searchUsernames(const std::string &query)
 
     for (entry = ldap_first_entry(_ldap, result); entry != NULL; entry = ldap_next_entry(_ldap, entry))
     {
-        values = ldap_get_values_len(_ldap, entry, "cn");
+        values = ldap_get_values_len(_ldap, entry, uidfield.c_str() );
         if (values)
         {
             for (int i = 0; values[i]; i++)
@@ -631,24 +643,6 @@ void PiServer::startChrootTerminal(const std::string &distribution)
 {
     GError *error = NULL;
     string distroPath = _distro.at(distribution)->distroPath();
-    /*string cmdline = string("/usr/sbin/chroot '")+distroPath+"'";
-    if (!hasArmCpu())
-    {
-        auto source = Gio::File::create_for_path("/usr/bin/qemu-arm-static");
-        auto dest = Gio::File::create_for_path(distroPath+"/usr/bin/qemu-arm-static");
-        source->copy(dest, Gio::FileCopyFlags::FILE_COPY_NOFOLLOW_SYMLINKS | Gio::FileCopyFlags::FILE_COPY_OVERWRITE);
-
-        string preload = distroPath+"/etc/ld.so.preload";
-        string preloadDisabled = preload + ".disabled";
-
-        if (::access(preload.c_str(), F_OK) == 0)
-        {
-            if (::rename(preload.c_str(), preloadDisabled.c_str() ) != 0) { }
-        }
-
-        cmdline += " /usr/bin/qemu-arm-static /bin/bash";
-    }*/
-
     string cmdline1 = string (PISERVER_DATADIR "/scripts/chroot_image.sh");
     string cmdline2 = distroPath;
     const gchar *cmd[] = {"/usr/bin/lxterminal", "-e", cmdline1.c_str(), cmdline2.c_str(), NULL};
@@ -676,10 +670,13 @@ void PiServer::_connectToLDAP()
     if (!_ldap)
     {
         struct berval cred;
-        string ldapbind = string("cn=")+PISERVER_LDAP_USER+","+PISERVER_LDAP_DN;
+
+        string ldapbind = getSetting("ldapUser", PISERVER_LDAP_USER);
         string ldappass = getSetting("ldapPassword");
+        string ldapuri  = getSetting("ldapUri", PISERVER_LDAP_URL);
+
         int version = LDAP_VERSION3;
-        int rc = ldap_initialize(&_ldap, PISERVER_LDAP_URL);
+        int rc = ldap_initialize(&_ldap, ldapuri.c_str() );
 
         if (rc != LDAP_SUCCESS)
         {
@@ -739,12 +736,13 @@ int PiServer::_getHighestUID(const char *objectClass /*= "posixAccount"*/, const
     LDAPMessage  *result = NULL, *entry = NULL;
     int rc;
     struct berval **values;
+    string ldapDN = _ldapDN();
     string filter = string("(objectClass=")+objectClass+")";
     const char *attrfilter[] = {attrname, NULL};
 
     _connectToLDAP();
 
-    rc = ldap_search_ext_s(_ldap, PISERVER_LDAP_DN, LDAP_SCOPE_SUBTREE,
+    rc = ldap_search_ext_s(_ldap, ldapDN.c_str(), LDAP_SCOPE_SUBTREE,
                       filter.c_str(), (char **) attrfilter, 0, NULL, NULL, LDAP_NO_LIMIT, LDAP_NO_LIMIT, &result);
     if (rc != LDAP_SUCCESS)
     {
@@ -893,8 +891,22 @@ int PiServer::getSetting(const std::string &key, int defaultValue)
     }
 }
 
+void PiServer::unsetSetting(const std::string &key)
+{
+    _settings.erase(key);
+}
+
 void PiServer::saveSettings()
 {
+    if (::access(PISERVER_SETTINGSFILE, F_OK) == -1)
+    {
+        /* File doesn't exists yet. Create it empty first as
+           ofstream doesn't support setting file permissions */
+        int fd = ::open(PISERVER_SETTINGSFILE, O_CREAT, 0600);
+        if (fd != -1)
+            close(fd);
+    }
+
     std::ofstream o(PISERVER_SETTINGSFILE);
     o << std::setw(4) << _settings << std::endl;
 }
@@ -914,4 +926,114 @@ double PiServer::availableDiskSpace(const std::string &path)
     }
 
     return bytesfree;
+}
+
+bool PiServer::_activeDirectory()
+{
+    return getSetting("ldapServerType") == "ad";
+}
+
+bool PiServer::externalServer()
+{
+    return !getSetting("ldapServerType").empty();
+}
+
+std::string PiServer::_ldapDN()
+{
+    return getSetting("ldapDN", PISERVER_LDAP_DN);
+}
+
+std::string PiServer::_uidField()
+{
+    return _activeDirectory() ? "sAMAccountName" : "uid";
+}
+
+/* Try out LDAP login details, and return domain sid if AD */
+std::string PiServer::getDomainSidFromLdap(const std::string &server, const std::string &servertype,
+                                       const std::string &basedn, const std::string &bindUser, const std::string &bindPass)
+{
+    string sid;
+    struct berval cred, **values;
+    LDAPMessage  *result = NULL, *entry = NULL;
+    int version = LDAP_VERSION3;
+    int rc = ldap_initialize(&_ldap, server.c_str() );
+
+    if (rc != LDAP_SUCCESS)
+    {
+        throw runtime_error("Error initializing LDAP connecting: "+string(ldap_err2string(rc)));
+    }
+
+    try
+    {
+        ldap_set_option(_ldap, LDAP_OPT_PROTOCOL_VERSION, &version);
+        cred.bv_val = (char *) bindPass.c_str();
+        cred.bv_len = bindPass.length();
+        rc = ldap_sasl_bind_s(_ldap, bindUser.c_str(), LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
+
+        if (rc != LDAP_SUCCESS)
+        {
+            throw runtime_error(Glib::ustring::compose("Error logging in to LDAP server '%1' with user '%2': %3", server, bindUser, ldap_err2string(rc)));
+        }
+
+        /* Try to fetch information about domain */
+        rc = ldap_search_ext_s(_ldap, basedn.c_str(), LDAP_SCOPE_BASE,
+                          NULL, NULL, 0, NULL, NULL, LDAP_NO_LIMIT, LDAP_NO_LIMIT, &result);
+        if (rc != LDAP_SUCCESS)
+        {
+            if (result)
+                ldap_msgfree(result);
+
+            throw runtime_error(Glib::ustring::compose("Error searching LDAP server for DN '%1': %2", basedn, ldap_err2string(rc)));
+        }
+
+        entry = ldap_first_entry(_ldap, result);
+        if (!entry)
+        {
+            throw runtime_error(Glib::ustring::compose("DN '%1' does not exist on the server. Verify domain entered.", basedn));
+        }
+
+        values = ldap_get_values_len(_ldap, entry, "objectSid");
+        if (values)
+        {
+            unsigned char *b = (unsigned char *) values[0]->bv_val;
+            size_t len = values[0]->bv_len;
+
+            if (len > 7)
+            {
+                /* Convert binary objectSid to string format */
+
+                int rev = b[0];
+                int subauthCount = b[1];
+                uint32_t identAuth = GUINT_FROM_BE( *(uint32_t *)(b+4) );
+
+                if (len != subauthCount*4+8)
+                    throw runtime_error("Error parsing objectSid");
+
+                sid = "S-"+to_string(b[0])+"-"+to_string(identAuth);
+
+                for (int i=0; i<subauthCount; i++)
+                {
+                    sid += "-"+to_string(GUINT_FROM_LE( *(uint32_t *)(b+i*4+8) ));
+                }
+            }
+            ldap_value_free_len(values);
+        }
+
+        if (servertype == "ad" && sid.empty())
+        {
+            throw runtime_error(Glib::ustring::compose("DN '%1' does not have objectSid attribute. Verify if LDAP server type selected is correct.", basedn));
+        }
+    }
+    catch (...)
+    {
+        /* Clean-up before passing through exception */
+        ldap_unbind_ext(_ldap, NULL, NULL);
+        _ldap = NULL;
+        throw;
+    }
+
+    ldap_unbind_ext(_ldap, NULL, NULL);
+    _ldap = NULL;
+
+    return sid;
 }

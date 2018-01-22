@@ -23,8 +23,12 @@ fi
 if [ -d "$DISTROROOT/etc/ssl/certs" ] && [ -f "/etc/ssl/certs/piserver.pem" ]; then
     cp -a /etc/ssl/certs/piserver.pem "$DISTROROOT/etc/ssl/certs"
     if [ -f "$DISTROROOT/etc/nslcd.conf" ]; then
-        sed -i "s/#ssl off/ssl start_tls/g" "$DISTROROOT/etc/nslcd.conf"
-        sed -i "s/#tls_reqcert never/tls_reqcert demand/g" "$DISTROROOT/etc/nslcd.conf"
-        sed -i "s#/etc/ssl/certs/ca-certificates.crt#/etc/ssl/certs/piserver.pem#g" "$DISTROROOT/etc/nslcd.conf"
+        if [ -n "$EXTERNAL_LDAP_CONFIG" ]; then
+            echo "$EXTERNAL_LDAP_CONFIG" >> "$DISTROROOT/etc/nslcd.conf"
+        else
+            sed -i "s/#ssl off/ssl start_tls/g" "$DISTROROOT/etc/nslcd.conf"
+            sed -i "s/#tls_reqcert never/tls_reqcert demand/g" "$DISTROROOT/etc/nslcd.conf"
+            sed -i "s#/etc/ssl/certs/ca-certificates.crt#/etc/ssl/certs/piserver.pem#g" "$DISTROROOT/etc/nslcd.conf"
+        fi
     fi
 fi

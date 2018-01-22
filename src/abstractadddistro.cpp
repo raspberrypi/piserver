@@ -193,6 +193,23 @@ void AbstractAddDistro::startInstallation()
     _dist->setLatestVersion(version);
     _det = new DownloadExtractThread(url, _dist->distroPath());
     _det->setPostInstallScript(PISERVER_POSTINSTALLSCRIPT);
+
+    if (!_ps->getSetting("ldapServerType").empty())
+    {
+        string ldapConfig = "\n# BEGIN PISERVER EXTERNAL LDAP SERVER CONFIG\n"
+                "uri "+_ps->getSetting("ldapUri")+"\n"
+                "base "+_ps->getSetting("ldapDN")+"\n";
+        if (!_ps->getSetting("ldapUser").empty())
+        {
+            ldapConfig +=
+                "binddn "+_ps->getSetting("ldapUser")+"\n"
+                "bindpw "+_ps->getSetting("ldapPassword")+"\n";
+        }
+        ldapConfig += _ps->getSetting("ldapExtraConfig");
+        ldapConfig += "# END PISERVER EXTERNAL LDAP SERVER CONFIG\n";
+        _det->setLdapConfig(ldapConfig);
+    }
+
     _det->signalSuccess().connect( sigc::mem_fun(this, &AbstractAddDistro::_onInstallationSuccess) );
     _det->signalError().connect( sigc::mem_fun(this, &AbstractAddDistro::_onInstallationFailed) );
     _det->start();
