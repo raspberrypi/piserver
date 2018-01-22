@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "remove" ]; then
+  if [ -f /var/lib/piserver/settings.json ]; then
+    echo
+    echo ===========================================
+    echo NOTE: piserver installed extra packages -such as a NFS and DHCP server-
+    echo during installation. To remove those run:
+    echo
+    echo sudo apt-get remove --purge dnsmasq openssh-server nfs-kernel-server slapd libnss-ldapd libpam-ldapd ldap-utils gnutls-bin ntp
+    echo ===========================================
+    echo
+  fi
+fi
+
+if [ "$1" = "purge" ]; then
+  rm -f /var/lib/piserver/settings.json /var/lib/piserver/installed_distros.json  /var/lib/piserver/hosts.json /usr/share/pam-configs/mkhomedir-piserver
+  rm -rf /var/lib/piserver/os /var/lib/piserver/tftproot
+  rmdir /var/lib/piserver || true
+fi
+
+#DEBHELPER#
+
+exit 0
