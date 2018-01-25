@@ -43,8 +43,15 @@ void DependenciesInstallThread::run()
     try
     {
         _execCheckResult("apt-get update -q");
+
         if (installSlapd)
         {
+            if (slapdAlreadyExists)
+            {
+                cerr << "Force removal of existing slapd" << endl;
+                _execCheckResult("apt-get -q -y remove --purge slapd");
+            }
+
             _preseed({
                 {"slapd	slapd/password1	password", ldapPassword},
                 {"slapd	slapd/internal/adminpw password", ldapPassword},
@@ -91,12 +98,6 @@ void DependenciesInstallThread::run()
 
         ::setenv("DEBIAN_FRONTEND", "noninteractive", 1);
         _execCheckResult("apt-get -q -y install "+pkglist);
-
-        if (installSlapd && slapdAlreadyExists)
-        {
-            cerr << "Force reconfiguration of existing slapd" << endl;
-            _execCheckResult("dpkg-reconfigure slapd");
-        }
 
         if (nslcdAlreadyExists)
         {
