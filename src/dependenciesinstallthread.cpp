@@ -72,12 +72,10 @@ void DependenciesInstallThread::run()
             });
             pkglist += " slapd";
         }
-        else
-        {
-            /* Using external LDAP server. Install pam_mkhomedir to create home on first login */
-            _execCheckResult("cp " PISERVER_DATADIR "/scripts/mkhomedir-piserver /usr/share/pam-configs");
-            _execCheckResult("pam-auth-update --package");
-        }
+
+        /* Install pam_mkhomedir to create home on first login */
+        _execCheckResult("cp " PISERVER_DATADIR "/scripts/mkhomedir-piserver /usr/share/pam-configs");
+        _execCheckResult("pam-auth-update --package");
 
         map<string,string> nslcdPreseed = {
             {"nslcd nslcd/ldap-uris string", ldapUri},

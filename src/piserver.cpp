@@ -145,10 +145,15 @@ void PiServer::addUser(const std::string &name, const std::string &password, boo
         attr.insert(make_pair("shadowMax", "10000"));
     }
     _ldapAdd(dn, attr);
-    if (::mkdir(homedir.c_str(), 0700) == -1)
-        throw runtime_error("Error creating home directory "+homedir+": "+ strerror(errno));
-    if (::chown(homedir.c_str(), uid, gid) == -1)
-        throw runtime_error("Error setting ownership for "+homedir+": "+ strerror(errno));
+
+    if (::access("/usr/share/pam-configs/mkhomedir-piserver", F_OK) == -1)
+    {
+        /* Only create home directory manually if not using mkhomedir */
+        if (::mkdir(homedir.c_str(), 0700) == -1)
+            throw runtime_error("Error creating home directory "+homedir+": "+ strerror(errno));
+        if (::chown(homedir.c_str(), uid, gid) == -1)
+            throw runtime_error("Error setting ownership for "+homedir+": "+ strerror(errno));
+    }
 }
 
 void PiServer::addGroup(const std::string &name, const std::string &description, int gid)
