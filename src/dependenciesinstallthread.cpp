@@ -113,7 +113,7 @@ void DependenciesInstallThread::run()
             os << "cn = \"piserver\"" << endl
                << "tls_www_server" << endl
                << "activation_date=\"1970-01-01 00:00:00 UTC\"" << endl
-               << "expiration_date=\"2037-12-31 23:59:59 UTC\"" << endl;
+               << "expiration_days=\"-1\"" << endl;
             os.close();
             _execCheckResult("certtool --generate-self-signed --load-privkey /etc/ldap/piserver.key --template=/etc/ldap/piserver.tpl --outfile=/etc/ssl/certs/piserver.pem");
             _execCheckResult("chown openldap /etc/ldap/piserver.key");
