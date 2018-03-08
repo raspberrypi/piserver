@@ -12,6 +12,7 @@
 #define PISERVER_SETTINGSFILE PISERVER_DATADIR "/settings.json"
 #define PISERVER_TFTPROOT   PISERVER_DATADIR "/tftproot"
 #define PISERVER_DISTROROOT PISERVER_DATADIR "/os"
+#define PISERVER_SHAREDROOT PISERVER_DISTROROOT "/shared"
 #define PISERVER_HOMEROOT   "/home"
 #define PISERVER_DNSMASQCONFFILE "/etc/dnsmasq.d/piserver"
 #define PISERVER_REPO_URL  "http://downloads.raspberrypi.org/piserver.json"

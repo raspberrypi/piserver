@@ -16,14 +16,15 @@ public:
     void _reloadDistro();
     void _reloadHosts();
     void _reloadUsers();
+    void _reloadFolders();
 
 protected:
     Glib::RefPtr<Gtk::Application> _app;
     Gtk::Window *_window;
     Gtk::Notebook *_notebook;
-    Gtk::TreeView *_distrotree, *_usertree, *_hosttree;
+    Gtk::TreeView *_distrotree, *_usertree, *_hosttree, *_folderstree;
     Gtk::ToolButton *_edituserbutton, *_deluserbutton, *_edithostbutton, *_delhostbutton,
-        *_upgradeosbutton, *_delosbutton, *_shellbutton;
+        *_upgradeosbutton, *_delosbutton, *_shellbutton, *_delfolderbutton, *_openfolderbutton;
     Gtk::SearchEntry *_usersearchentry;
     Gtk::Entry *_startipentry, *_endipentry, *_netmaskentry, *_gatewayentry;
     Gtk::Button *_savesettingsbutton;
@@ -31,7 +32,7 @@ protected:
     Gtk::RadioButton *_proxydhcpradio, *_standaloneradio;
     Gtk::Frame *_dhcpserverframe;
     Gtk::Label *_softwarelabel;
-    Glib::RefPtr<Gtk::ListStore> _distrostore, _hoststore, _userstore, _ethstore;
+    Glib::RefPtr<Gtk::ListStore> _distrostore, _hoststore, _userstore, _ethstore, _folderstore;
     DownloadThread *_dt;
     PiServer *_ps;
     std::string _cachedDistroInfo;
@@ -54,6 +55,7 @@ protected:
     void on_hosttree_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
     void on_distrotree_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
     void on_usertree_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
+    void on_foldertree_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
     void onDownloadSuccessful();
     void onDownloadFailed();
     void onOtherDhcpServerDetected(const std::string &ip);
@@ -61,6 +63,9 @@ protected:
     bool on_popup_button(GdkEventButton*,Gtk::Widget *sender);
     void _setSettingsSensitive();
     void on_savesettings_clicked();
+    void on_addfolder_clicked();
+    void on_delfolder_clicked();
+    void on_openfolder_clicked();
 };
 
 #endif // MAINWINDOW_H

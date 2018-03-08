@@ -8,7 +8,11 @@
 #include "downloadthread.h"
 #include "adddistrodialog.h"
 #include "dhcpclient.h"
+#include "addfolderdialog.h"
 #include <arpa/inet.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <pwd.h>
 #include <iostream>
 #include <regex>
 
@@ -24,6 +28,7 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     builder->get_widget("distrotree", _distrotree);
     builder->get_widget("hosttree", _hosttree);
     builder->get_widget("usertree", _usertree);
+    builder->get_widget("folderstree", _folderstree);
     builder->get_widget("usersearchentry", _usersearchentry);
     builder->get_widget("ifacecombo", _ifacecombo);
     builder->get_widget("startipentry", _startipentry);
@@ -40,11 +45,13 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     _userstore = Glib::RefPtr<Gtk::ListStore>::cast_dynamic( builder->get_object("userstore") );
     _hoststore = Glib::RefPtr<Gtk::ListStore>::cast_dynamic( builder->get_object("pistore") );
     _ethstore = Glib::RefPtr<Gtk::ListStore>::cast_dynamic( builder->get_object("ethstore") );
+    _folderstore = Glib::RefPtr<Gtk::ListStore>::cast_dynamic( builder->get_object("folderstore") );
 
     _usersearchentry->signal_changed().connect( sigc::mem_fun(this, &MainWindow::_reloadUsers) );
     _hosttree->signal_row_activated().connect( sigc::mem_fun(this, &MainWindow::on_hosttree_activated) );
     _distrotree->signal_row_activated().connect( sigc::mem_fun(this, &MainWindow::on_distrotree_activated) );
     _usertree->signal_row_activated().connect( sigc::mem_fun(this, &MainWindow::on_usertree_activated) );
+    _folderstree->signal_row_activated().connect( sigc::mem_fun(this, &MainWindow::on_foldertree_activated) );
 
     Gtk::ToolButton *button;
     builder->get_widget("adduserbutton", button);
@@ -56,6 +63,8 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_addhost_clicked) );
     builder->get_widget("addosbutton", button);
     button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_addos_clicked) );
+    builder->get_widget("addfolderbutton", button);
+    button->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_addfolder_clicked) );
     builder->get_widget("importusersbutton", button);
     if (_ps->externalServer())
         button->set_sensitive(false);
@@ -75,6 +84,10 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     _delosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_delos_clicked) );
     builder->get_widget("shellbutton", _shellbutton);
     _shellbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_shell_clicked) );
+    builder->get_widget("removefolderbutton", _delfolderbutton);
+    _delfolderbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_delfolder_clicked) );
+    builder->get_widget("openfolderbutton", _openfolderbutton);
+    _openfolderbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_openfolder_clicked) );
 
     _ethstore->clear();
     map<string,string> ifaces = _ps->getInterfaces();
@@ -120,6 +133,7 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     _reloadDistro();
     _reloadHosts();
     _reloadUsers();
+    _reloadFolders();
     _usersearchentry->grab_focus();
 
     _dt = new DownloadThread(PISERVER_REPO_URL);
@@ -555,4 +569,93 @@ void MainWindow::onOtherDhcpServerDetected(const std::string &otherserverip)
         _savesettings();
     }
     _savesettingsbutton->set_sensitive();
+}
+
+void MainWindow::on_addfolder_clicked()
+{
+    AddFolderDialog d(_ps, _window);
+    if ( d.exec() )
+        _reloadFolders();
+}
+
+void MainWindow::on_delfolder_clicked()
+{
+    string folder;
+    auto iter = _folderstree->get_selection()->get_selected();
+    iter->get_value(0, folder);
+    if (!folder.empty())
+    {
+        Gtk::MessageDialog d(_("Are you sure you want to delete this folder?"),
+                             false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+        d.set_transient_for(*_window);
+        if (d.run() == Gtk::RESPONSE_YES)
+        {
+            string path = PISERVER_SHAREDROOT "/" +folder;
+            if (::rmdir(path.c_str()) == -1)
+            {
+                Gtk::MessageDialog ed(_("Error deleting folder. Make sure it is empty."));
+                ed.set_transient_for(*_window);
+                ed.run();
+            }
+            else
+            {
+                _reloadFolders();
+            }
+        }
+    }
+}
+
+void MainWindow::on_openfolder_clicked()
+{
+    string folder;
+    auto iter = _folderstree->get_selection()->get_selected();
+    iter->get_value(0, folder);
+    if (!folder.empty())
+    {
+        string path = PISERVER_SHAREDROOT "/" +folder;
+        const gchar *cmd[] = {"/usr/bin/xdg-open", path.c_str(), NULL};
+        g_spawn_async(NULL, (gchar **) cmd, NULL, G_SPAWN_DEFAULT, NULL, NULL, NULL, NULL);
+    }
+}
+
+void MainWindow::on_foldertree_activated(const Gtk::TreeModel::Path &, Gtk::TreeViewColumn *)
+{
+    _delfolderbutton->set_sensitive();
+    _openfolderbutton->set_sensitive();
+}
+
+void MainWindow::_reloadFolders()
+{
+    _folderstore->clear();
+    _delfolderbutton->set_sensitive(false);
+    _openfolderbutton->set_sensitive(false);
+
+    struct dirent *dp;
+    struct stat st;
+    DIR *d = ::opendir(PISERVER_SHAREDROOT);
+
+    if (d)
+    {
+        while (dp = ::readdir(d))
+        {
+            string name = dp->d_name;
+            string path = PISERVER_SHAREDROOT "/" +name;
+            string owner;
+
+            if (name == "." || name == "..")
+                continue;
+            if (::stat(path.c_str(), &st) == -1)
+                continue;
+            if ( (st.st_mode & S_IFMT ) != S_IFDIR)
+                continue;
+
+            passwd *p = getpwuid(st.st_uid);
+            if (p && p->pw_name)
+                owner = p->pw_name;
+
+            auto row = _folderstore->append();
+            row->set_value(0, name);
+            row->set_value(1, owner);
+        }
+    }
 }

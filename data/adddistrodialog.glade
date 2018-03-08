@@ -15,22 +15,6 @@
       <!-- column-name rawsize -->
       <column type="guint64"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes">Raspbian</col>
-        <col id="2" translatable="yes">2017-1-1</col>
-        <col id="3" translatable="yes">1024 MB</col>
-        <col id="4">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes">Raspbian Lite</col>
-        <col id="2" translatable="yes">2016-12-31</col>
-        <col id="3" translatable="yes">512 MB</col>
-        <col id="4">0</col>
-      </row>
-    </data>
   </object>
   <object class="GtkFileFilter" id="tarxzfilter">
     <patterns>

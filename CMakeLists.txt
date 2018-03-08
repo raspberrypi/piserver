@@ -54,6 +54,7 @@ set(RESOURCE_LIST
     data/adduserdialog.glade
     data/edituserdialog.glade
     data/adddistrodialog.glade
+    data/addfolderdialog.glade
     )
 
 compile_gresources(RESOURCE_FILE
@@ -69,6 +70,7 @@ install(TARGETS piserver DESTINATION bin)
 install(FILES data/piserver.desktop DESTINATION share/applications)
 install(DIRECTORY DESTINATION /var/lib/piserver)
 install(DIRECTORY DESTINATION /var/lib/piserver/os)
+install(DIRECTORY DESTINATION /var/lib/piserver/os/shared)
 install(DIRECTORY DESTINATION /var/lib/piserver/tftproot)
 install(DIRECTORY DESTINATION /var/lib/piserver/scripts)
 install(PROGRAMS scripts/postinstall.sh scripts/convert.sh scripts/chroot_image.sh DESTINATION /var/lib/piserver/scripts)
