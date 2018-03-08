@@ -533,6 +533,9 @@ void PiServer::_patchDistributions()
 
 void PiServer::updateIP()
 {
+    if (currentIP().empty())
+        return;
+
     _patchDistributions();
     regenDnsmasqConf();
 }
