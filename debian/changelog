@@ -1,3 +1,21 @@
+piserver (0.2) stretch; urgency=medium
+
+  * Add DhcpClient. Remove dependency on odhcploc
+  * Force reconfig of existing slapd
+  * Add initial .csv import support
+  * Workaround for warnings being printed (gtk empty string bug)
+  * Force systemd reload on install
+  * Update convert_chrooted_cmds for Stretch
+  * Remove data files on apt-get remove --purge piserver
+  * Add minimal support for external LDAP/AD servers
+  * Workaround for error when running "dpkg-reconfigure slapd" twice
+  * Defer home directory creation to first login
+  * Set certificate date to 9999
+  * Add simple shared folder support
+  * Do not create /etc/dnsmasq.d/piserver if not configured
+
+ -- Serge Schneider <serge@raspberrypi.org>  Tue, 20 Mar 2018 10:53:01 +0000
+
 piserver (0.1) jessie; urgency=medium
 
   * Initial release
