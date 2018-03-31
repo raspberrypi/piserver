@@ -20,7 +20,7 @@ tmpfs           /var/lib/systemd/rfkill   tmpfs defaults,mode=755    0       0
 tmpfs           /var/lib/systemd/coredump tmpfs defaults,mode=755    0       0
 tmpfs           /media          tmpfs   defaults,mode=755            0       0
 tmpfs           /home           tmpfs   defaults,mode=755            0       0
-piserver:/var/lib/piserver/os/shared   /mnt/shared      nfs     defaults,nofail,x-gvfs-show,x-gvfs-name=Shared%20folders    0       0
+piserver:/var/lib/piserver/os/shared   /mnt/shared      nfs     defaults,nolock,nofail,x-gvfs-show,x-gvfs-name=Shared%20folders    0       0
 EOF
 
 mkdir -p /mnt/shared
