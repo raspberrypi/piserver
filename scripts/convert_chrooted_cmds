@@ -106,6 +106,14 @@ else
     echo "Warning: unable to find NTP configuration file. Configure it manually to use server 'piserver'"
 fi
 
+# dhcpcd: disable link detection as we do not want dhcpcd to tear down interface if cable gets disconnected temporarily
+if [ -f /etc/dhcpcd.conf ]; then
+    echo "nolink" >> /etc/dhcpcd.conf
+    echo "# Piserver: disable wifi by default" >> /boot/config.txt
+    echo "# If you have a need for wifi, remove both the following line, as well as nolink from /etc/dhcpcd.conf" >> /boot.config.txt
+    echo "dtoverlay=pi3-disable-wifi" >> /boot/config.txt
+fi
+
 #
 # Remove non-relevant options from cmdline.txt
 #
