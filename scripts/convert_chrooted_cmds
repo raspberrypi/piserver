@@ -110,7 +110,7 @@ fi
 if [ -f /etc/dhcpcd.conf ]; then
     echo "nolink" >> /etc/dhcpcd.conf
     echo "# Piserver: disable wifi by default" >> /boot/config.txt
-    echo "# If you have a need for wifi, remove both the following line, as well as nolink from /etc/dhcpcd.conf" >> /boot.config.txt
+    echo "# If you have a need for wifi, remove both the following line, as well as nolink from /etc/dhcpcd.conf" >> /boot/config.txt
     echo "dtoverlay=pi3-disable-wifi" >> /boot/config.txt
 fi
 
