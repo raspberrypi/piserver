@@ -8,6 +8,7 @@ set -e
 
 if [ -d "$DISTROROOT/etc" ]; then
     cp -a /etc/timezone "$DISTROROOT/etc"
+    cp -a /etc/localtime "$DISTROROOT/etc"
 fi
 if [ -d "$DISTROROOT/etc/default" ]; then
     cp -a /etc/default/keyboard "$DISTROROOT/etc/default"
