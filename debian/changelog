@@ -1,3 +1,12 @@
+piserver (0.3) stretch; urgency=medium
+
+  * dhcpcd: disable link detection
+  * Fix copying timezone setting from Piserver computer
+  * Mount shared folders nolock
+  * Shell button: call x-terminal-emulator instead of lxterminal
+
+ -- Serge Schneider <serge@raspberrypi.org>  Tue, 03 Jul 2018 09:52:24 +0100
+
 piserver (0.2) stretch; urgency=medium
 
   * Add DhcpClient. Remove dependency on odhcploc
