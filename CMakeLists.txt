@@ -69,6 +69,7 @@ add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
 
 install(TARGETS piserver DESTINATION bin)
 install(FILES data/piserver.desktop DESTINATION share/applications)
+install(FILES data/org.raspberrypi.piserver.policy DESTINATION share/polkit-1/actions)
 install(DIRECTORY DESTINATION /var/lib/piserver)
 install(DIRECTORY DESTINATION /var/lib/piserver/os)
 install(DIRECTORY DESTINATION /var/lib/piserver/os/shared)
