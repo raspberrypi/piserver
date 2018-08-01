@@ -444,6 +444,19 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkToolButton" id="cloneosbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Clone</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-copy</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkToolButton" id="removeosbutton">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>

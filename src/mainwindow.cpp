@@ -7,6 +7,7 @@
 #include "edituserdialog.h"
 #include "downloadthread.h"
 #include "adddistrodialog.h"
+#include "clonedistrodialog.h"
 #include "dhcpclient.h"
 #include "addfolderdialog.h"
 #include <arpa/inet.h>
@@ -80,6 +81,8 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     _delhostbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_delhost_clicked) );
     builder->get_widget("upgradeosbutton", _upgradeosbutton);
     _upgradeosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_upgradeos_clicked) );
+    builder->get_widget("cloneosbutton", _cloneosbutton);
+    _cloneosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_cloneos_clicked) );
     builder->get_widget("removeosbutton", _delosbutton);
     _delosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_delos_clicked) );
     builder->get_widget("shellbutton", _shellbutton);
@@ -162,6 +165,7 @@ void MainWindow::_reloadDistro()
 {
     _distrostore->clear();
     _upgradeosbutton->set_sensitive(false);
+    _cloneosbutton->set_sensitive(false);
     _delosbutton->set_sensitive(false);
     _shellbutton->set_sensitive(false);
     auto distros = _ps->getDistributions();
@@ -374,6 +378,20 @@ void MainWindow::on_delos_clicked()
     }
 }
 
+void MainWindow::on_cloneos_clicked()
+{
+    string distroname;
+    auto iter = _distrotree->get_selection()->get_selected();
+    iter->get_value(0, distroname);
+    if (!distroname.empty())
+    {
+        Distribution *distro = _ps->getDistributions()->at(distroname);
+        CloneDistroDialog d(_ps, distro, _window);
+        if (d.exec())
+            _reloadDistro();
+    }
+}
+
 void MainWindow::on_shell_clicked()
 {
     string distro;
@@ -398,6 +416,7 @@ void MainWindow::on_distrotree_activated(const Gtk::TreeModel::Path &path, Gtk::
     iter->get_value(1, curVersion);
     iter->get_value(2, newVersion);
     _upgradeosbutton->set_sensitive(curVersion != newVersion && !newVersion.empty());
+    _cloneosbutton->set_sensitive();
     _delosbutton->set_sensitive();
     _shellbutton->set_sensitive();
 }

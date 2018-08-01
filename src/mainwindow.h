@@ -24,7 +24,7 @@ protected:
     Gtk::Notebook *_notebook;
     Gtk::TreeView *_distrotree, *_usertree, *_hosttree, *_folderstree;
     Gtk::ToolButton *_edituserbutton, *_deluserbutton, *_edithostbutton, *_delhostbutton,
-        *_upgradeosbutton, *_delosbutton, *_shellbutton, *_delfolderbutton, *_openfolderbutton;
+        *_upgradeosbutton, *_cloneosbutton, *_delosbutton, *_shellbutton, *_delfolderbutton, *_openfolderbutton;
     Gtk::SearchEntry *_usersearchentry;
     Gtk::Entry *_startipentry, *_endipentry, *_netmaskentry, *_gatewayentry;
     Gtk::Button *_savesettingsbutton;
@@ -51,6 +51,7 @@ protected:
     void on_addos_clicked();
     void on_upgradeos_clicked();
     void on_delos_clicked();
+    void on_cloneos_clicked();
     void on_shell_clicked();
     void on_hosttree_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
     void on_distrotree_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);

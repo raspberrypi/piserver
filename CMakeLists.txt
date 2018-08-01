@@ -55,6 +55,7 @@ set(RESOURCE_LIST
     data/edituserdialog.glade
     data/adddistrodialog.glade
     data/addfolderdialog.glade
+    data/clonedistrodialog.glade
     )
 
 compile_gresources(RESOURCE_FILE
