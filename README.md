@@ -41,7 +41,7 @@ sudo dpkg -i piserver*.deb
 
 ### Extra dependencies if NOT running Raspbian or "Debian Stretch with Raspberry Pi desktop"
 
-## dnsmasq
+#### dnsmasq
 
 Piserver requires dnsmasq version 2.77 or later.
 If your Linux distribution comes with an older version, compile the latest version from source:
@@ -57,7 +57,7 @@ sudo dpkg -i dnsmasq-base_*.deb dnsmasq_*.deb
 
 If you are running Raspbian this is not necessary. Although it is using an older dnsmasq version as well, it has been patched to include the newer features used (--dhcp-reply-delay and tftp-unique-root=mac options).
 
-## IP update hook
+#### IP update hook
 
 It is expected that the computer that is running piserver:
 
