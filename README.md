@@ -14,7 +14,7 @@ sudo apt-get install build-essential devscripts debhelper cmake libldap2-dev lib
 If not using a Pi (or other armhf device), you also need the following runtime dependencies:
 
 ```
-sudo apt-get install binfmt-support qemu-user-static
+sudo apt-get install binfmt-support qemu-user-static console-setup nscd
 ```
 
 
