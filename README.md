@@ -8,13 +8,13 @@ Raspberry Pi Server wizard to serve Raspbian to network booting Pis
 On Raspbian install the build dependencies:
 
 ```
-sudo apt-get install build-essential devscripts debhelper cmake libldap2-dev libgtkmm-3.0-dev libarchive-dev libcurl4-openssl-dev intltool gksu git
+sudo apt install build-essential devscripts debhelper cmake libldap2-dev libgtkmm-3.0-dev libarchive-dev libcurl4-openssl-dev intltool gksu git
 ```
 
 If not using a Pi (or other armhf device), you also need the following runtime dependencies:
 
 ```
-sudo apt-get install binfmt-support qemu-user-static
+sudo apt install binfmt-support qemu-user-static
 ```
 
 
@@ -47,7 +47,7 @@ Piserver requires dnsmasq version 2.77 or later.
 If your Linux distribution comes with an older version, compile the latest version from source:
 
 ```
-sudo apt-get install libnetfilter-conntrack-dev libidn11-dev libgmp-dev nettle-dev liblua5.2-de
+sudo apt install libnetfilter-conntrack-dev libidn11-dev libgmp-dev nettle-dev liblua5.2-de
 git clone --depth 1 http://thekelleys.org.uk/git/dnsmasq.git
 cd dnsmasq
 debuild -uc -us
