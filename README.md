@@ -47,7 +47,7 @@ Piserver requires dnsmasq version 2.77 or later.
 If your Linux distribution comes with an older version, compile the latest version from source:
 
 ```
-sudo apt-get install libnetfilter-conntrack-dev libidn11-dev libgmp-dev nettle-dev liblua5.2-de
+sudo apt-get install libnetfilter-conntrack-dev libidn11-dev libgmp-dev nettle-dev liblua5.2-dev
 git clone --depth 1 http://thekelleys.org.uk/git/dnsmasq.git
 cd dnsmasq
 debuild -uc -us
