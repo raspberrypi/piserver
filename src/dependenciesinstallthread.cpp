@@ -35,7 +35,7 @@ void DependenciesInstallThread::run()
     string ldapUser = _ps->getSetting("ldapUser");
     string ldapPassword = _ps->getSetting("ldapPassword");
     string ldapExtraConfig = _ps->getSetting("ldapExtraConfig");
-    string pkglist = "dnsmasq openssh-server nfs-kernel-server libnss-ldapd libpam-ldapd ldap-utils gnutls-bin ntp";
+    string pkglist = "dnsmasq openssh-server nfs-kernel-server libnss-ldapd libpam-ldapd ldap-utils gnutls-bin libarchive-tools ntp";
     bool installSlapd = ldapServerType.empty();
     bool nslcdAlreadyExists = ::access("/etc/nslcd.conf", F_OK) != -1;
     bool slapdAlreadyExists = ::access("/etc/ldap/slapd.d", F_OK) != -1;

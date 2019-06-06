@@ -9,6 +9,7 @@
 #include "adddistrodialog.h"
 #include "clonedistrodialog.h"
 #include "dhcpclient.h"
+#include "exportdistrodialog.h"
 #include "addfolderdialog.h"
 #include <arpa/inet.h>
 #include <sys/types.h>
@@ -83,6 +84,8 @@ MainWindow::MainWindow(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     _upgradeosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_upgradeos_clicked) );
     builder->get_widget("cloneosbutton", _cloneosbutton);
     _cloneosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_cloneos_clicked) );
+    builder->get_widget("exportosbutton", _exportosbutton);
+    _exportosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_exportos_clicked) );
     builder->get_widget("removeosbutton", _delosbutton);
     _delosbutton->signal_clicked().connect( sigc::mem_fun(this, &MainWindow::on_delos_clicked) );
     builder->get_widget("shellbutton", _shellbutton);
@@ -166,6 +169,7 @@ void MainWindow::_reloadDistro()
     _distrostore->clear();
     _upgradeosbutton->set_sensitive(false);
     _cloneosbutton->set_sensitive(false);
+    _exportosbutton->set_sensitive(false);
     _delosbutton->set_sensitive(false);
     _shellbutton->set_sensitive(false);
     auto distros = _ps->getDistributions();
@@ -392,6 +396,19 @@ void MainWindow::on_cloneos_clicked()
     }
 }
 
+void MainWindow::on_exportos_clicked()
+{
+    string distroname;
+    auto iter = _distrotree->get_selection()->get_selected();
+    iter->get_value(0, distroname);
+    if (!distroname.empty())
+    {
+        Distribution *distro = _ps->getDistributions()->at(distroname);
+        ExportDistroDialog d(_ps, distro, _window);
+        d.exec();
+    }
+}
+
 void MainWindow::on_shell_clicked()
 {
     string distro;
@@ -417,6 +434,7 @@ void MainWindow::on_distrotree_activated(const Gtk::TreeModel::Path &path, Gtk::
     iter->get_value(2, newVersion);
     _upgradeosbutton->set_sensitive(curVersion != newVersion && !newVersion.empty());
     _cloneosbutton->set_sensitive();
+    _exportosbutton->set_sensitive();
     _delosbutton->set_sensitive();
     _shellbutton->set_sensitive();
 }
