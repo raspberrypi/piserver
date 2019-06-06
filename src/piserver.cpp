@@ -692,7 +692,7 @@ void PiServer::_connectToLDAP()
         }
 
         ldap_set_option(_ldap, LDAP_OPT_PROTOCOL_VERSION, &version);
-
+        ldap_set_option(_ldap, LDAP_OPT_REFERRALS, LDAP_OPT_OFF);
 
         cred.bv_val = (char *) ldappass.c_str();
         cred.bv_len = ldappass.length();

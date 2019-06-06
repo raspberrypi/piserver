@@ -184,10 +184,9 @@ void InstallWizard::onPagePrepare(Gtk::Widget *newPage)
 
                     if (ldapType == "ad")
                     {
-                        /* For reasons unknown searching the entire tree is very slow with AD, limit to cn=users */
-                        baseDN = "cn=users,"+baseDN;
                         _ps->setSetting("domainSid", domainSid);
                         _ps->setSetting("ldapExtraConfig",
+                                "referrals no\n"
                                 "filter passwd (&(objectCategory=person)(objectClass=user)(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))\n"
                                 "map passwd uid              sAMAccountName\n"
                                 "map passwd homeDirectory    \"/home/$sAMAccountName\"\n"
