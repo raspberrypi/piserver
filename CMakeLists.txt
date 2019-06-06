@@ -38,7 +38,7 @@ target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LDAP_LIBRARY}
 if (GETTEXT_FOUND)
     file(GLOB LANGUAGES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} po/*.po)
     GETTEXT_CREATE_TRANSLATIONS(po/piserver.pot ALL ${LANGUAGES})
-    add_definitions(-DLOCALE_DIR=/usr/share/locale)
+    add_definitions(-DLOCALEDIR="/usr/share/locale")
 endif()
 
 # Resources
