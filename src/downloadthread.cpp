@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <curl/curl.h>
 #include <utime.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -15,7 +14,8 @@ int DownloadThread::_curlCount = 0;
 
 DownloadThread::DownloadThread(const string &url, const string &localfilename) :
     _thread(NULL), _lastDlTotal(0), _lastDlNow(0), _url(url), _cancelled(false), _successful(false),
-    _lastModified(0), _serverTime(0), _filename(localfilename), _file(NULL)
+    _lastModified(0), _serverTime(0), _filename(localfilename), _file(NULL),
+    _startOffset(0), _lastFailureTime(0)
 {
     if (!_curlCount)
         curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -65,7 +65,7 @@ size_t DownloadThread::_curl_write_callback(char *ptr, size_t size, size_t nmemb
     return static_cast<DownloadThread *>(userdata)->_writeData(ptr, size * nmemb);
 }
 
-int DownloadThread::_curl_progress_callback(void *userdata, double dltotal, double dlnow, double ultotal, double ulnow)
+int DownloadThread::_curl_xferinfo_callback(void *userdata, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
 {
     return (static_cast<DownloadThread *>(userdata)->_progress(dltotal, dlnow, ultotal, ulnow) == false);
 }
@@ -87,7 +87,7 @@ void DownloadThread::run()
     curl_easy_setopt(_c, CURLOPT_NOSIGNAL, 1);
     curl_easy_setopt(_c, CURLOPT_WRITEFUNCTION, &DownloadThread::_curl_write_callback);
     curl_easy_setopt(_c, CURLOPT_WRITEDATA, this);
-    curl_easy_setopt(_c, CURLOPT_PROGRESSFUNCTION, &DownloadThread::_curl_progress_callback);
+    curl_easy_setopt(_c, CURLOPT_XFERINFOFUNCTION, &DownloadThread::_curl_xferinfo_callback);
     curl_easy_setopt(_c, CURLOPT_PROGRESSDATA, this);
     curl_easy_setopt(_c, CURLOPT_NOPROGRESS, 0);
     curl_easy_setopt(_c, CURLOPT_URL, _url.c_str());
@@ -114,6 +114,24 @@ void DownloadThread::run()
     }
 
     CURLcode ret = curl_easy_perform(_c);
+
+    /* Deal with badly configured HTTP servers that terminate the connection quickly
+       if connections stalls for some seconds while kernel commits buffers to slow SD card */
+    while (ret == CURLE_PARTIAL_FILE)
+    {
+        time_t t = time(NULL);
+
+        /* If last failure happened less than 5 seconds ago, something else may
+           be wrong. Sleep some time to prevent hammering server */
+        if (t - _lastFailureTime < 5)
+            ::sleep(10);
+        _lastFailureTime = t;
+
+        _startOffset = _lastDlNow;
+        curl_easy_setopt(_c, CURLOPT_RESUME_FROM_LARGE, _startOffset);
+
+        ret = curl_easy_perform(_c);
+    }
 
     if (_file)
         _file->close();
@@ -177,10 +195,10 @@ size_t DownloadThread::_writeData(const char *buf, size_t len)
     }
 }
 
-bool DownloadThread::_progress(double dltotal, double dlnow, double /*ultotal*/, double /*ulnow*/)
+bool DownloadThread::_progress(curl_off_t dltotal, curl_off_t dlnow, curl_off_t /*ultotal*/, curl_off_t /*ulnow*/)
 {
-    _lastDlTotal = dltotal;
-    _lastDlNow   = dlnow;
+    _lastDlTotal = _startOffset + dltotal;
+    _lastDlNow   = _startOffset + dlnow;
 
     return !_cancelled;
 }

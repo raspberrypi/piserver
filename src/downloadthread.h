@@ -8,8 +8,7 @@
 #include <atomic>
 #include <glibmm.h>
 #include <time.h>
-
-typedef void CURL;
+#include <curl/curl.h>
 
 class DownloadThread
 {
@@ -115,22 +114,23 @@ protected:
      * libcurl callbacks
      */
     virtual size_t _writeData(const char *buf, size_t len);
-    bool _progress(double dltotal, double dlnow, double ultotal, double ulnow);
+    bool _progress(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow);
     void _header(const std::string &header);
 
     static size_t _curl_write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
-    static int _curl_progress_callback(void *userdata, double dltotal, double dlnow, double ultotal, double ulnow);
+    static int _curl_xferinfo_callback(void *userdata, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow);
     static size_t _curl_header_callback( void *ptr, size_t size, size_t nmemb, void *userdata);
 
     std::thread *_thread;
     CURL *_c;
+    curl_off_t _startOffset;
     std::atomic<std::uint64_t> _lastDlTotal, _lastDlNow;
     std::mutex _errorMutex;
     std::string _url, _useragent, _buf, _cachefile, _filename, _lastError;
     static std::string _proxy;
     static int _curlCount;
     bool _cancelled, _successful;
-    time_t _lastModified, _serverTime;
+    time_t _lastModified, _serverTime, _lastFailureTime;
     std::ofstream *_file;
     Glib::Dispatcher _signalSucess;
     Glib::Dispatcher _signalError;
