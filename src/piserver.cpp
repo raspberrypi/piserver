@@ -459,7 +459,7 @@ void PiServer::regenDnsmasqConf(bool restartDnsmasqIfChanged)
     //ofstream fs(PISERVER_DNSMASQCONFFILE, ios_base::out | ios_base::trunc);
     stringstream fs;
     fs << "# This is an auto-generated file. DO NOT EDIT" << endl << endl
-    // << "bind-dynamic" << endl
+       << "bind-dynamic" << endl
        << "log-dhcp" << endl
        << "enable-tftp" << endl
        << "tftp-root="+string(PISERVER_TFTPROOT) << endl
