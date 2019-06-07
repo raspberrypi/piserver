@@ -6,3 +6,4 @@ _Comment=Server for diskless Pi 3
 Icon=folder-remote
 Exec=sh -c "sudo piserver || pkexec piserver"
 Categories=Settings
+StartupNotify=false
