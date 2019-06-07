@@ -134,6 +134,23 @@ void DependenciesInstallThread::run()
             fwrite(ldif, strlen(ldif), 1, f);
             pclose(f);
 
+            ldif =
+                    "dn: cn=module{0},cn=config\n"
+                    "changetype: modify\n"
+                    "add: olcModuleload\n"
+                    "olcModuleLoad: lastbind.la\n"
+                    "\n"
+                    "dn: olcOverlay=lastbind,olcDatabase={1}mdb,cn=config\n"
+                    "changetype: add\n"
+                    "objectClass: olcLastBindConfig\n"
+                    "objectClass: olcOverlayConfig\n"
+                    "objectClass: top\n"
+                    "olcOverlay: lastbind\n"
+                    "olcLastBindPrecision: 60\n";
+            f = popen("ldapmodify -Y EXTERNAL -H ldapi:///", "w");
+            fwrite(ldif, strlen(ldif), 1, f);
+            pclose(f);
+
             // Test that LDAP server works. Generates exception if not
             _ps->isUsernameAvailable("test");
         }

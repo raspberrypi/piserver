@@ -214,11 +214,14 @@ void MainWindow::_reloadUsers()
     {
         auto users = _ps->searchUsernames(_usersearchentry->get_text());
 
-        for (const string &user : users)
+        for (const auto &kv : users)
         {
+            const User &u = kv.second;
             auto row = _userstore->append();
-            row->set_value(0, user);
-            row->set_value(1, string(_("Normal users"))); /* FIXME: add support for groups */
+            row->set_value(0, u.name());
+            row->set_value(1, u.description());
+            row->set_value(2, u.lastlogin());
+            row->set_value(3, u.dn());
         }
     }
     catch (exception &e)
@@ -257,21 +260,27 @@ void MainWindow::on_importusers_clicked()
 
 void MainWindow::on_edituser_clicked()
 {
-    string user;
+    string dn, user, desc;
     auto iter = _usertree->get_selection()->get_selected();
     iter->get_value(0, user);
+    iter->get_value(1, desc);
+    iter->get_value(3, dn);
     if (!user.empty())
     {
-        EditUserDialog d(_ps, user, _window);
-        d.exec();
+        EditUserDialog d(_ps, dn, user, desc, _window);
+        if (d.exec())
+        {
+            iter->set_value(1, d.description());
+        }
     }
 }
 
 void MainWindow::on_deluser_clicked()
 {
-    string user;
+    string dn, user;
     auto iter = _usertree->get_selection()->get_selected();
     iter->get_value(0, user);
+    iter->get_value(3, dn);
     if (!user.empty())
     {
         Gtk::MessageDialog d(_("Are you sure you want to delete this user and the files in their home directory?"),
@@ -281,7 +290,7 @@ void MainWindow::on_deluser_clicked()
         {
             try
             {
-                _ps->deleteUser(user);
+                _ps->deleteUser(dn, user);
             }
             catch (exception &e)
             {

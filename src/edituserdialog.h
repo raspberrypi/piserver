@@ -7,16 +7,17 @@
 class EditUserDialog
 {
 public:
-    EditUserDialog(PiServer *ps, const std::string &user, Gtk::Window *parent = NULL);
+    EditUserDialog(PiServer *ps, const std::string &dn, const std::string &user, const std::string &desc, Gtk::Window *parent = NULL);
     virtual ~EditUserDialog();
     bool exec();
+    std::string description();
 
 protected:
     PiServer *_ps;
     Gtk::Window *_parentWindow;
-    std::string _user;
+    std::string _dn, _user, _oldDesc;
     Gtk::Dialog *_dialog;
-    Gtk::Entry *_passEntry, *_pass2Entry;
+    Gtk::Entry *_passEntry, *_pass2Entry, *_descEntry;
     Gtk::Button *_okButton;
     Gtk::CheckButton *_showPassCheck;
 

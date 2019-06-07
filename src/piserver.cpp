@@ -195,9 +195,8 @@ int PiServer::_unlink_cb(const char *fpath, const struct stat *, int, struct FTW
     return rv;
 }
 
-void PiServer::deleteUser(const std::string &name)
+void PiServer::deleteUser(const std::string &dn, const string &name)
 {
-    string dn = "cn="+name+","+_ldapDN();
     string homedir = string(PISERVER_HOMEROOT)+"/"+name;
 
     if (!isUsernameValid(name))
@@ -213,17 +212,19 @@ void PiServer::deleteUser(const std::string &name)
     }
 }
 
-void PiServer::setUserPassword(const std::string &name, const std::string &password)
+void PiServer::updateUser(const std::string &dn, std::multimap<std::string,std::string> &attr)
 {
     struct crypt_data cd;
-    string dn = "cn="+name+","+_ldapDN();
-
-    if (!isUsernameValid(name))
-        throw runtime_error("Username not well-formed");
 
     _connectToLDAP();
-    multimap<string,string> attr;
-    attr.insert(make_pair("userPassword", string("{CRYPT}")+string(crypt_r(password.c_str(), "$5$", &cd))));
+
+    auto it = attr.find("password");
+    if (it != attr.end())
+    {
+        string password = it->second;
+        attr.insert(make_pair("userPassword", string("{CRYPT}")+string(crypt_r(password.c_str(), "$5$", &cd))));
+        attr.erase(it);
+    }
     _ldapModify(dn, attr);
 }
 
@@ -279,9 +280,9 @@ bool PiServer::isUsernameAvailableLocally(const std::string &name)
     return getpwnam(name.c_str()) == NULL;
 }
 
-std::set<std::string> PiServer::searchUsernames(const std::string &query)
+std::map<std::string,User> PiServer::searchUsernames(const std::string &query)
 {
-    set<string> users;
+    std::map<string,User> users;
     LDAPMessage  *result = NULL, *entry = NULL;
     int rc;
     struct berval **values;
@@ -292,7 +293,7 @@ std::set<std::string> PiServer::searchUsernames(const std::string &query)
         filter = "(&(objectCategory=person)(objectClass=user)(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))";
     else
         filter = "(objectClass=posixAccount)";
-    const char *attrfilter[] = { uidfield.c_str(), NULL};
+    const char *attrfilter[] = { uidfield.c_str(), "description", "authtimestamp", NULL};
 
     if (!query.empty())
         filter = "(&"+filter+"("+uidfield+"=*"+_ldapEscape(query)+"*))";
@@ -311,14 +312,35 @@ std::set<std::string> PiServer::searchUsernames(const std::string &query)
 
     for (entry = ldap_first_entry(_ldap, result); entry != NULL; entry = ldap_next_entry(_ldap, entry))
     {
+        string dn, name, description, lastLogin;
+
+        char *dn_cstr = ldap_get_dn(_ldap, entry);
+        dn = dn_cstr;
+        ldap_memfree(dn_cstr);
+
         values = ldap_get_values_len(_ldap, entry, uidfield.c_str() );
         if (values)
         {
-            for (int i = 0; values[i]; i++)
-                users.insert(string(values[i]->bv_val, values[i]->bv_len));
-
+            if (values[0])
+                name = string(values[0]->bv_val, values[0]->bv_len);
             ldap_value_free_len(values);
         }
+        values = ldap_get_values_len(_ldap, entry, "description");
+        if (values)
+        {
+            if (values[0])
+                description = string(values[0]->bv_val, values[0]->bv_len);
+            ldap_value_free_len(values);
+        }
+        values = ldap_get_values_len(_ldap, entry, "authtimestamp");
+        if (values)
+        {
+            if (values[0])
+                lastLogin = string(values[0]->bv_val, values[0]->bv_len);
+            ldap_value_free_len(values);
+        }
+
+        users.insert( make_pair(name, User(dn, name, description, lastLogin)) );
     }
 
     if (result)
@@ -806,20 +828,29 @@ void PiServer::_ldapAdd(const std::string &dn, const multimap<std::string,std::s
     for (auto iter = attrmap.begin(); iter != attrmap.end(); iattr++)
     {
         const string &key = iter->first;
+        attrs[iattr].mod_type = (char *) key.c_str();
 
         pattrs[iattr] = &attrs[iattr];
-        attrs[iattr].mod_op = LDAP_MOD_BVALUES;
-        attrs[iattr].mod_type = (char *) key.c_str();
-        attrs[iattr].mod_vals.modv_bvals = &pbers[ipber];
-
-        /* There can be one or more values with same key. In all
-           cases they will be after each other as multimap is always sorted */
-        while (iter != attrmap.end() && iter->first == key)
+        if (iter->second.empty())
         {
-            pbers[ipber++] = &bers[iber++];
+            attrs[iattr].mod_op = LDAP_MOD_DELETE;
+            attrs[iattr].mod_vals.modv_strvals = NULL;
             iter++;
         }
-        pbers[ipber++] = NULL;
+        else
+        {
+            attrs[iattr].mod_op = LDAP_MOD_REPLACE | LDAP_MOD_BVALUES;
+            attrs[iattr].mod_vals.modv_bvals = &pbers[ipber];
+
+            /* There can be one or more values with same key. In all
+               cases they will be after each other as multimap is always sorted */
+            while (iter != attrmap.end() && iter->first == key)
+            {
+                pbers[ipber++] = &bers[iber++];
+                iter++;
+            }
+            pbers[ipber++] = NULL;
+        }
     }
     pattrs[iattr] = NULL;
 
