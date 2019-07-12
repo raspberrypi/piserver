@@ -114,6 +114,9 @@ if [ -f /etc/dhcpcd.conf ]; then
     echo "dtoverlay=pi3-disable-wifi" >> /boot/config.txt
 fi
 
+# do not continously poll for SD card
+echo "dtoverlay=sdtweak,pollonce" >> /boot/config.txt
+
 #
 # Remove non-relevant options from cmdline.txt
 #
