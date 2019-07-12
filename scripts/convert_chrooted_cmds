@@ -56,7 +56,7 @@ cat >/etc/security/pam_mount.conf.xml <<EOF
 <pam_mount>
 <debug enable="0" />
 <volume user="*" fstype="fuse" path="%(USER)@piserver:" mountpoint="/home/%(USER)"
-        options="port=1022,password_stdin,nonempty,UserKnownHostsFile=/dev/null,StrictHostKeyChecking=no,IdentitiesOnly=yes,IdentityFile=/dev/null,PubkeyAuthentication=no,ssh_command=ssh -F /dev/null" />
+        options="port=1022,password_stdin,nonempty,UserKnownHostsFile=/dev/null,StrictHostKeyChecking=no,IdentitiesOnly=yes,IdentityFile=/dev/null,ssh_command=ssh -F /dev/null" />
 
 <mntoptions require="nosuid,nodev" />
 <logout wait="0" hup="0" term="0" kill="0" />
