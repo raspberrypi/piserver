@@ -25,7 +25,7 @@ protected:
     Glib::RefPtr<Gtk::ListStore> _ethstore, _repostore;
     Gtk::Widget *_addHostPage, *_addUserPage, *_addDistroPage, *_progressPage, *_authSelectPage;
     DependenciesInstallThread *_dependsThread;
-    Gtk::RadioButton *_localLdapRadio, *_extLdapRadio;
+    Gtk::RadioButton *_localLdapRadio, *_extLdapRadio, *_restrictByGroupRadio;
     Gtk::Frame *_extLdapFrame;
     Gtk::ComboBox *_ldapTypeBox;
     Gtk::Entry *_ldapServerEntry, *_domainEntry, *_bindUserEntry, *_bindPassEntry;

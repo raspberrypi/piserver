@@ -289,10 +289,7 @@ std::map<std::string,User> PiServer::searchUsernames(const std::string &query)
     string ldapDN = _ldapDN();
     string uidfield = _uidField();
     string filter;
-    if (_activeDirectory()) /* Hide hidden and disabled users */
-        filter = "(&(objectCategory=person)(objectClass=user)(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))";
-    else
-        filter = "(objectClass=posixAccount)";
+    filter = getLdapFilter(getSetting("ldapGroup"));
     const char *attrfilter[] = { uidfield.c_str(), "description", "authtimestamp", NULL};
 
     if (!query.empty())
@@ -1005,6 +1002,7 @@ std::string PiServer::getDomainSidFromLdap(const std::string &server, const std:
     try
     {
         ldap_set_option(_ldap, LDAP_OPT_PROTOCOL_VERSION, &version);
+        ldap_set_option(_ldap, LDAP_OPT_REFERRALS, LDAP_OPT_OFF);
         cred.bv_val = (char *) bindPass.c_str();
         cred.bv_len = bindPass.length();
         rc = ldap_sasl_bind_s(_ldap, bindUser.c_str(), LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
@@ -1075,4 +1073,101 @@ std::string PiServer::getDomainSidFromLdap(const std::string &server, const std:
     _ldap = NULL;
 
     return sid;
+}
+
+std::set<std::string> PiServer::getPotentialBaseDNs()
+{
+    std::set<string> containers;
+    LDAPMessage  *result = NULL, *entry = NULL;
+    int rc;
+    string ldapDN = _ldapDN();
+    string filter = "(|(objectClass=organizationalUnit)(objectClass=container)(objectClass=domainDNS)(objectClass=dcObject))";
+    const char *attrfilter[] = {NULL};
+
+    _connectToLDAP();
+    rc = ldap_search_ext_s(_ldap, ldapDN.c_str(), LDAP_SCOPE_SUBTREE,
+                      filter.c_str(), (char **) attrfilter, 0, NULL, NULL, LDAP_NO_LIMIT, LDAP_NO_LIMIT, &result);
+    if (rc != LDAP_SUCCESS)
+    {
+        if (result)
+            ldap_msgfree(result);
+
+        throw runtime_error("Error searching LDAP server: "+string(ldap_err2string(rc)));
+    }
+
+    for (entry = ldap_first_entry(_ldap, result); entry != NULL; entry = ldap_next_entry(_ldap, entry))
+    {
+        string dn;
+
+        char *dn_cstr = ldap_get_dn(_ldap, entry);
+        dn = dn_cstr;
+        ldap_memfree(dn_cstr);
+        containers.insert(dn);
+    }
+
+    if (result)
+        ldap_msgfree(result);
+
+    return containers;
+}
+
+std::set<std::string> PiServer::getLdapGroups()
+{
+    std::set<string> groups;
+    LDAPMessage  *result = NULL, *entry = NULL;
+    int rc;
+    string ldapDN = _ldapDN();
+    string filter = "(|(objectClass=group)(objectClass=groupOfNames)(objectClass=groupOfUniqueNames))";
+    const char *attrfilter[] = {NULL};
+
+    _connectToLDAP();
+    rc = ldap_search_ext_s(_ldap, ldapDN.c_str(), LDAP_SCOPE_SUBTREE,
+                      filter.c_str(), (char **) attrfilter, 0, NULL, NULL, LDAP_NO_LIMIT, LDAP_NO_LIMIT, &result);
+    if (rc != LDAP_SUCCESS)
+    {
+        if (result)
+            ldap_msgfree(result);
+
+        throw runtime_error("Error searching LDAP server: "+string(ldap_err2string(rc)));
+    }
+
+    for (entry = ldap_first_entry(_ldap, result); entry != NULL; entry = ldap_next_entry(_ldap, entry))
+    {
+        string dn;
+
+        char *dn_cstr = ldap_get_dn(_ldap, entry);
+        dn = dn_cstr;
+        ldap_memfree(dn_cstr);
+        groups.insert(dn);
+    }
+
+    if (result)
+        ldap_msgfree(result);
+
+    return groups;
+}
+
+std::string PiServer::getLdapFilter(const std::string &forGroup)
+{
+    string filter;
+
+    if (forGroup.empty())
+    {
+        if (_activeDirectory()) /* Hide hidden and disabled users */
+            filter = "(&(objectCategory=person)(objectClass=user)"
+                     "(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))";
+        else
+            filter = "(objectClass=posixAccount)";
+    }
+    else
+    {
+        if (_activeDirectory())
+            filter = "(&(objectCategory=person)(objectClass=user)"
+                     "(memberof:1.2.840.113556.1.4.1941:="+_ldapEscape(forGroup)+")"
+                     "(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))";
+        else
+            filter = "(&(objectClass=posixAccount)(memberof="+_ldapEscape(forGroup)+"))";
+    }
+
+    return filter;
 }

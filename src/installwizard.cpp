@@ -1,5 +1,6 @@
 #include "installwizard.h"
 #include "activediscovery.h"
+#include "ldapsettingsdialog.h"
 #include <random>
 
 using namespace std;
@@ -32,6 +33,7 @@ InstallWizard::InstallWizard(Glib::RefPtr<Gtk::Application> app, PiServer *ps)
     builder->get_widget("binduserentry", _bindUserEntry);
     builder->get_widget("bindpassentry", _bindPassEntry);
     builder->get_widget("ldaptypebox", _ldapTypeBox);
+    builder->get_widget("restrictbygroupradio", _restrictByGroupRadio);
     _localLdapRadio->signal_clicked().connect( sigc::mem_fun(this, &InstallWizard::authSelectionRadioChange) );
     _extLdapRadio->signal_clicked().connect( sigc::mem_fun(this, &InstallWizard::authSelectionRadioChange) );
     _ldapTypeBox->signal_changed().connect( sigc::mem_fun(this, &InstallWizard::setAuthSelectionOkButton) );
@@ -215,6 +217,22 @@ void InstallWizard::onPagePrepare(Gtk::Widget *newPage)
                     _ps->setSetting("ldapUri", ldapServer);
                     _ps->setSetting("ldapDN", baseDN);
 
+                    if (_restrictByGroupRadio->get_active())
+                    {
+                        /* Show dialog for advanced LDAP options (restrictions) */
+                        LdapSettingsDialog ls(_ps, _assistant);
+                        if (!ls.exec())
+                        {
+                            /* Keep user on current page */
+                            _assistant->previous_page();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        _ps->unsetSetting("ldapGroup");
+                    }
+
                     /* External LDAP seems to work, skip "add users" page */
                     _assistant->next_page();
                 }
@@ -237,6 +255,7 @@ void InstallWizard::onPagePrepare(Gtk::Widget *newPage)
             _ps->unsetSetting("ldapDN");
             _ps->unsetSetting("domainSid");
             _ps->unsetSetting("ldapUser");
+            _ps->unsetSetting("ldapGroup");
         }
     }
 

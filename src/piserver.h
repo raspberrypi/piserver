@@ -69,6 +69,9 @@ public:
     bool hasArmCpu();
     bool externalServer();
     std::string getDomainSidFromLdap(const std::string &server, const std::string &servertype, const std::string &basedn, const std::string &bindUser, const std::string &bindPass);
+    std::set<std::string> getPotentialBaseDNs();
+    std::set<std::string> getLdapGroups();
+    std::string getLdapFilter(const std::string &forGroup);
 
 protected:
     std::map<std::string,Host *> _hosts;
