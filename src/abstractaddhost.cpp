@@ -21,6 +21,7 @@ void AbstractAddHost::setupAddHostFields(Glib::RefPtr<Gtk::Builder> builder)
     _watcher.signal_macDetected().connect( sigc::mem_fun(this, &AbstractAddHost::on_macDetected) );
     dynamic_cast<Gtk::CellRendererToggle *>(_hosttree->get_column_cell_renderer(0))->signal_toggled().connect(
                 sigc::mem_fun(this, &AbstractAddHost::on_hostToggled) );
+    _stpdetect.signal_detected().connect( sigc::mem_fun(this, &AbstractAddHost::on_stpDetected) );
 
     try
     {
@@ -31,6 +32,32 @@ void AbstractAddHost::setupAddHostFields(Glib::RefPtr<Gtk::Builder> builder)
         Gtk::MessageDialog d(_("Error listening for DHCP traffic.\n"
                                "Uninstall any other DHCP servers running on this computer."));
         d.run();
+    }
+
+    try
+    {
+        std::string ifname = _ps->getSetting("interface");
+        if (ifname.empty())
+        {
+            map<string,string> ifaces = _ps->getInterfaces();
+            for (auto kv : ifaces)
+            {
+                if (kv.first != "lo")
+                {
+                    ifname = kv.first;
+                    break;
+                }
+            }
+        }
+
+        if (!ifname.empty())
+        {
+            _stpdetect.startListening(ifname);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        Gtk::MessageDialog d( e.what() );
     }
 }
 
@@ -87,4 +114,15 @@ void AbstractAddHost::addHosts(Distribution *distro, const string &description)
     }
 
     _ps->addHosts(macs, distro, description);
+}
+
+void AbstractAddHost::on_stpDetected(std::string info)
+{
+    Gtk::MessageDialog d(Glib::ustring::compose(_(
+                           "STP seems to be enabled on your switch, which\n"
+                           "can conflict with network booting.\n"
+                           "Ask your network administrator to either disable it completely\n"
+                           "on ports connecting Pi, or change it to the portfast/rapid variant.\n\n"
+                           "(%1)"), info));
+    d.run();
 }
