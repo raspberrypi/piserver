@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <regex>
 
 DhcpAnalyzer::DhcpAnalyzer()
     : _s(-1)
@@ -50,15 +51,15 @@ void DhcpAnalyzer::startListening()
 
 bool DhcpAnalyzer::on_packet(Glib::IOCondition)
 {
+#ifdef OUI_FILTER
+    static std::regex r(OUI_FILTER);
+#endif
     struct dhcp_packet dhcp = { 0 };
     char macbuf[32];
 
     int len = recvfrom(_s, &dhcp, sizeof(dhcp), 0, NULL, 0);
 
     if ( len > 0
-#ifdef OUI_FILTER1
-         && dhcp.chaddr[0] == OUI_FILTER1 && dhcp.chaddr[1] == OUI_FILTER2 && dhcp.chaddr[2] == OUI_FILTER3
-#endif
          && dhcp.op == 1
          && dhcp.cookie == DHCP_COOKIE
 #ifdef DHCPANALYZER_FILTER_STRING
@@ -70,6 +71,11 @@ bool DhcpAnalyzer::on_packet(Glib::IOCondition)
                  dhcp.chaddr[0], dhcp.chaddr[1], dhcp.chaddr[2],
                  dhcp.chaddr[3], dhcp.chaddr[4], dhcp.chaddr[5]);
         std::string mac = macbuf;
+
+#ifdef OUI_FILTER
+        if (!regex_search(mac, r))
+            return true;
+#endif
 
         if (!_seen.count(mac))
         {
