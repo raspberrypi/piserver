@@ -82,6 +82,7 @@ fi
 
 # Disable console auto-login
 ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
 
 # No point in saving random seed on read-only system
 rm -f $DISTROROOT/lib/systemd/system/sysinit.target.wants/systemd-random-seed.service
