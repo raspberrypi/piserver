@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
     if (!ps.getSetting("installed", false))
     {
-        /* Warn if using overlayfs, as Pixel currently uses Linux 4.9.x
+        /* Warn if using overlayfs, as Debian currently uses Linux 4.9.x
          * that does not support exporting overlayfs through NFS
          * Do not make warning fatal, as this may change in the future
          */
@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
 
         if (buf.str().find("overlay / ") != string::npos)
         {
-                Gtk::MessageDialog d(_("Warning: you seem to be running Pixel with persistence enabled, "
-                                       "which does not work properly with piserver. Please 'install' Pixel to "
+                Gtk::MessageDialog d(_("Warning: you seem to be running Debian with persistence enabled, "
+                                       "which does not work properly with piserver. Please 'install' Debian to "
                                        "hard disk first."));
                 d.run();
         }
