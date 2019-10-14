@@ -1,3 +1,10 @@
+piserver (0.4) buster; urgency=medium
+
+  * Add 'clone OS' button
+  * Remove dependency on gksudo
+
+ -- Serge Schneider <serge@arm-build.pitowers.org>  Thu, 07 Feb 2019 10:26:54 +0000
+
 piserver (0.3) stretch; urgency=medium
 
   * dhcpcd: disable link detection
