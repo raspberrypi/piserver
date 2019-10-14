@@ -1,3 +1,34 @@
+piserver (0.5) buster; urgency=medium
+
+  * Add export/save button for OS images
+  * AD: support having users outside CN=users
+  * LOCALE_DIR -> LOCALEDIR
+  * Implement minimal download resuming support
+  * Add support for lastlogin tracking, description
+  * Fix mouse cursor on startup
+  * Do not continously poll for SD card that usually is not present
+  * Remove PubkeyAuthentication=no from pam_mount.conf.xml
+  * Link to libatomic if needed
+  * Fix setting /etc/nslcd.conf when using external LDAP/AD server
+  * External LDAP/AD server: allow restricting access by user group
+  * Warn user if STP is enabled on switch
+  * Buster: fix disabling console auto-login
+  * Add hosts screen: add new OUI to detection routine
+  * sdtweak,pollonce -> sdtweak,poll_once
+  * Buster: fix systemd-timesync time synchronization
+  * Let systemd create the sshd runtime directory
+  * Remove improper references to gksu
+  * Remove references to Pixel
+
+ -- Serge Schneider <serge@raspberrypi.org>  Mon, 14 Oct 2019 10:40:59 +0100
+
+piserver (0.4) buster; urgency=medium
+
+  * Add 'clone OS' button
+  * Remove dependency on gksudo
+
+ -- Serge Schneider <serge@raspberrypi.org>  Thu, 07 Feb 2019 10:26:54 +0000
+
 piserver (0.3) stretch; urgency=medium
 
   * dhcpcd: disable link detection
