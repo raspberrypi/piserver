@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <!-- interface-css-provider-path pi-server.css -->
@@ -43,7 +43,11 @@
     <columns>
       <!-- column-name username -->
       <column type="gchararray"/>
-      <!-- column-name group -->
+      <!-- column-name description -->
+      <column type="gchararray"/>
+      <!-- column-name lastlogin -->
+      <column type="gchararray"/>
+      <!-- column-name dn -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -53,6 +57,9 @@
     <property name="window_position">center</property>
     <property name="icon_name">folder-remote</property>
     <property name="gravity">center</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkNotebook" id="notebook">
         <property name="width_request">600</property>
@@ -102,7 +109,7 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Reset Password</property>
+                    <property name="label" translatable="yes">Edit</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">accessories-text-editor</property>
                   </object>
@@ -150,8 +157,9 @@
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                         <property name="resizable">True</property>
-                        <property name="fixed_width">200</property>
+                        <property name="fixed_width">150</property>
                         <property name="title" translatable="yes">User</property>
+                        <property name="sort_column_id">0</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
@@ -161,11 +169,26 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkTreeViewColumn">
+                        <property name="sizing">fixed</property>
+                        <property name="fixed_width">100</property>
+                        <property name="title" translatable="yes">Last login</property>
+                        <property name="sort_column_id">2</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="treeviewcolumn11"/>
+                          <attributes>
+                            <attribute name="text">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                         <property name="resizable">True</property>
-                        <property name="sizing">fixed</property>
-                        <property name="title" translatable="yes">Group</property>
+                        <property name="fixed_width">200</property>
+                        <property name="title" translatable="yes">Description</property>
                         <property name="clickable">True</property>
+                        <property name="sort_column_id">1</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertoggle1"/>
                           <attributes>
@@ -437,6 +460,19 @@
                     <property name="label" translatable="yes">Upgrade</property>
                     <property name="use_underline">True</property>
                     <property name="stock_id">gtk-go-up</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="exportosbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Export</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-save</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

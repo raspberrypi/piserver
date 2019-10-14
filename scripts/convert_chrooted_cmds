@@ -18,6 +18,7 @@ tmpfs           /var/lib/sudo   tmpfs   defaults,mode=711            0       0
 tmpfs           /var/lib/dhcp   tmpfs   defaults,mode=755            0       0
 tmpfs           /var/lib/systemd/rfkill   tmpfs defaults,mode=755    0       0
 tmpfs           /var/lib/systemd/coredump tmpfs defaults,mode=755    0       0
+tmpfs           /var/lib/systemd/timesync tmpfs defaults,mode=755    0       0
 tmpfs           /media          tmpfs   defaults,mode=755            0       0
 tmpfs           /home           tmpfs   defaults,mode=755            0       0
 piserver:/var/lib/piserver/os/shared   /mnt/shared      nfs     defaults,nolock,nofail,x-gvfs-show,x-gvfs-name=Shared%20folders    0       0
@@ -42,6 +43,7 @@ EOF
 ln -sf /proc/self/mounts /etc/mtab
 mkdir -p /var/lib/systemd/rfkill
 mkdir -p /var/lib/systemd/coredump
+mkdir -p /var/lib/systemd/timesync
 rm -f /etc/init.d/apply_noobs_os_config /etc/rc2.d/S01apply_noobs_os_config /etc/init.d/resize2fs_once /etc/rc3.d/resize2fs_once \
     /etc/systemd/system/multi-user.target.wants/regenerate_ssh_host_keys.service
 
@@ -56,7 +58,7 @@ cat >/etc/security/pam_mount.conf.xml <<EOF
 <pam_mount>
 <debug enable="0" />
 <volume user="*" fstype="fuse" path="%(USER)@piserver:" mountpoint="/home/%(USER)"
-        options="port=1022,password_stdin,nonempty,UserKnownHostsFile=/dev/null,StrictHostKeyChecking=no,IdentitiesOnly=yes,IdentityFile=/dev/null,PubkeyAuthentication=no,ssh_command=ssh -F /dev/null" />
+        options="port=1022,password_stdin,nonempty,UserKnownHostsFile=/dev/null,StrictHostKeyChecking=no,IdentitiesOnly=yes,IdentityFile=/dev/null,ssh_command=ssh -F /dev/null" />
 
 <mntoptions require="nosuid,nodev" />
 <logout wait="0" hup="0" term="0" kill="0" />
@@ -82,6 +84,7 @@ fi
 
 # Disable console auto-login
 ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
 
 # No point in saving random seed on read-only system
 rm -f $DISTROROOT/lib/systemd/system/sysinit.target.wants/systemd-random-seed.service
@@ -114,12 +117,18 @@ if [ -f /etc/dhcpcd.conf ]; then
     echo "dtoverlay=pi3-disable-wifi" >> /boot/config.txt
 fi
 
+# do not continously poll for SD card
+echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
+
 #
 # Remove non-relevant options from cmdline.txt
 #
 sed -i 's# init=/usr/lib/raspi-config/init_resize.sh##g' /boot/cmdline.txt
 sed -i 's# fsck.repair=yes##g' /boot/cmdline.txt
 sed -i 's# rootfstype=ext4##g' /boot/cmdline.txt
+
+# Disable swap
+rm -f /lib/systemd/system/dphys-swapfile.service
 
 #
 # User Pi has no place in multi-user system

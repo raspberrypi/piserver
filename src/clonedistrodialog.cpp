@@ -55,7 +55,7 @@ bool CloneDistroDialog::exec()
             /* FIXME: proper file copy code with disk space check and progress indication
                instead of just calling "cp" may be better */
 
-            const gchar *cmd[] = {"cp", "-a", oldpath.c_str(), newpath.c_str(), NULL};
+            const gchar *cmd[] = {"cp", "-a", "--one-file-system", oldpath.c_str(), newpath.c_str(), NULL};
             GError *error = NULL;
 
             if (!g_spawn_async(NULL, (gchar **) cmd, NULL,

@@ -2,6 +2,7 @@
 #define PISERVER_H
 
 #include "config.h"
+#include "user.h"
 #include "json/json.hpp"
 #include <string>
 #include <set>
@@ -31,12 +32,12 @@ public:
     void addUser(const std::string &name, const std::string &password, bool forcePasswordChange = false, int gid = PISERVER_GID);
     void addGroup(const std::string &name, const std::string &description, int gid = -1);
     void deleteGroup(const std::string &name);
-    void deleteUser(const std::string &name);
-    void setUserPassword(const std::string &name, const std::string &password);
+    void deleteUser(const std::string &dn, const std::string &name);
+    void updateUser(const std::string &dn, std::multimap<std::string,std::string> &attr);
     bool isUsernameValid(const std::string &name);
     bool isUsernameAvailable(const std::string &name);
     bool isUsernameAvailableLocally(const std::string &name);
-    std::set<std::string> searchUsernames(const std::string &query = "");
+    std::map<std::string,User> searchUsernames(const std::string &query = "");
 
     /* Host management functions */
     void addHosts(std::set<std::string> macs, Distribution *d, const std::string &description = "");
@@ -68,6 +69,9 @@ public:
     bool hasArmCpu();
     bool externalServer();
     std::string getDomainSidFromLdap(const std::string &server, const std::string &servertype, const std::string &basedn, const std::string &bindUser, const std::string &bindPass);
+    std::set<std::string> getPotentialBaseDNs();
+    std::set<std::string> getLdapGroups();
+    std::string getLdapFilter(const std::string &forGroup);
 
 protected:
     std::map<std::string,Host *> _hosts;

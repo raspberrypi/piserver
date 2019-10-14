@@ -19,9 +19,7 @@
 #define PISERVER_REPO_CACHEFILE PISERVER_DATADIR "/avail_distros_cache.json"
 #define PISERVER_POSTINSTALLSCRIPT PISERVER_DATADIR "/scripts/postinstall.sh"
 
-#define OUI_FILTER1  0xB8
-#define OUI_FILTER2  0x27
-#define OUI_FILTER3  0xEB
+#define OUI_FILTER         "^(b8:27:eb|dc:a6:32):"
 #define DHCPANALYZER_FILTER_STRING "PXEClient"
 
 #define PISERVER_LDAP_URL  "ldapi:///"

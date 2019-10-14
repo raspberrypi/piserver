@@ -4,5 +4,6 @@ Version=1.0
 _Name=PiServer
 _Comment=Server for diskless Pi 3
 Icon=folder-remote
-Exec=gksudo piserver
+Exec=sh -c "sudo piserver || pkexec piserver"
 Categories=Settings
+StartupNotify=false

@@ -35,7 +35,7 @@ void DependenciesInstallThread::run()
     string ldapUser = _ps->getSetting("ldapUser");
     string ldapPassword = _ps->getSetting("ldapPassword");
     string ldapExtraConfig = _ps->getSetting("ldapExtraConfig");
-    string pkglist = "dnsmasq openssh-server nfs-kernel-server libnss-ldapd libpam-ldapd ldap-utils gnutls-bin ntp";
+    string pkglist = "dnsmasq openssh-server nfs-kernel-server libnss-ldapd libpam-ldapd ldap-utils gnutls-bin libarchive-tools ntp";
     bool installSlapd = ldapServerType.empty();
     bool nslcdAlreadyExists = ::access("/etc/nslcd.conf", F_OK) != -1;
     bool slapdAlreadyExists = ::access("/etc/ldap/slapd.d", F_OK) != -1;
@@ -131,6 +131,23 @@ void DependenciesInstallThread::run()
                     "replace: olcTLSCertificateKeyFile\n"
                     "olcTLSCertificateKeyFile: /etc/ldap/piserver.key\n";
             FILE *f = popen("ldapmodify -Y EXTERNAL -H ldapi:///", "w");
+            fwrite(ldif, strlen(ldif), 1, f);
+            pclose(f);
+
+            ldif =
+                    "dn: cn=module{0},cn=config\n"
+                    "changetype: modify\n"
+                    "add: olcModuleload\n"
+                    "olcModuleLoad: lastbind.la\n"
+                    "\n"
+                    "dn: olcOverlay=lastbind,olcDatabase={1}mdb,cn=config\n"
+                    "changetype: add\n"
+                    "objectClass: olcLastBindConfig\n"
+                    "objectClass: olcOverlayConfig\n"
+                    "objectClass: top\n"
+                    "olcOverlay: lastbind\n"
+                    "olcLastBindPrecision: 60\n";
+            f = popen("ldapmodify -Y EXTERNAL -H ldapi:///", "w");
             fwrite(ldif, strlen(ldif), 1, f);
             pclose(f);
 

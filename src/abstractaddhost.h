@@ -3,6 +3,7 @@
 
 #include <gtkmm.h>
 #include "dhcpanalyzer.h"
+#include "stpanalyzer.h"
 #include "piserver.h"
 
 class AbstractAddHost : public sigc::trackable
@@ -18,10 +19,12 @@ protected:
     /* Slots */
     void on_macDetected(std::string mac);
     void on_hostToggled(const Glib::ustring& path);
+    void on_stpDetected(std::string info);
 
     Gtk::TreeView *_hosttree;
     Glib::RefPtr<Gtk::ListStore> _hoststore;
     DhcpAnalyzer _watcher;
+    StpAnalyzer _stpdetect;
 
 private:
     PiServer *_ps;

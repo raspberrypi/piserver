@@ -28,17 +28,36 @@ find_library(CRYPT_LIBRARY crypt)
 # for resolving SRV DNS records
 find_library(RESOLV_LIBRARY resolv)
 
+# test if we need libatomic
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles("
+    #include <atomic>
+    #include <stdint.h>
+    int main() {
+	std::atomic<int64_t> x;
+	x = 1;
+	return (int) x;
+    }"
+    atomicbuiltin)
+
+if (NOT atomicbuiltin)
+	find_library(ATOMIC_LIBRARY NAMES atomic libatomic.so.1)
+	if (NOT ATOMIC_LIBRARY)
+		message( FATAL_ERROR "Missing libatomic while architecture does need it" )
+	endif()
+endif()
+
 aux_source_directory(src SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST} resources.c)
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LDAP_LIBRARY}
-    ${CRYPT_LIBRARY} ${RESOLV_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} Threads::Threads)
+    ${CRYPT_LIBRARY} ${RESOLV_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} ${ATOMIC_LIBRARY} Threads::Threads)
 
 # Languages
 
 if (GETTEXT_FOUND)
     file(GLOB LANGUAGES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} po/*.po)
     GETTEXT_CREATE_TRANSLATIONS(po/piserver.pot ALL ${LANGUAGES})
-    add_definitions(-DLOCALE_DIR=/usr/share/locale)
+    add_definitions(-DLOCALEDIR="/usr/share/locale")
 endif()
 
 # Resources
@@ -56,6 +75,7 @@ set(RESOURCE_LIST
     data/adddistrodialog.glade
     data/addfolderdialog.glade
     data/clonedistrodialog.glade
+    data/ldapsettingsdialog.glade
     )
 
 compile_gresources(RESOURCE_FILE
