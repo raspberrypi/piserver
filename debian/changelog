@@ -1,3 +1,10 @@
+piserver (0.6) buster; urgency=medium
+
+  [ Floris Bos ]
+  * Add missing return statement
+
+ -- Serge Schneider <serge@raspberrypi.org>  Wed, 19 Feb 2020 17:36:57 +0000
+
 piserver (0.5) buster; urgency=medium
 
   * Add export/save button for OS images
