@@ -129,6 +129,8 @@ bool DhcpClient::on_packet(Glib::IOCondition)
         if (optlen > 0)
             _parseDhcpOptions(dhcp.data, optlen);
     }
+
+    return true;
 }
 
 bool DhcpClient::on_timeout()

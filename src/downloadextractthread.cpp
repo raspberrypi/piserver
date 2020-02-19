@@ -176,7 +176,7 @@ ssize_t DownloadExtractThread::_on_read(struct archive *a, const void **buff)
 
 int DownloadExtractThread::_on_close(struct archive *a)
 {
-
+    return 0;
 }
 
 /* static callback functions that call object oriented equivalents */
