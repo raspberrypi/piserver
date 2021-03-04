@@ -82,7 +82,7 @@ multiple Raspberry Pis can be remotely booted.
 
 &lt;big&gt;Requirements&lt;/big&gt;
 
-Only Raspberry Pi 3s can be used. They must:
+Only Raspberry Pi 3s and 4s can be used. They must:
    - have network boot enabled.
    - be connected via Ethernet to the same network as this server.
    - use the same keyboard layout as this server.
