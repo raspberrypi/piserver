@@ -1,3 +1,11 @@
+piserver (0.7) buster; urgency=medium
+
+  * Add new MAC OUI
+  * pxz -> xz
+  * Mention Pi 4 is also supported in UI
+
+ -- Floris Bos <bos@je-eigen-domein.nl>  Tue, 27 Apr 2021 14:38:33 +0200
+
 piserver (0.6) buster; urgency=medium
 
   [ Floris Bos ]

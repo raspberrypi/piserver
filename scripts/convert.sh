@@ -43,7 +43,7 @@ fi
 if [ "$ARCH" != "armhf" ]; then
     command -v qemu-arm-static > /dev/null || { echo "qemu-arm-static command not found. Try: sudo apt-get install binfmt-support qemu-user-static"; exit 1; }
 fi
-command -v pxz > /dev/null || { echo "pxz command not found. Try: sudo apt-get install pxz"; exit 1; }
+command -v xz > /dev/null || { echo "xz command not found. Try: sudo apt install xz"; exit 1; }
 
 mkdir work
 echo Extracting original files
@@ -73,7 +73,7 @@ mv work/etc/ld.so.preload.disabled work/etc/ld.so.preload
 rm -rf work/run/*
 
 echo Compressing result
-tar cf $OUTPUT_TARBALL -C work --use-compress-program pxz .
+tar cf $OUTPUT_TARBALL -C work --use-compress-program "xz -T0" .
 echo Deleting work directory
 rm -rf work
 
