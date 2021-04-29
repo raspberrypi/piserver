@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkListStore" id="repostore">
@@ -14,6 +14,14 @@
       <column type="gchararray"/>
       <!-- column-name rawsize -->
       <column type="guint64"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="sdstore">
+    <columns>
+      <!-- column-name device -->
+      <column type="gchararray"/>
+      <!-- column-name friendlyname -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkFileFilter" id="tarxzfilter">
@@ -185,6 +193,90 @@ Select the operating system you wish to install.
             <property name="position">6</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkRadioButton" id="sdradio">
+            <property name="label" translatable="yes">Import operating system from SD card</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+            <property name="group">reporadio</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="sdgrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkLabel" id="labelsd">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xpad">5</property>
+                <property name="label" translatable="yes">SD card:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelos">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xpad">5</property>
+                <property name="label" translatable="yes">Name of operating system:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="sdcombo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="model">sdstore</property>
+                <property name="id_column">0</property>
+                <child>
+                  <object class="GtkCellRendererText" id="name"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="osnameentry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="margin_top">5</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">8</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="title" translatable="yes">Select OS</property>
@@ -291,21 +383,17 @@ In the "hosts" tab you can configure which terminals should run this OS.</proper
         <property name="complete">True</property>
       </packing>
     </child>
-    <child internal-child="action_area">
-      <object class="GtkBox" id="assistant-action_area">
-        <property name="can_focus">False</property>
-        <property name="halign">end</property>
-        <property name="margin_left">6</property>
-        <property name="margin_right">6</property>
-        <property name="margin_start">6</property>
-        <property name="margin_end">6</property>
-        <property name="margin_top">6</property>
-        <property name="margin_bottom">6</property>
-        <property name="spacing">6</property>
-      </object>
-      <packing>
-        <property name="has_padding">False</property>
-      </packing>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>

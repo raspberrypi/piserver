@@ -10,7 +10,7 @@ proc            /proc           proc    defaults            0       0
 # Locations that need to be writable
 # Any location that ordinary users can write to must be nosuid to prevent pam_group privilege escalation
 tmpfs           /dev/shm        tmpfs   defaults,nosuid,nodev,noexec 0       0
-tmpfs           /tmp            tmpfs   defaults,nosuid,nodev,noexec 0       0
+tmpfs           /tmp            tmpfs   defaults,nosuid,nodev        0       0
 tmpfs           /var/tmp        tmpfs   defaults,nosuid,nodev,noexec 0       0
 tmpfs           /var/log        tmpfs   defaults,mode=755,size=100m  0       0
 tmpfs           /var/spool      tmpfs   defaults,mode=755            0       0
@@ -129,6 +129,25 @@ sed -i 's# rootfstype=ext4##g' /boot/cmdline.txt
 
 # Disable swap
 rm -f /lib/systemd/system/dphys-swapfile.service
+
+# Default to disabling per-user browser disk cache
+if [ -e /etc/chromium.d ]; then
+    echo 'export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disk-cache-dir=/dev/null --disk-cache-size=1"' >/etc/chromium.d/99-piserver-disable-cache
+fi
+if [ -e /etc/chromium-browser/customizations ]; then
+    echo 'CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disk-cache-dir=/dev/null --disk-cache-size=1"' >/etc/chromium-browser/customizations/99-piserver-disable-cache
+fi
+
+# See if user made any customizations as Pi user and make them global
+if [ -e /home/pi/.local/share/applications ]; then
+    echo "Making Pi user start menu modifications global"
+    cp /home/pi/.local/share/applications/*.desktop /usr/share/applications || true
+fi
+
+if [ -e /home/pi/.config/pcmanfm/LXDE-pi ]; then
+    echo "Making Pi user desktop appearance setting changes global"
+    cp /home/pi/.config/pcmanfm/LXDE-pi/*.conf /etc/xdg/pcmanfm/LXDE-pi || true
+fi
 
 #
 # User Pi has no place in multi-user system

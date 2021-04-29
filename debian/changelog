@@ -1,3 +1,9 @@
+piserver (0.7.1) buster; urgency=medium
+
+  * Add support for converting OS images from SD card 
+
+ -- Floris Bos <bos@je-eigen-domein.nl>  Thu, 29 Apr 2021 23:37:25 +0200
+
 piserver (0.7) buster; urgency=medium
 
   * Add new MAC OUI

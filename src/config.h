@@ -18,6 +18,7 @@
 #define PISERVER_REPO_URL  "http://downloads.raspberrypi.org/piserver.json"
 #define PISERVER_REPO_CACHEFILE PISERVER_DATADIR "/avail_distros_cache.json"
 #define PISERVER_POSTINSTALLSCRIPT PISERVER_DATADIR "/scripts/postinstall.sh"
+#define PISERVER_CONVERTSCRIPT PISERVER_DATADIR "/scripts/convert_folder.sh"
 
 #define OUI_FILTER         "^(b8:27:eb|dc:a6:32|e4:5f:01):"
 #define DHCPANALYZER_FILTER_STRING "PXEClient"

@@ -1,7 +1,7 @@
 project(piserver)
 cmake_minimum_required(VERSION 3.1)
 
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wno-psabi")
 
 find_package(Gettext)
@@ -50,7 +50,7 @@ endif()
 aux_source_directory(src SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST} resources.c)
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LDAP_LIBRARY}
-    ${CRYPT_LIBRARY} ${RESOLV_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} ${ATOMIC_LIBRARY} Threads::Threads)
+    ${CRYPT_LIBRARY} ${RESOLV_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} ${ATOMIC_LIBRARY} Threads::Threads -lstdc++fs)
 
 # Languages
 
@@ -95,6 +95,6 @@ install(DIRECTORY DESTINATION /var/lib/piserver/os)
 install(DIRECTORY DESTINATION /var/lib/piserver/os/shared)
 install(DIRECTORY DESTINATION /var/lib/piserver/tftproot)
 install(DIRECTORY DESTINATION /var/lib/piserver/scripts)
-install(PROGRAMS scripts/postinstall.sh scripts/convert.sh scripts/chroot_image.sh DESTINATION /var/lib/piserver/scripts)
+install(PROGRAMS scripts/postinstall.sh scripts/convert.sh scripts/convert_folder.sh scripts/chroot_image.sh DESTINATION /var/lib/piserver/scripts)
 install(FILES scripts/convert_chrooted_cmds scripts/mkhomedir-piserver DESTINATION /var/lib/piserver/scripts)
 install(FILES scripts/50-piserver-dhcpcd-hook DESTINATION /lib/dhcpcd/dhcpcd-hooks)

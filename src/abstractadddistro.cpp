@@ -1,9 +1,11 @@
 #include "abstractadddistro.h"
 #include "downloadthread.h"
 #include "downloadextractthread.h"
+#include "importosthread.h"
 #include "piserver.h"
 #include "distribution.h"
 #include <regex>
+#include <filesystem>
 
 using namespace std;
 using nlohmann::json;
@@ -29,6 +31,10 @@ AbstractAddDistro::~AbstractAddDistro()
     {
         _timer.disconnect();
     }
+    if (_sdPollTimer.connected())
+    {
+        _sdPollTimer.disconnect();
+    }
 }
 
 void AbstractAddDistro::setupAddDistroFields(Glib::RefPtr<Gtk::Builder> builder, const std::string &cachedDistroInfo)
@@ -43,6 +49,24 @@ void AbstractAddDistro::setupAddDistroFields(Glib::RefPtr<Gtk::Builder> builder,
     builder->get_widget("progresslabel1", _progressLabel1);
     builder->get_widget("progresslabel2", _progressLabel2);
     builder->get_widget("progresslabel3", _progressLabel3);
+    if (builder->get_object("sdstore"))
+    {
+        builder->get_widget("sdradio", _sdRadio);
+        builder->get_widget("osnameentry", _osnameEntry);
+        builder->get_widget("sdcombo", _sdCombo);
+        builder->get_widget("sdgrid", _sdGrid);
+        _sdRadio->signal_clicked().connect( sigc::mem_fun(this, &AbstractAddDistro::_setSensitive) );
+        _sdStore = Glib::RefPtr<Gtk::ListStore>::cast_dynamic( builder->get_object("sdstore") );
+        _sdStore->clear();
+        _pollSDdrives();
+        _sdPollTimer = Glib::signal_timeout().connect_seconds( sigc::mem_fun(this, &AbstractAddDistro::_pollSDdrives), 1 );
+        _osnameEntry->signal_changed().connect( sigc::mem_fun(this, &AbstractAddDistro::setAddDistroOkButton) );
+        _sdCombo->signal_changed().connect( sigc::mem_fun(this, &AbstractAddDistro::setAddDistroOkButton) );
+    }
+    else
+    {
+        _sdRadio = nullptr; _osnameEntry = nullptr; _sdCombo = nullptr; _sdGrid = nullptr;
+    }
 
     _repoStore = Glib::RefPtr<Gtk::ListStore>::cast_dynamic( builder->get_object("repostore") );
     _repoStore->clear();
@@ -78,6 +102,10 @@ void AbstractAddDistro::_setSensitive()
     {
         _distroTree->set_cursor(Gtk::TreePath("0"));
     }
+    if (_sdGrid)
+    {
+        _sdGrid->set_sensitive( _sdRadio->get_active() );
+    }
     setAddDistroOkButton();
 }
 
@@ -85,7 +113,10 @@ bool AbstractAddDistro::addDistroFieldsOk()
 {
     return (_repoRadio->get_active() && _distroTree->get_selection()->count_selected_rows())
             || (_localfileRadio->get_active() && !_fileChooser->get_filename().empty() )
-            || (_urlRadio->get_active() && !_getDistroname(_urlEntry->get_text()).empty() );
+            || (_urlRadio->get_active() && !_getDistroname(_urlEntry->get_text()).empty() )
+            || (_sdRadio && _sdRadio->get_active() && !_osnameEntry->get_text().empty()
+                && _osnameEntry->get_text().find('/') == Glib::ustring::npos && _osnameEntry->get_text()[0] != '.'
+                && _sdCombo->get_active_row_number() != -1) ;
 }
 
 void AbstractAddDistro::_onRepolistDownloadComplete()
@@ -151,6 +182,11 @@ void AbstractAddDistro::startInstallation()
 {
     string distroName, url, version, sizestr;
 
+    if (_sdPollTimer.connected())
+    {
+        _sdPollTimer.disconnect();
+    }
+
     if ( _repoRadio->get_active() )
     {
         auto iter = _distroTree->get_selection()->get_selected();
@@ -177,6 +213,11 @@ void AbstractAddDistro::startInstallation()
         url = "file://"+_fileChooser->get_filename();
         distroName = _getDistroname(url);
     }
+    else if ( _sdRadio && _sdRadio->get_active() )
+    {
+        distroName = _osnameEntry->get_text();
+    }
+
     if (distroName.empty())
         distroName = "unnamed";
 
@@ -191,7 +232,14 @@ void AbstractAddDistro::startInstallation()
 
     _dist = new Distribution(distroName, version);
     _dist->setLatestVersion(version);
-    _det = new DownloadExtractThread(url, _dist->distroPath());
+    if ( _sdRadio && _sdRadio->get_active() )
+    {
+        _det = new ImportOSThread(_sdCombo->get_active_id(), _dist->distroPath());
+    }
+    else
+    {
+        _det = new DownloadExtractThread(url, _dist->distroPath());
+    }
     _det->setPostInstallScript(PISERVER_POSTINSTALLSCRIPT);
 
     if (!_ps->getSetting("ldapServerType").empty())
@@ -282,6 +330,49 @@ bool AbstractAddDistro::_updateProgress()
     if (totalMb)
     {
         _progressBar->set_fraction(mb / totalMb);
+    }
+
+    return true;
+}
+
+bool AbstractAddDistro::_pollSDdrives()
+{
+    std::string sysclassblock = "/sys/class/block";
+
+    for (const auto &entry : std::filesystem::directory_iterator(sysclassblock))
+    {
+        if (!std::filesystem::exists(entry.path() / "removable")
+                || std::filesystem::exists(entry.path() / "partition")
+                || !std::filesystem::exists(entry.path() / "device/vendor")
+                || !std::filesystem::exists(entry.path() / "device/model")
+                || Glib::file_get_contents(entry.path() / "removable") == "0\n")
+        {
+            continue;
+        }
+
+        std::string dev = entry.path().filename();
+        if (_sdDrives.find(dev) != _sdDrives.end())
+        {
+            // Already in list
+            continue;
+        }
+        std::string vendor = Glib::file_get_contents(entry.path() / "device/vendor");
+        std::string model = Glib::file_get_contents(entry.path() / "device/model");
+        // Remove trailing \n
+        if (!vendor.empty())
+            vendor.pop_back();
+        if (!model.empty())
+            model.pop_back();
+
+        auto row = _sdStore->append();
+        row->set_value(0, "/dev/"+dev);
+        row->set_value(1, dev+": "+vendor+" "+model);
+        if (_sdDrives.empty())
+        {
+            // First drive detected, set combobox to drive.
+            _sdCombo->set_active(0);
+        }
+        _sdDrives.insert(dev);
     }
 
     return true;
