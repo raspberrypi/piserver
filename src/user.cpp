@@ -2,10 +2,8 @@
 #include <glibmm.h>
 
 User::User(const std::string &dn, const std::string &name, const std::string &description, std::string lastLoginStr)
-    : _dn(dn), _name(name), _description(description)
+    : _dn(dn), _name(name), _description(description), _lastLoginTime(nullptr)
 {
-    _lastLoginTime.tv_sec = 0;
-
     if (lastLoginStr.size() > 14)
     {
         if (lastLoginStr[8] != 'T')
@@ -14,15 +12,23 @@ User::User(const std::string &dn, const std::string &name, const std::string &de
                glib expects 20190607T130317Z */
             lastLoginStr.insert(8, 1, 'T');
         }
-        g_time_val_from_iso8601(lastLoginStr.c_str(), &_lastLoginTime);
+        _lastLoginTime = g_date_time_new_from_iso8601(lastLoginStr.c_str(), NULL);
+    }
+}
+
+User::~User()
+{
+    if (_lastLoginTime)
+    {
+        g_date_time_unref(_lastLoginTime);
     }
 }
 
 const std::string User::lastlogin(const char *format) const
 {
-    if (!_lastLoginTime.tv_sec)
+    if (!_lastLoginTime)
         return "";
 
-    auto dt = Glib::DateTime::create_now_local(_lastLoginTime);
+    auto dt = Glib::DateTime(_lastLoginTime);
     return dt.format(format);
 }

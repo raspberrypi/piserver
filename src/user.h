@@ -9,6 +9,8 @@ class User
 public:
     User(const std::string &dn, const std::string &name, const std::string &description, std::string lastLoginStr);
 
+    virtual ~User();
+
     inline const std::string &name() const
     {
         return _name;
@@ -28,7 +30,7 @@ public:
 
 protected:
     std::string _dn, _name, _description, _lastLogin;
-    GTimeVal _lastLoginTime;
+    GDateTime *_lastLoginTime;
 };
 
 #endif // USER_H
