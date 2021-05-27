@@ -474,8 +474,7 @@ void PiServer::regenDnsmasqConf(bool restartDnsmasqIfChanged)
     {
         fs << "dhcp-range=tag:piserver,"+currentIP()+",proxy" << endl;
     }
-    fs << "pxe-service=tag:piserver,0,\"Raspberry Pi Boot\"" << endl
-       << "dhcp-reply-delay=tag:piserver,1" << endl << endl;
+    fs << "pxe-service=tag:piserver,0,\"Raspberry Pi Boot\"" << endl;
 
     for (auto &kv : _hosts)
     {
