@@ -8,7 +8,7 @@ Raspberry Pi Server wizard to serve Raspbian to network booting Pis
 On Raspbian install the build dependencies:
 
 ```
-sudo apt-get install build-essential devscripts debhelper cmake libldap2-dev libgtkmm-3.0-dev libarchive-dev libcurl4-openssl-dev intltool git
+sudo apt-get install build-essential devscripts debhelper cmake libldap2-dev libgtkmm-3.0-dev libarchive-dev libcurl4-openssl-dev libcap-dev intltool git
 ```
 
 If not using a Pi (or other armhf device), you also need the following runtime dependencies:

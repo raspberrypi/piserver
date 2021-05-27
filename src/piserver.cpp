@@ -20,6 +20,7 @@
 #include <sys/utsname.h>
 #include <giomm.h>
 #include <fcntl.h>
+#include <sys/capability.h>
 
 using namespace std;
 using nlohmann::json;
@@ -665,6 +666,28 @@ void PiServer::_restartService(const char *name)
     }
 }
 
+/* Prevent that chroot'ed applications set filesystem capabilities (as they are not supported by nfs) */
+void PiServer::_dropFilesystemCapabilities(gpointer)
+{
+    if (!CAP_IS_SUPPORTED(CAP_SETFCAP))
+        return;
+
+    cap_t caps = cap_get_proc();
+    if (!caps)
+        return;
+
+    /* Need to grant CAP_SETPCAP to self, before being able to drop bounds */
+    const cap_value_t setpcap_arr[1] = { CAP_SETPCAP };
+    cap_set_flag(caps, CAP_EFFECTIVE, 1, setpcap_arr, CAP_SET);
+    cap_set_proc(caps);
+
+    cap_drop_bound(CAP_SETFCAP);
+
+    cap_set_flag(caps, CAP_EFFECTIVE, 1, setpcap_arr, CAP_CLEAR);
+    cap_set_proc(caps);
+    cap_free(caps);
+}
+
 void PiServer::startChrootTerminal(const std::string &distribution)
 {
     GError *error = NULL;
@@ -673,7 +696,7 @@ void PiServer::startChrootTerminal(const std::string &distribution)
     string cmdline2 = distroPath;
     const gchar *cmd[] = {"/usr/bin/x-terminal-emulator", "-e", cmdline1.c_str(), cmdline2.c_str(), NULL};
 
-    if (!g_spawn_async(NULL, (gchar **) cmd, NULL, G_SPAWN_DEFAULT, NULL, NULL, NULL, &error))
+    if (!g_spawn_async(NULL, (gchar **) cmd, NULL, G_SPAWN_DEFAULT, &PiServer::_dropFilesystemCapabilities, NULL, NULL, &error))
     {
         g_warning("Error trying to start terminal: %s", error->message);
     }

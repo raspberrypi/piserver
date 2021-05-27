@@ -19,7 +19,13 @@ check_include_file(ldap.h HAVE_LDAP_H)
 find_library(LDAP_LIBRARY ldap)
 
 if(NOT HAVE_LDAP_H OR NOT LDAP_LIBRARY)
-    message( FATAL_ERROR "Missing libldap. Try 'sudo apt-get install libldap2-dev'" )
+    message( FATAL_ERROR "Missing libldap. Try 'sudo apt install libldap2-dev'" )
+endif()
+
+find_library(CAP_LIBRARY cap)
+check_include_file(sys/capability.h HAVE_CAPABILITY_H)
+if(NOT HAVE_CAPABILITY_H OR NOT CAP_LIBRARY)
+    message( FATAL_ERROR "Missing libcap. Try 'sudo apt install libcap-dev'" )
 endif()
 
 # for crypt_r()
@@ -50,7 +56,7 @@ endif()
 aux_source_directory(src SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST} resources.c)
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LDAP_LIBRARY}
-    ${CRYPT_LIBRARY} ${RESOLV_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} ${ATOMIC_LIBRARY} Threads::Threads -lstdc++fs)
+    ${CRYPT_LIBRARY} ${RESOLV_LIBRARY} ${CURL_LIBRARY} ${LibArchive_LIBRARIES} ${CAP_LIBRARY} ${ATOMIC_LIBRARY} Threads::Threads -lstdc++fs)
 
 # Languages
 

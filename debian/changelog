@@ -1,3 +1,10 @@
+piserver (0.7.2) buster; urgency=medium
+
+  * Drop file system capabilities while running chroot shell
+  * Importing SD cards: copy start menu folder structure too   
+
+ -- Floris Bos <bos@je-eigen-domein.nl>  Thu, 27 May 2021 18:33:33 +0200
+
 piserver (0.7.1) buster; urgency=medium
 
   * Add support for converting OS images from SD card 

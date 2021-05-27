@@ -95,6 +95,7 @@ protected:
     std::string _ldapDN();
     bool _activeDirectory();
     std::string _uidField();
+    static void _dropFilesystemCapabilities(gpointer);
 };
 
 #endif // PISERVER_H

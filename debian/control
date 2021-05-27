@@ -2,7 +2,7 @@ Source: piserver
 Section: admin
 Priority: optional
 Maintainer: Floris Bos <bos@je-eigen-domein.nl>
-Build-Depends: debhelper (>= 9), cmake, libldap2-dev, libgtkmm-3.0-dev, libarchive-dev, libcurl4-openssl-dev, intltool
+Build-Depends: debhelper (>= 9), cmake, libldap2-dev, libgtkmm-3.0-dev, libarchive-dev, libcurl4-openssl-dev, libcap-dev, intltool
 Standards-Version: 3.9.7
 
 Package: piserver
