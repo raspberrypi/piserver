@@ -144,6 +144,11 @@ if [ -e /home/pi/.local/share/applications ]; then
     cp /home/pi/.local/share/applications/*.desktop /usr/share/applications || true
 fi
 
+if [ -e /home/pi/.local/share/desktop-directories ]; then
+    echo "Making Pi user start menu folder modifications global"
+    cp /home/pi/.local/share/desktop-directories/*.directory /usr/share/desktop-directories || true
+fi
+
 if [ -e /home/pi/.config/pcmanfm/LXDE-pi ]; then
     echo "Making Pi user desktop appearance setting changes global"
     cp /home/pi/.config/pcmanfm/LXDE-pi/*.conf /etc/xdg/pcmanfm/LXDE-pi || true
