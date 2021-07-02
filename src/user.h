@@ -9,6 +9,8 @@ class User
 public:
     User(const std::string &dn, const std::string &name, const std::string &description, std::string lastLoginStr);
 
+    User(const User &u);
+
     virtual ~User();
 
     inline const std::string &name() const

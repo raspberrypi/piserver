@@ -16,6 +16,18 @@ User::User(const std::string &dn, const std::string &name, const std::string &de
     }
 }
 
+User::User(const User &u)
+{
+    _dn = u._dn;
+    _name = u._name;
+    _description = u._description;
+    _lastLoginTime = u._lastLoginTime;
+    if (_lastLoginTime)
+    {
+        g_date_time_ref(_lastLoginTime);
+    }
+}
+
 User::~User()
 {
     if (_lastLoginTime)
@@ -29,6 +41,12 @@ const std::string User::lastlogin(const char *format) const
     if (!_lastLoginTime)
         return "";
 
-    auto dt = Glib::DateTime(_lastLoginTime);
-    return dt.format(format);
+    gchar *gstr = g_date_time_format(_lastLoginTime, format);
+    if (!gstr)
+	return "";
+
+    std::string result(gstr);
+    g_free(gstr);
+
+    return result;
 }
