@@ -19,6 +19,7 @@ tmpfs           /var/lib/dhcp   tmpfs   defaults,mode=755            0       0
 tmpfs           /var/lib/systemd/rfkill   tmpfs defaults,mode=755    0       0
 tmpfs           /var/lib/systemd/coredump tmpfs defaults,mode=755    0       0
 tmpfs           /var/lib/systemd/timesync tmpfs defaults,mode=755    0       0
+tmpfs           /var/lib/systemd/linger tmpfs defaults,mode=755      0       0
 tmpfs           /media          tmpfs   defaults,mode=755            0       0
 tmpfs           /home           tmpfs   defaults,mode=755            0       0
 piserver:/var/lib/piserver/os/shared   /mnt/shared      nfs     defaults,nolock,nofail,x-gvfs-show,x-gvfs-name=Shared%20folders    0       0
@@ -44,6 +45,7 @@ ln -sf /proc/self/mounts /etc/mtab
 mkdir -p /var/lib/systemd/rfkill
 mkdir -p /var/lib/systemd/coredump
 mkdir -p /var/lib/systemd/timesync
+mkdir -p /var/lib/systemd/linger
 rm -f /etc/init.d/apply_noobs_os_config /etc/rc2.d/S01apply_noobs_os_config /etc/init.d/resize2fs_once /etc/rc3.d/resize2fs_once \
     /etc/systemd/system/multi-user.target.wants/regenerate_ssh_host_keys.service
 
@@ -51,6 +53,13 @@ apt-get update
 apt-get install -y -q libnss-ldapd libpam-ldapd sshfs libpam-mount
 apt-get clean
 
+# Use server's CUPS instance instead of per-client
+if [ -d /etc/cups ]; then
+	apt-get remove -y -q cups-daemon cups-browsed system-config-printer system-config-printer-common
+	apt-get install -y -q cups-client
+	apt-get autoremove -y -q
+	echo "ServerName piserver" > /etc/cups/client.conf
+fi
 
 cat >/etc/security/pam_mount.conf.xml <<EOF
 <?xml version="1.0" encoding="utf-8" ?>
@@ -58,7 +67,7 @@ cat >/etc/security/pam_mount.conf.xml <<EOF
 <pam_mount>
 <debug enable="0" />
 <volume user="*" fstype="fuse" path="%(USER)@piserver:" mountpoint="/home/%(USER)"
-        options="port=1022,password_stdin,nonempty,UserKnownHostsFile=/dev/null,StrictHostKeyChecking=no,IdentitiesOnly=yes,IdentityFile=/dev/null,ssh_command=ssh -F /dev/null" />
+        options="port=1022,password_stdin,UserKnownHostsFile=/dev/null,StrictHostKeyChecking=no,IdentitiesOnly=yes,IdentityFile=/dev/null,ssh_command=ssh -F /dev/null" />
 
 <mntoptions require="nosuid,nodev" />
 <logout wait="0" hup="0" term="0" kill="0" />
@@ -114,11 +123,11 @@ if [ -f /etc/dhcpcd.conf ]; then
     echo "nolink" >> /etc/dhcpcd.conf
     echo "# Piserver: disable wifi by default" >> /boot/config.txt
     echo "# If you have a need for wifi, remove both the following line, as well as nolink from /etc/dhcpcd.conf" >> /boot/config.txt
-    echo "dtoverlay=pi3-disable-wifi" >> /boot/config.txt
+    echo "dtoverlay=disable-wifi" >> /boot/config.txt
 fi
 
 # do not continously poll for SD card
-echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
+echo "dtparam=sd_poll_once" >> /boot/config.txt
 
 #
 # Remove non-relevant options from cmdline.txt
