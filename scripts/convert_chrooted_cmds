@@ -15,7 +15,7 @@ tmpfs           /var/tmp        tmpfs   defaults,nosuid,nodev,noexec 0       0
 tmpfs           /var/log        tmpfs   defaults,mode=755,size=100m  0       0
 tmpfs           /var/spool      tmpfs   defaults,mode=755            0       0
 tmpfs           /var/lib/sudo   tmpfs   defaults,mode=711            0       0
-tmpfs           /var/lib/dhcp   tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/dhcpcd tmpfs   defaults,mode=755            0       0
 tmpfs           /var/lib/systemd/rfkill   tmpfs defaults,mode=755    0       0
 tmpfs           /var/lib/systemd/coredump tmpfs defaults,mode=755    0       0
 tmpfs           /var/lib/systemd/timesync tmpfs defaults,mode=755    0       0
@@ -32,7 +32,7 @@ if [ -d /var/cache ]; then
 fi
 
 if [ -d /var/lib/lightdm ]; then
-    echo "tmpfs           /var/lib/lightdm  tmpfs defaults,mode=755,nosuid     0       0" >> /etc/fstab
+    echo "tmpfs           /var/lib/lightdm  tmpfs defaults,uid=lightdm,gid=lightdm,mode=755,nosuid     0       0" >> /etc/fstab
 fi
 
 debconf-set-selections <<EOF
@@ -82,6 +82,12 @@ if grep -qv disable_interactive /etc/pam.d/common-password; then
     echo "password  optional  pam_mount.so disable_interactive" >> /etc/pam.d/common-password
 fi
 
+# Disable user rename
+cancel-rename pi
+userdel -r rpi-first-boot-wizard
+rm -f /etc/sudoers.d/010_wiz-nopasswd
+rm -f /etc/xdg/autostart/deluser.desktop
+
 if [ -f /etc/lightdm/lightdm.conf ]; then
     # Disable GUI auto-login
     sed -i "s/^autologin-user=.*/#autologin-user=/" /etc/lightdm/lightdm.conf
@@ -96,7 +102,7 @@ ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants
 rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
 
 # No point in saving random seed on read-only system
-rm -f $DISTROROOT/lib/systemd/system/sysinit.target.wants/systemd-random-seed.service
+rm -f "$DISTROROOT"/lib/systemd/system/sysinit.target.wants/systemd-random-seed.service
 
 # systemd-tmpfiles-setup should not try to change files on read-only file system
 rm -f /usr/lib/tmpfiles.d/dbus.conf /usr/lib/tmpfiles.d/debian.conf
@@ -121,9 +127,11 @@ fi
 # dhcpcd: disable link detection as we do not want dhcpcd to tear down interface if cable gets disconnected temporarily
 if [ -f /etc/dhcpcd.conf ]; then
     echo "nolink" >> /etc/dhcpcd.conf
-    echo "# Piserver: disable wifi by default" >> /boot/config.txt
-    echo "# If you have a need for wifi, remove both the following line, as well as nolink from /etc/dhcpcd.conf" >> /boot/config.txt
-    echo "dtoverlay=disable-wifi" >> /boot/config.txt
+    {
+        echo "# Piserver: disable wifi by default"
+        echo "# If you have a need for wifi, remove both the following line, as well as nolink from /etc/dhcpcd.conf"
+        echo "dtoverlay=disable-wifi"
+    } >> /boot/config.txt
 fi
 
 # do not continously poll for SD card
@@ -136,14 +144,16 @@ sed -i 's# init=/usr/lib/raspi-config/init_resize.sh##g' /boot/cmdline.txt
 sed -i 's# fsck.repair=yes##g' /boot/cmdline.txt
 sed -i 's# rootfstype=ext4##g' /boot/cmdline.txt
 
-# Disable swap
-rm -f /lib/systemd/system/dphys-swapfile.service
+# Remove dphys-swapfile and logrotate
+apt-get purge -y -q dphys-swapfile logrotate
 
 # Default to disabling per-user browser disk cache
 if [ -e /etc/chromium.d ]; then
+     # shellcheck disable=SC2016
     echo 'export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disk-cache-dir=/dev/null --disk-cache-size=1"' >/etc/chromium.d/99-piserver-disable-cache
 fi
 if [ -e /etc/chromium-browser/customizations ]; then
+    # shellcheck disable=SC2016
     echo 'CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disk-cache-dir=/dev/null --disk-cache-size=1"' >/etc/chromium-browser/customizations/99-piserver-disable-cache
 fi
 
@@ -173,7 +183,9 @@ delgroup pi
 # Make all users part of some extra local groups when logged in through lightdm
 #
 sed -i '/@include common-auth/a auth       optional   pam_group.so' /etc/pam.d/lightdm
-echo "" >> /etc/security/group.conf
-echo "# Added for Piserver" >> /etc/security/group.conf
-echo "lightdm;*;*;Al0000-2400;dialout, audio, video, spi, i2c, gpio, plugdev, input" >> /etc/security/group.conf
+{
+    echo
+    echo "# Added for Piserver"
+    echo "lightdm;*;*;Al0000-2400;dialout, audio, video, spi, i2c, gpio, plugdev, input"
+} >> /etc/security/group.conf
 #echo "login;tty*;*;Al0000-2400;dialout, spi, i2c, gpio" >> /etc/security/group.conf
