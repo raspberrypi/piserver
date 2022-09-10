@@ -26,7 +26,7 @@ using namespace std;
 using nlohmann::json;
 
 PiServer::PiServer()
-    : _ldap(NULL)
+    : _ldap(NULL), _settings({})
 {
 #ifdef LOCALEDIR
     setlocale(LC_ALL, "");
