@@ -5,27 +5,32 @@
 #
 
 cat >/etc/fstab <<EOF
-proc            /proc           proc    defaults            0       0
+proc            /proc                     proc    defaults            0       0
 
 # Locations that need to be writable
 # Any location that ordinary users can write to must be nosuid to prevent pam_group privilege escalation
-tmpfs           /dev/shm        tmpfs   defaults,nosuid,nodev,noexec 0       0
-tmpfs           /tmp            tmpfs   defaults,nosuid,nodev        0       0
-tmpfs           /var/tmp        tmpfs   defaults,nosuid,nodev,noexec 0       0
-tmpfs           /var/log        tmpfs   defaults,mode=755,size=100m  0       0
-tmpfs           /var/spool      tmpfs   defaults,mode=755            0       0
-tmpfs           /var/lib/sudo   tmpfs   defaults,mode=711            0       0
-tmpfs           /var/lib/dhcpcd tmpfs   defaults,mode=755            0       0
-tmpfs           /var/lib/systemd/rfkill   tmpfs defaults,mode=755    0       0
-tmpfs           /var/lib/systemd/coredump tmpfs defaults,mode=755    0       0
-tmpfs           /var/lib/systemd/timesync tmpfs defaults,mode=755    0       0
-tmpfs           /var/lib/systemd/linger tmpfs defaults,mode=755      0       0
-tmpfs           /media          tmpfs   defaults,mode=755            0       0
-tmpfs           /home           tmpfs   defaults,mode=755            0       0
+tmpfs           /dev/shm                  tmpfs   defaults,nosuid,nodev,noexec 0       0
+tmpfs           /tmp                      tmpfs   defaults,nosuid,nodev        0       0
+tmpfs           /var/tmp                  tmpfs   defaults,nosuid,nodev,noexec 0       0
+tmpfs           /var/log                  tmpfs   defaults,mode=755,size=100m  0       0
+tmpfs           /var/spool                tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/sudo             tmpfs   defaults,mode=711            0       0
+tmpfs           /var/lib/dhcpcd           tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/bluetooth        tmpfs   defaults,mode=700            0       0
+tmpfs           /var/lib/systemd/rfkill   tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/systemd/coredump tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/systemd/timesync tmpfs   defaults,mode=755            0       0
+tmpfs           /var/lib/systemd/linger   tmpfs   defaults,mode=755            0       0
+tmpfs           /media                    tmpfs   defaults,mode=755            0       0
+tmpfs           /home                     tmpfs   defaults,mode=755            0       0
 piserver:/var/lib/piserver/os/shared   /mnt/shared      nfs     defaults,nolock,nofail,x-gvfs-show,x-gvfs-name=Shared%20folders    0       0
 EOF
 
 mkdir -p /mnt/shared
+
+if [ -d /var/lib/dhcpcd5 ] && ! [ -d /var/lib/dhcpcd ]; then
+    sed -i 's#/var/lib/dhcpcd #/var/lib/dhcpcd5#g' /etc/fstab
+fi
 
 if [ -d /var/cache ]; then
     echo "tmpfs           /var/cache  tmpfs defaults,mode=755                  0       0" >> /etc/fstab
@@ -42,6 +47,7 @@ libnss-ldapd libnss-ldapd/nsswitch multiselect group, passwd, shadow
 EOF
 
 ln -sf /proc/self/mounts /etc/mtab
+install -m 700 -d /var/lib/bluetooth
 mkdir -p /var/lib/systemd/rfkill
 mkdir -p /var/lib/systemd/coredump
 mkdir -p /var/lib/systemd/timesync
@@ -140,7 +146,7 @@ echo "dtparam=sd_poll_once" >> /boot/config.txt
 #
 # Remove non-relevant options from cmdline.txt
 #
-sed -i 's# init=/usr/lib/raspi-config/init_resize.sh##g' /boot/cmdline.txt
+sed -i 's# init=\S\+##g' /boot/cmdline.txt
 sed -i 's# fsck.repair=yes##g' /boot/cmdline.txt
 sed -i 's# rootfstype=ext4##g' /boot/cmdline.txt
 
