@@ -20,7 +20,7 @@
 #define PISERVER_POSTINSTALLSCRIPT PISERVER_DATADIR "/scripts/postinstall.sh"
 #define PISERVER_CONVERTSCRIPT PISERVER_DATADIR "/scripts/convert_folder.sh"
 
-#define OUI_FILTER         "^(b8:27:eb|dc:a6:32|e4:5f:01):"
+#define OUI_FILTER         "^(b8:27:eb|dc:a6:32|e4:5f:01|d8:3a:dd):"
 #define DHCPANALYZER_FILTER_STRING "PXEClient"
 
 #define PISERVER_LDAP_URL  "ldapi:///"

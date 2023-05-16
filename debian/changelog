@@ -1,3 +1,9 @@
+piserver (0.7.6) bullseye; urgency=medium
+
+  * Add support for newer Pi with MAC-addresses that start with d8:3a:dd
+
+ -- Floris Bos <bos@je-eigen-domein.nl>  Tue, 16 May 2023 22:04:36 +0200
+
 piserver (0.7.5) buster; urgency=medium
 
   * Fix "Cannot use erase() with null" error when using
