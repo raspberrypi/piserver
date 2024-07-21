@@ -1,0 +1,663 @@
+# Simplified Chinese translations for piserver package.
+# Copyright (C) 2017 Raspberry Pi Ltd
+# This file is distributed under the same license as the piserver package.
+# ykla <yklaxds@gmail>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: piserver\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-22 19:21+0200\n"
+"PO-Revision-Date: 2024-07-22 02:58+0800\n"
+"Last-Translator: ykla <yklaxds@gmail.com>\n"
+"Language-Team: English (British)\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: ../src/abstractadduser.cpp:110
+msgid ""
+"\n"
+"Only the following characters are allowed: a-z 0-9 . - _\n"
+msgstr ""
+"\n"
+"仅允许以下字符：a-z 0-9 . - _\n"
+
+#: ../src/abstractadddistro.cpp:165
+msgid " MB available."
+msgstr " MB 可用。"
+
+#: ../src/piserver.cpp:541
+msgid " hosts"
+msgstr " 主机"
+
+#: ../src/abstractadddistro.cpp:248
+msgid " hours "
+msgstr " 小时 "
+
+#: ../src/abstractadddistro.cpp:252
+msgid " minutes "
+msgstr " 分钟 "
+
+#: ../src/abstractadddistro.cpp:241
+#, c-format
+msgid "%.1f MB of %.1f MB"
+msgstr "%1$.1f MB 共 %2$.1f MB"
+
+#: ../src/abstractadddistro.cpp:243
+#, c-format
+msgid "%.1f Mbit/sec"
+msgstr "%.1f Mbps"
+
+#: ../src/abstractadddistro.cpp:186
+msgid "' installed."
+msgstr "已安装。"
+
+#: ../src/abstractadddistro.cpp:256
+msgid "1 minute "
+msgstr "1 分钟 "
+
+#: ../data/adduserdialog.glade.h:6 ../data/firstuse.glade.h:58
+msgid "1)"
+msgstr "1)"
+
+#: ../data/adddistrodialog.glade.h:3 ../data/firstuse.glade.h:7
+msgid "1024 MB"
+msgstr "1024 MB"
+
+#: ../data/adduserdialog.glade.h:5 ../data/firstuse.glade.h:57
+msgid "2)"
+msgstr "2)"
+
+#: ../data/adddistrodialog.glade.h:5 ../data/firstuse.glade.h:9
+msgid "2016-12-31"
+msgstr "2016-12-31"
+
+#: ../data/adddistrodialog.glade.h:2 ../data/firstuse.glade.h:6
+msgid "2017-1-1"
+msgstr "2017-1-1"
+
+#: ../data/adduserdialog.glade.h:4 ../data/firstuse.glade.h:56
+msgid "3)"
+msgstr "3)"
+
+#: ../data/adduserdialog.glade.h:3 ../data/firstuse.glade.h:55
+msgid "4)"
+msgstr "4)"
+
+#: ../data/adduserdialog.glade.h:2 ../data/firstuse.glade.h:54
+msgid "5)"
+msgstr "5)"
+
+#: ../data/adddistrodialog.glade.h:6 ../data/firstuse.glade.h:10
+msgid "512 MB"
+msgstr "512 MB"
+
+#: ../data/adddistrodialog.glade.h:8
+msgid ""
+"<big>Add operating system</big>\n"
+"\n"
+"Select the operating system you wish to install.\n"
+msgstr ""
+"<b>添加操作系统</b>\n"
+"\n"
+"请选择您要安装的操作系统。\n"
+
+#: ../data/firstuse.glade.h:47
+msgid ""
+"<big>Create user accounts on server</big>\n"
+"\n"
+"You need to create at least one user account on the server - you can\n"
+"add more accounts later if desired.\n"
+"\n"
+"Enter a username and password for each account to be created.\n"
+msgstr ""
+"<big>在服务器上创建用户账户</big>\n"
+"\n"
+"您至少要在服务器上创建一个用户账户——如有需要，您可以在稍后添加更多账户。\n"
+"\n"
+"为每个要创建的账户输入用户名和密码。\n"
+
+#: ../data/adddistrodialog.glade.h:29
+msgid ""
+"<big>Finished</big>\n"
+"\n"
+"Installation of the operating system has completed.\n"
+"In the \"hosts\" tab you can configure which terminals should run this OS."
+msgstr ""
+"<big>完成</big>\n"
+"\n"
+"操作系统安装完成。  \n"
+"在选项卡“主机”中，您可以使用该系统的终端来进行配置。"
+
+#: ../data/firstuse.glade.h:87
+msgid ""
+"<big>Finished</big>\n"
+"\n"
+"Installation was successful.\n"
+"\n"
+"You can now start using the system, and add additional users and clients as "
+"needed."
+msgstr ""
+"<big>完成</big>\n"
+"\n"
+"安装成功。\n"
+"\n"
+"您现在可以开始使用系统了，并可根据需要添加其他用户和客户端。"
+
+#: ../data/firstuse.glade.h:78
+msgid ""
+"<big>Installing software</big>\n"
+"\n"
+"Please wait while the software is installed.\n"
+"\n"
+"\n"
+"\n"
+"\n"
+msgstr ""
+"<big>正在安装软件</big>\n"
+"\n"
+"请稍候，正在安装安装软件。\n"
+"\n"
+"\n"
+"\n"
+"\n"
+
+#: ../data/adddistrodialog.glade.h:20
+msgid ""
+"<big>Installing software</big>\n"
+"\n"
+"The software is being installed.\n"
+"\n"
+"\n"
+"\n"
+"\n"
+msgstr ""
+"<big>正在安装软件</big>\n"
+"\n"
+"正在安装软件。\n"
+"\n"
+"\n"
+"\n"
+"\n"
+
+#: ../data/firstuse.glade.h:12
+msgid ""
+"<big>Introduction</big>\n"
+"\n"
+"PiServer enables you to set this computer up as a central server from which\n"
+"multiple Raspberry Pis can be remotely booted.\n"
+"\n"
+"<big>Requirements</big>\n"
+"\n"
+"Only Raspberry Pi 3s can be used. They must:\n"
+"   - have network boot enabled.\n"
+"   - be connected via Ethernet to the same network as this server.\n"
+"   - use the same keyboard layout as this server.\n"
+"\n"
+"This server must have Internet access to download required software.\n"
+"\n"
+"<big>Process</big>\n"
+"\n"
+"This wizard will guide you through the following process:\n"
+"\n"
+"1) Registering Raspberry Pis with the server.\n"
+"2) Creating user accounts.\n"
+"3) Installing an operating system.\n"
+msgstr ""
+"<big>简介</big>\n"
+"\n"
+"树莓派无盘服务器能让你把这台计算机设置为中央服务器，以便多个远程启动多个服务"
+"器。\n"
+"\n"
+"<big>要求</big>\n"
+"\n"
+"仅支持树莓派 3 系列。它们必须：\n"
+"   - 启用网络启动。\n"
+"   - 通过以太网连接到与此服务器相同的网络。\n"
+"   - 使用与此服务器相同的键盘布局。\n"
+"\n"
+"该服务器必须具有互联网访问权限，来下载所需的软件。\n"
+"\n"
+"<big>流程</big>\n"
+"\n"
+"本向导将引导你完成以下流程：\n"
+"\n"
+"1) 将树莓派注册到服务器。\n"
+"2) 创建用户账户。\n"
+"3) 安装操作系统。\n"
+
+#: ../data/firstuse.glade.h:35
+msgid ""
+"<big>Select Raspberry Pi clients to use</big>\n"
+"\n"
+"Select the Raspberry Pis to use with this server.\n"
+"\n"
+"Ensure all the Pis you want to use are set up to boot from the network,\n"
+"connected to Ethernet and powered on. They will appear in the list below.\n"
+"\n"
+"Uncheck the box next to any Pis you do not want to use with this server.\n"
+msgstr ""
+"<big>选择要使用的树莓派客户端</big>\n"
+"\n"
+"选择要与此服务器配合使用的树莓派。\n"
+"\n"
+"确保所有要使用的树莓派已设置为从网络启动，连接到以太网且已开机。它们将出现在"
+"下面的列表中。\n"
+"\n"
+"取消勾选任何不希望与此服务器配合使用的树莓派旁边的复选框。\n"
+
+#: ../data/firstuse.glade.h:64
+msgid ""
+"<big>Select the operating system to install</big>\n"
+"\n"
+"Select the operating system that the server will provide for the clients. \n"
+"\n"
+"Choose one option below - you can add additional operating systems later.\n"
+msgstr ""
+"<big>选择要安装的操作系统</big>\n"
+"\n"
+"选择服务器将为客户端提供的操作系统。\n"
+"\n"
+"请选择下面的选项之一——您可以稍后添加其他操作系统。\n"
+
+#: ../data/piserver.glade.h:21
+msgid "Act as proxy DHCP server"
+msgstr "充当 DHCP 代理服务器"
+
+#: ../data/piserver.glade.h:22
+msgid "Act as standalone DHCP server"
+msgstr "作为独立的 DHCP 服务器运行"
+
+#: ../data/piserver.glade.h:4
+msgid "Add"
+msgstr "添加"
+
+#: ../data/addhostdialog.glade.h:1
+msgid "Add Clients"
+msgstr "添加客户端"
+
+#: ../data/adduserdialog.glade.h:1
+msgid "Add Users"
+msgstr "添加用户"
+
+#: ../data/firstuse.glade.h:46
+msgid "Add clients   "
+msgstr "添加客户端 "
+
+#: ../data/adddistrodialog.glade.h:7 ../data/firstuse.glade.h:77
+msgid "Add software"
+msgstr "添加软件"
+
+#: ../data/firstuse.glade.h:63
+msgid "Add users"
+msgstr "添加用户"
+
+#: ../src/mainwindow.cpp:316
+msgid "Are you sure you want to delete this operating system?"
+msgstr "您确定要删除该操作系统吗？"
+
+#: ../src/mainwindow.cpp:228
+msgid ""
+"Are you sure you want to delete this user and the files in their home "
+"directory?"
+msgstr "您确定要删除该用户及其主目录中的文件吗？"
+
+#: ../src/piserver.cpp:541
+msgid "Cannot delete this OS, as it is in use by "
+msgstr "无法删除此操作系统，因为它正在被占用 "
+
+#: ../data/piserver.glade.h:24
+msgid "Client IP range end:"
+msgstr "客户端 IP 的结束范围："
+
+#: ../data/piserver.glade.h:23
+msgid "Client IP range start:"
+msgstr "客户端 IP 的开始范围："
+
+#: ../data/piserver.glade.h:14
+msgid "Clients"
+msgstr "客户端"
+
+#: ../data/edituserdialog.glade.h:4
+msgid "Confirm password:"
+msgstr "确认密码："
+
+#: ../data/piserver.glade.h:27
+msgid "DHCP server settings"
+msgstr "DHCP 服务器设置"
+
+#: ../data/piserver.glade.h:12
+msgid "Description"
+msgstr "备注"
+
+#: ../data/addhostdialog.glade.h:11
+msgid "Description of clients (optional):"
+msgstr "客户端备注（可选）："
+
+#: ../data/edithostdialog.glade.h:3
+msgid "Description:"
+msgstr "备注："
+
+#: ../data/piserver.glade.h:10
+msgid "Edit"
+msgstr "编辑"
+
+#: ../data/edithostdialog.glade.h:1
+msgid "Edit Client"
+msgstr "编辑客户端"
+
+#: ../data/addhostdialog.glade.h:2
+msgid ""
+"Ensure all the Pis you want to use are set up to boot from the network,\n"
+"connected to Ethernet and powered on. They will appear in the list below.\n"
+"(Note that any Pis already registered do not appear in the list.)\n"
+"\n"
+"Uncheck the box next to any Pis you do not want to use with this server.\n"
+"\n"
+"Select the operating system to run on these Pis from the drop-down box.\n"
+msgstr ""
+"确保所有您想使用的树莓派均已设置为从网络启动，连接到以太网且已开机。它们会出"
+"现在下面的列表中。  \n"
+"（请注意，任何已经注册的树莓派不会出现在列表中。）\n"
+"\n"
+"取消勾选您不希望与此服务器一起使用的树莓派旁边的框。\n"
+"\n"
+"从下拉框中选择要在这些树莓派上运行的操作系统。\n"
+
+#: ../src/abstractadddistro.cpp:132
+msgid "Error downloading repository information: "
+msgstr "下载存储库库信息时出错： "
+
+#: ../src/abstractaddhost.cpp:31
+msgid ""
+"Error listening for DHCP traffic.\n"
+"Uninstall any other DHCP servers running on this computer."
+msgstr ""
+"监听 DHCP 流量时出错。  \n"
+"请卸载此计算机上运行的其他 DHCP 服务器。"
+
+#: ../src/abstractadddistro.cpp:123
+msgid "Error parsing downloaded repository information: "
+msgstr "解析已下载的存储库信息时出错： "
+
+#: ../src/mainwindow.cpp:468
+msgid ""
+"Error starting odhcploc: %1\n"
+"Skipped checking if other DHCP servers are active."
+msgstr ""
+"odhcploc 启动时出错：%1  \n"
+"未检查其他 DHCP 服务器是否处于运行状态。"
+
+#: ../data/adddistrodialog.glade.h:33 ../data/firstuse.glade.h:92
+msgid "Finished"
+msgstr "完成"
+
+#: ../data/adduserdialog.glade.h:10 ../data/firstuse.glade.h:62
+msgid "Force password change on first login"
+msgstr "首次登录时强制修改密码"
+
+#: ../data/piserver.glade.h:26
+msgid "Gateway:"
+msgstr "网关："
+
+#: ../data/piserver.glade.h:8
+msgid "Group"
+msgstr "组"
+
+#: ../data/adddistrodialog.glade.h:17 ../data/firstuse.glade.h:75
+msgid "Install operating system from URL"
+msgstr "从链接安装操作系统"
+
+#: ../data/adddistrodialog.glade.h:16 ../data/firstuse.glade.h:74
+msgid "Install operating system from local file (.tar.xz)"
+msgstr "使用本地文件 (.tar.xz) 安装操作系统"
+
+#: ../data/adddistrodialog.glade.h:12 ../data/firstuse.glade.h:70
+msgid "Install operating system from repository"
+msgstr "从存储库安装操作系统"
+
+#: ../data/adddistrodialog.glade.h:28 ../data/firstuse.glade.h:86
+msgid "Installation"
+msgstr "安装"
+
+#: ../data/piserver.glade.h:17
+msgid "Installed version"
+msgstr "已安装版本"
+
+#: ../src/installwizard.cpp:96
+msgid "Installing LDAP, NFS and DHCP server software"
+msgstr "正在安装 LDAP、NFS 和 DHCP 服务器软件"
+
+#: ../src/abstractadddistro.cpp:165
+msgid "Insufficient disk space. "
+msgstr "磁盘空间不足。 "
+
+#: ../data/firstuse.glade.h:34
+msgid "Introduction"
+msgstr "简介"
+
+#: ../data/piserver.glade.h:18
+msgid "Latest version"
+msgstr "最新版本"
+
+#: ../src/abstractadddistro.cpp:260
+msgid "Less than a minute "
+msgstr "不到一分钟"
+
+#: ../data/piserver.glade.h:11
+msgid "MAC address"
+msgstr "MAC 地址"
+
+#: ../data/addhostdialog.glade.h:10 ../data/firstuse.glade.h:45
+msgid "MAC address of Raspberry Pi"
+msgstr "树莓派的 MAC 地址"
+
+#: ../data/edithostdialog.glade.h:2
+msgid "MAC address:"
+msgstr "MAC 地址："
+
+#: ../data/piserver.glade.h:25
+msgid "Netmask:"
+msgstr "子网掩码："
+
+#: ../data/piserver.glade.h:20 ../data/firstuse.glade.h:44
+msgid "Network interface: "
+msgstr "网络接口： "
+
+#: ../src/installwizard.cpp:45
+msgid ""
+"No network interfaces with IPv4 address detected. Check your network "
+"settings."
+msgstr "未检测到分配了 IPv4 地址的网络接口。请检查您的网络设置。"
+
+#: ../src/mainwindow.cpp:191
+msgid "Normal users"
+msgstr "普通用户"
+
+#: ../src/piserver.cpp:559
+msgid "Old"
+msgstr "老年"
+
+#: ../data/adddistrodialog.glade.h:13 ../data/piserver.glade.h:13
+#: ../data/firstuse.glade.h:71
+msgid "Operating system"
+msgstr "操作系统"
+
+#: ../data/edithostdialog.glade.h:4 ../data/addhostdialog.glade.h:12
+msgid "Operating system:"
+msgstr "操作系统："
+
+#: ../data/adduserdialog.glade.h:8 ../data/firstuse.glade.h:60
+msgid "Password"
+msgstr "密码"
+
+#: ../data/edituserdialog.glade.h:3
+msgid "Password:"
+msgstr "密码："
+
+#: ../data/piserver.glade.h:3 ../data/piserver.desktop.in.h:1
+msgid "PiServer"
+msgstr "树莓派无盘服务器"
+
+#: ../data/firstuse.glade.h:11
+msgid "PiServer initial installation"
+msgstr "树莓派无盘服务器初始安装"
+
+#. Shouldn't happen if user made it through the first-use wizard
+#: ../src/mainwindow.cpp:253
+msgid "Please install a Linux distribution first under 'Software'"
+msgstr "请先在“软件”下安装某 Linux 发行版。"
+
+#: ../data/adddistrodialog.glade.h:1 ../data/firstuse.glade.h:5
+msgid "Raspbian"
+msgstr "Raspbian"
+
+#: ../data/adddistrodialog.glade.h:4 ../data/firstuse.glade.h:8
+msgid "Raspbian Lite"
+msgstr "Raspbian Lite"
+
+#: ../data/piserver.glade.h:6
+msgid "Remove"
+msgstr "移除"
+
+#: ../data/edituserdialog.glade.h:1 ../data/piserver.glade.h:5
+msgid "Reset Password"
+msgstr "重置密码"
+
+#: ../data/piserver.glade.h:28
+msgid "Save"
+msgstr "保存"
+
+#: ../data/adddistrodialog.glade.h:19
+msgid "Select OS"
+msgstr "选择操作系统"
+
+#: ../data/piserver.desktop.in.h:2
+msgid "Server for diskless Pi 3"
+msgstr "用于树莓派 3 的无盘服务器"
+
+#: ../data/piserver.glade.h:29
+msgid "Settings"
+msgstr "设置"
+
+#: ../src/mainwindow.cpp:516
+msgid "Settings saved"
+msgstr "设置已保存"
+
+#: ../data/piserver.glade.h:16
+msgid "Shell"
+msgstr "Shell"
+
+#: ../data/edituserdialog.glade.h:5 ../data/adduserdialog.glade.h:9
+#: ../data/firstuse.glade.h:61
+msgid "Show passwords"
+msgstr "显示密码"
+
+#: ../data/adddistrodialog.glade.h:15 ../data/firstuse.glade.h:73
+msgid "Size"
+msgstr "大小"
+
+#: ../data/piserver.glade.h:19
+msgid "Software"
+msgstr "软件"
+
+#: ../src/abstractadddistro.cpp:190
+msgid "Starting download"
+msgstr "开始下载"
+
+#: ../src/abstractadduser.cpp:114
+msgid "The following user names already exist on the system or this computer: "
+msgstr "以下用户名已在系统上或这台计算机上存在： "
+
+#: ../src/abstractadduser.cpp:106
+msgid "The following user names contain invalid characters: "
+msgstr "以下用户名含有无效字符： "
+
+#: ../src/abstractadddistro.cpp:186
+msgid "There is already an OS called '"
+msgstr "已经有个操作系统叫"
+
+#: ../src/mainwindow.cpp:491
+msgid ""
+"There is already another DHCP server (%1) active in your network.\n"
+"Having more than one DHCP server hand out IP-addresses from the same range "
+"can result in serious problems, such as that more than one client is "
+"assigned the same IP-address.\n"
+"Please read the <a href=\"https://github.com/raspberrypi/piserver/"
+"wiki\">documentation</a> before proceeding.\n"
+"\n"
+"Are you sure you want to activate standalone DHCP server mode?"
+msgstr ""
+"您的网络中已经有其他的 DHCP 服务器（%1）在运行。\n"
+"在同一网络内有多个 DHCP 服务器分配 IP 地址可能会导致严重的问题，如多个客户端"
+"被分配到了相同的 IP 地址。\n"
+"请在继续操作之前阅读 <a href=\"https://github.com/raspberrypi/piserver/"
+"wiki\">文档</a>。\n"
+"\n"
+"您确定要激活独立 DHCP 服务器模式吗？"
+
+#: ../src/main.cpp:28
+msgid "This program must be run as root. Try starting it with sudo."
+msgstr "该程序必须以 root 用户身份运行。请尝试使用 sudo 启动它。"
+
+#: ../src/mainwindow.cpp:400
+msgid "Update available"
+msgstr "有更新可用"
+
+#: ../data/piserver.glade.h:15
+msgid "Upgrade"
+msgstr "升级"
+
+#: ../data/piserver.glade.h:7 ../data/adduserdialog.glade.h:7
+#: ../data/firstuse.glade.h:59
+msgid "User"
+msgstr "用户"
+
+#: ../data/edituserdialog.glade.h:2
+msgid "User:"
+msgstr "用户："
+
+#: ../data/piserver.glade.h:9
+msgid "Users"
+msgstr "用户"
+
+#: ../data/adddistrodialog.glade.h:14 ../data/firstuse.glade.h:72
+msgid "Version"
+msgstr "版本"
+
+#: ../data/firstuse.glade.h:3
+msgid "b8:27:eb:11:22:33"
+msgstr "b8:27:eb:11:22:33"
+
+#: ../data/firstuse.glade.h:4
+msgid "b8:27:eb:44:55:66"
+msgstr "b8:27:eb:44:55:66"
+
+#: ../data/piserver.glade.h:1 ../data/firstuse.glade.h:1
+msgid "eth0"
+msgstr "eth0"
+
+#: ../data/piserver.glade.h:2 ../data/firstuse.glade.h:2
+msgid "eth0 (e1000)"
+msgstr "eth0 (e1000)"
+
+#: ../data/adddistrodialog.glade.h:18 ../data/firstuse.glade.h:76
+msgid "http://"
+msgstr "http://"
+
+#: ../src/abstractadddistro.cpp:262
+msgid "left"
+msgstr "剩余"
+
+#: ../src/mainwindow.cpp:476
+msgid ""
+"odhcploc returned error code.\n"
+"Skipped checking if other DHCP servers are active."
+msgstr ""
+"`odhcploc` 返回了错误代码。  \n"
+"未检查其他 DHCP 服务器是否处于运行状态。"
