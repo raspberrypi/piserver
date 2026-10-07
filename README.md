@@ -1,5 +1,5 @@
 # piserver
-Raspberry Pi Server wizard to serve Raspbian to network booting Pis
+Raspberry Pi Server wizard to serve Raspberry Pi os to network booting Pis
 
 ## How to rebuild piserver
 
